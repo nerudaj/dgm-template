@@ -5,7 +5,7 @@ configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Paths.hpp"
 )
 
-make_executable ( ${TEST_TARGET_NAME} DEPS ${LIB_TARGET_NAME} catch2 )
+make_executable ( ${TEST_TARGET_NAME} DEPS ${LIB_TARGET_NAME} catch2 FakeIt::FakeIt-catch )
 
 add_test (
     NAME ${TEST_TARGET_NAME}
