@@ -1,0 +1,4 @@
+set ( THE_PROJECT_NAME "Template" )
+set ( LIB_TARGET_NAME "game-lib" )
+set ( TEST_TARGET_NAME "unit-tests" )
+set ( USE_SFML_TGUI_STATIC_LINKAGE OFF )
