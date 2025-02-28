@@ -37,8 +37,8 @@ sf::Vector2f Input::getCursorDelta() const
         controller.getInputValue(std::to_underlying(InputKind::CursorLeft))
             + controller.getInputValue(
                 std::to_underlying(InputKind::CursorRight)),
-        controller.getInputValue(std::to_underlying(InputKind::CursorUp))
-            + controller.getInputValue(
+        -controller.getInputValue(std::to_underlying(InputKind::CursorUp))
+            - controller.getInputValue(
                 std::to_underlying(InputKind::CursorDown)),
     };
 }
