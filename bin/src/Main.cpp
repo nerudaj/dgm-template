@@ -51,8 +51,11 @@ int main(int, char*[])
     auto&& settings = AppSettings {
         .video =
             VideoSettings {
-                //.resolution = sf::VideoMode::getDesktopMode().size,
+#ifdef _DEBUG
                 .resolution = { 1280, 720 },
+#else
+                .resolution = sf::VideoMode::getDesktopMode().size,
+#endif
             },
     };
 
