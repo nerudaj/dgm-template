@@ -27,7 +27,7 @@ message ( "==== DGM-LIB DOWNLOADED ===" )
 
 fetch_prebuilt_dependency (
     FSM
-    URL https://github.com/nerudaj/fsm-lib/releases/download/v${FSM_LIB_VERSION}/fsm-lib-v${FSM_LIB_VERSION}-Windows-MSVC-x64.zip
+    URL https://github.com/nerudaj/fsm-lib/releases/download/v${FSM_LIB_VERSION}/fsm-lib-v${FSM_LIB_VERSION}-Windows-x64-MSVC-143.zip
 )
 
 
@@ -61,7 +61,7 @@ message ( "=== FETCHING OK ===" )
 
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
 find_package ( SFML
-    ${SFML_VERSION} REQUIRED
+    3.0.0 REQUIRED
     COMPONENTS Main Window Graphics
     PATHS "${SFML_FOLDER}/lib/cmake"
 )
@@ -69,23 +69,23 @@ find_package ( SFML
 set ( TGUI_BACKEND SFML_GRAPHICS )
 set ( TGUI_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
 find_package ( TGUI 
-    ${TGUI_VERSION} REQUIRED
+    1.7.0 REQUIRED
     PATHS "${TGUI_FOLDER}/lib/cmake"
 )
 
 find_package ( dgm-lib
-    ${DGM_LIB_VERSION} REQUIRED
+    3.0.0 REQUIRED
     PATHS "${DGM_FOLDER}/lib/cmake"
 )
 
 find_package ( fsm-lib
-    ${FSM_LIB_VERSION} REQUIRED
+    2.1.0 REQUIRED
     PATHS "${FSM_FOLDER}/lib/cmake"
 )
 
 
 if ( ${BUILD_TESTS} )
-    add_library ( catch2 STATIC "${CATCH2_FOLDER}/include/catch2/catch_all.hpp" "${CATCH2_FOLDER}/catch_amalgamated.cpp" )
+    add_library ( catch2 STATIC "${CATCH2_FOLDER}/include/catch_amalgamated.hpp" "${CATCH2_FOLDER}/catch_amalgamated.cpp" )
     target_include_directories( catch2 PUBLIC "${CATCH2_FOLDER}/include" )
     message ( "=== CATCH CONFIGURED ===" )
 endif ()
