@@ -134,7 +134,7 @@ void AppStateOptions::onResolutionSelected(const sf::Vector2u& resolution)
 {
     settings.video.resolution = resolution;
     app.window.changeResolution(resolution);
-    dic.gui.setWindow(app.window.getWindowContext());
+    dic.gui.setWindow(app.window.getSfmlWindowContext());
     buildLayout();
 
     // TODO: Open "Are you sure dialog?"

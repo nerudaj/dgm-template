@@ -63,7 +63,7 @@ int main(int, char*[])
     });
     auto&& app = dgm::App(window);
 
-    tgui::Gui gui(window.getWindowContext());
+    tgui::Gui gui(window.getSfmlWindowContext());
     tgui::Theme guiTheme;
 
     try

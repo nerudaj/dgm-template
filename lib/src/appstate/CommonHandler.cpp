@@ -16,10 +16,14 @@ static void emulateGuiClick(Gui& gui, const sf::Vector2i& mousePos)
 void CommonHandler::handleInput(
     dgm::App& app, DependencyContainer& dic, const InputSettings& settings)
 {
+    const auto mousePosition =
+        sf::Mouse::getPosition(app.window.getSfmlWindowContext());
+
+    dic.input.update();
+
     if (dic.input.isConfirmPressed())
     {
-        emulateGuiClick(
-            dic.gui, sf::Mouse::getPosition(app.window.getWindowContext()));
+        emulateGuiClick(dic.gui, mousePosition);
     }
 
     while (const auto event = app.window.pollEvent())
@@ -36,7 +40,5 @@ void CommonHandler::handleInput(
                  * app.time.getDeltaTime();
 
     sf::Mouse::setPosition(
-        sf::Mouse::getPosition(app.window.getWindowContext())
-            + sf::Vector2i(delta),
-        app.window.getWindowContext());
+        mousePosition + sf::Vector2i(delta), app.window.getSfmlWindowContext());
 }
