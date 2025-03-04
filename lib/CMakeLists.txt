@@ -11,4 +11,5 @@ make_static_library ( ${LIB_TARGET_NAME}
         dgm::dgm-lib
         fsm::fsm-lib
         TGUI::TGUI
+        SFML::Audio
 )

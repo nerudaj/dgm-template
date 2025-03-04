@@ -19,6 +19,24 @@ Input::Input()
     controller.bindInput(
         std::to_underlying(InputKind::CursorRight),
         dgm::Xbox::Axis::LStickXpos);
+
+    controller.bindInput(
+        std::to_underlying(InputKind::Left), sf::Keyboard::Key::A);
+    controller.bindInput(
+        std::to_underlying(InputKind::Right), sf::Keyboard::Key::D);
+    controller.bindInput(
+        std::to_underlying(InputKind::Jump), sf::Keyboard::Key::Space);
+}
+
+float Input::getHorizontalVelocity() const
+{
+    return -controller.getInputValue(std::to_underlying(InputKind::Left))
+           + controller.getInputValue(std::to_underlying(InputKind::Right));
+}
+
+bool Input::isJumpPressed() const
+{
+    return controller.isInputToggled(std::to_underlying(InputKind::Jump));
 }
 
 bool Input::isBackButtonPressed() const

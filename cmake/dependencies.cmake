@@ -61,10 +61,11 @@ message ( "==== CATCH2 DOWNLOADED ===" )
 
 message ( "=== FETCHING OK ===" )
 
+set ( Ogg_DIR "${SFML_FOLDER}/lib/cmake/Ogg" )
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
 find_package ( SFML
     3.0.0 REQUIRED
-    COMPONENTS Main Window Graphics
+    COMPONENTS Main Window Graphics Audio
     PATHS "${SFML_FOLDER}/lib/cmake"
 )
 

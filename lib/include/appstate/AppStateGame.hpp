@@ -7,6 +7,7 @@
 #include "misc/DependencyContainer.hpp"
 #include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 
 class [[nodiscard]] AppStateGame : public dgm::AppState
@@ -16,9 +17,12 @@ public:
         : dgm::AppState(app)
         , dic(dic)
         , settings(settings)
-        , gameRulesEngine(gameEvents, scene)
-        , renderingEngine(scene)
+        , scene(buildScene(dic.resmgr))
+        , gameRulesEngine(gameEvents, scene, dic.input)
+        , renderingEngine(dic.resmgr, scene)
+        , sound(dic.resmgr.get<sf::SoundBuffer>("land.wav"))
     {
+        sound.setVolume(100.f);
     }
 
 public:
@@ -31,6 +35,8 @@ public:
 private:
     void restoreFocusImpl(const std::string& msg) override;
 
+    static Scene buildScene(const dgm::ResourceManager& resmgr);
+
 private:
     DependencyContainer& dic;
     AppSettings& settings;
@@ -38,4 +44,5 @@ private:
     EventQueue<GameEvent> gameEvents;
     GameRulesEngine gameRulesEngine;
     RenderingEngine renderingEngine;
+    sf::Sound sound;
 };

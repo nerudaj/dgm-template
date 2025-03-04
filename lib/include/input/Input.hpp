@@ -10,6 +10,9 @@ enum class [[nodiscard]] InputKind
     CursorDown,
     CursorLeft,
     CursorRight,
+    Left,
+    Right,
+    Jump,
 };
 
 class [[nodiscard]] Input final
@@ -24,6 +27,12 @@ public:
     {
         controller.update();
     }
+
+#pragma region For dummy entity, can be removed
+    float getHorizontalVelocity() const;
+
+    [[nodiscard]] bool isJumpPressed() const;
+#pragma endregion
 
     [[nodiscard]] bool isBackButtonPressed() const;
 

@@ -6,7 +6,13 @@
 class [[nodiscard]] RenderingEngine final
 {
 public:
-    RenderingEngine(Scene& scene) noexcept : scene(scene) {}
+    RenderingEngine(dgm::ResourceManager& resmgr, Scene& scene) noexcept
+        : scene(scene), sprite(resmgr.get<sf::Texture>("mrman.png"))
+    {
+        sprite.setOrigin(
+            sf::Vector2f(scene.dummy.animation.getCurrentFrame().size) / 2.f);
+    }
+
     RenderingEngine(RenderingEngine&&) = delete;
     RenderingEngine(const RenderingEngine&) = delete;
 
@@ -15,4 +21,5 @@ public:
 
 private:
     Scene& scene;
+    sf::Sprite sprite;
 };

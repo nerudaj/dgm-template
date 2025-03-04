@@ -6,18 +6,19 @@ template<class T>
 class [[nodiscard]] EventQueue final
 {
 public:
-    template<class EventType, class ... Args>
-    void pushEvent(Args&& ... args)
+    template<class EventType, class... Args>
+    void pushEvent(Args&&... args)
     {
-        events.emplace_back<EventType>(std::forward<Args>(args...));
+        events.emplace_back<EventType>(
+            EventType { std::forward<Args>(args)... });
     }
 
     template<class Visitor>
-    void processEvents(Visitor& visitor)
+    void processEvents(Visitor&& visitor)
     {
         for (size_t idx = 0; idx < events.size(); ++idx)
         {
-            std::visit(events[idx], visitor);
+            std::visit(visitor, events[idx]);
         }
 
         events.clear();
