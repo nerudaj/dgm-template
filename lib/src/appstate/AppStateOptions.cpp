@@ -3,6 +3,8 @@
 #include "gui/Builders.hpp"
 #include <ranges>
 
+const tgui::Color CONTENT_BGCOLOR = tgui::Color(255, 255, 255, 64);
+
 std::string resolutionToString(const sf::Vector2u& vec)
 {
     return std::format("{}x{}", vec.x, vec.y);
@@ -52,6 +54,7 @@ void AppStateOptions::buildLayout()
                         {
                             dic.strings.getString(StringId::VideoOptionsTab),
                             dic.strings.getString(StringId::AudioOptionsTab),
+                            dic.strings.getString(StringId::InputOptionsTab),
                         },
                         [&](const tgui::String& tabName)
                         { onTabClicked(tabName); }))
@@ -90,7 +93,7 @@ void AppStateOptions::buildVideoOptionsLayout()
                         onResolutionSelected(
                             sf::VideoMode::getFullscreenModes()[idx].size);
                     }))
-            .build(tgui::Color(255, 255, 255, 64)));
+            .build(CONTENT_BGCOLOR));
 }
 
 void AppStateOptions::buildAudioOptionsLayout()
@@ -114,7 +117,31 @@ void AppStateOptions::buildAudioOptionsLayout()
                     dic.gui,
                     WidgetBuilder::SliderProperties {
                         .low = 0.f, .high = 100.f, .step = 1.f }))
-            .build(tgui::Color(255, 255, 255, 64)));
+            .build(CONTENT_BGCOLOR));
+}
+
+void AppStateOptions::buildInputOptionsLayout()
+{
+    content->removeAllWidgets();
+    content->add(
+        FormBuilder()
+            .addOption(
+                dic.strings.getString(StringId::GamepadDeadzone),
+                WidgetBuilder::createSlider(
+                    settings.input.gamepadDeadzone,
+                    [&](float val) { settings.input.gamepadDeadzone = val; },
+                    dic.gui,
+                    WidgetBuilder::SliderProperties {
+                        .low = 0.f, .high = 100.f, .step = 1.f }))
+            .addOption(
+                dic.strings.getString(StringId::CursorSpeed),
+                WidgetBuilder::createSlider(
+                    settings.input.cursorSpeed,
+                    [&](float val) { settings.input.cursorSpeed = val; },
+                    dic.gui,
+                    WidgetBuilder::SliderProperties {
+                        .low = 0.f, .high = 100.f, .step = 1.f }))
+            .build(CONTENT_BGCOLOR));
 }
 
 void AppStateOptions::onTabClicked(const tgui::String& tabName)
@@ -123,6 +150,8 @@ void AppStateOptions::onTabClicked(const tgui::String& tabName)
         buildVideoOptionsLayout();
     else if (tabName == dic.strings.getString(StringId::AudioOptionsTab))
         buildAudioOptionsLayout();
+    else if (tabName == dic.strings.getString(StringId::InputOptionsTab))
+        buildInputOptionsLayout();
 }
 
 void AppStateOptions::onBack()

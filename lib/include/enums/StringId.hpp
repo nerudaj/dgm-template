@@ -11,10 +11,13 @@ enum class [[nodiscard]] StringId
     Back,
     VideoOptionsTab,
     AudioOptionsTab,
+    InputOptionsTab,
     EnableFullscreen,
     SetResolution,
     SoundVolume,
     MusicVolume,
+    GamepadDeadzone,
+    CursorSpeed,
     Resume,
     BackToMenu,
     MaxId, // Make sure this one is always the last!

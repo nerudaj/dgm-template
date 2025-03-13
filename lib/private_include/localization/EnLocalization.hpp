@@ -13,10 +13,13 @@ const std::map<StringId, StringView> EN_LOCALIZATION = {
     { Back, "Back" },
     { VideoOptionsTab, "Video" },
     { AudioOptionsTab, "Audio" },
+    { InputOptionsTab, "Input" },
     { EnableFullscreen, "Fullscreen" },
     { SetResolution, "Resolution" },
     { SoundVolume, "Sound volume" },
     { MusicVolume, "Music volume" },
+    { GamepadDeadzone, "Gamepad deadzone" },
+    { CursorSpeed, "Cursor speed" },
     { Resume, "Resume game" },
     { BackToMenu, "Back to main menu" },
 };

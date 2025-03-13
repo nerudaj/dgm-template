@@ -24,6 +24,8 @@ private:
 
     void buildAudioOptionsLayout();
 
+    void buildInputOptionsLayout();
+
     void onTabClicked(const tgui::String& tabName);
 
     void onBack();
