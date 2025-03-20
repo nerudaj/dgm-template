@@ -4,8 +4,6 @@
 
 void AppStateGame::input()
 {
-    dic.input.update();
-
     if (dic.input.isBackButtonPressed())
     {
         app.pushState<AppStatePause>(dic, settings);

@@ -9,7 +9,7 @@ public:
     template<class EventType, class... Args>
     void pushEvent(Args&&... args)
     {
-        events.emplace_back<EventType>(
+        events.template emplace_back<EventType>(
             EventType { std::forward<Args>(args)... });
     }
 

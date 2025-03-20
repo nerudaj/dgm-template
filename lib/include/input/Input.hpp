@@ -23,11 +23,6 @@ public:
     Input(const Input&) = delete;
 
 public:
-    void update()
-    {
-        controller.update();
-    }
-
 #pragma region For dummy entity, can be removed
     float getHorizontalVelocity() const;
 
@@ -44,5 +39,5 @@ private:
     bool readAndRelease(InputKind i) const;
 
 private:
-    mutable dgm::Controller controller;
+    mutable dgm::Controller<InputKind> controller;
 };

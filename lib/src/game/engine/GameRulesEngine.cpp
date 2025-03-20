@@ -86,7 +86,8 @@ void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
     if (pos.y + dummy.body.getSize().y > VERTICAL_LIMIT)
     {
         dummy.forward.y = 0.f;
-        dummy.body.setPosition(pos.x, VERTICAL_LIMIT - dummy.body.getSize().y);
+        dummy.body.setPosition(
+            { pos.x, VERTICAL_LIMIT - dummy.body.getSize().y });
     }
 }
 
