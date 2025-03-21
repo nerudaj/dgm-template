@@ -1,5 +1,6 @@
 #pragma once
 
+#include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <optional>
@@ -21,7 +22,7 @@ namespace priv
         ~FinalNavbarLayoutBuilder() = default;
 
     public:
-        tgui::Panel::Ptr build();
+        NODISCARD_RESULT tgui::Panel::Ptr build();
 
     private:
         tgui::Widget::Ptr widget;

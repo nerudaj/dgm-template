@@ -1,5 +1,6 @@
 #pragma once
 
+#include "misc/Compatibility.hpp"
 #include <DGM/dgm.hpp>
 
 enum class [[nodiscard]] InputKind
@@ -26,14 +27,14 @@ public:
 #pragma region For dummy entity, can be removed
     float getHorizontalVelocity() const;
 
-    [[nodiscard]] bool isJumpPressed() const;
+    NODISCARD_RESULT bool isJumpPressed() const;
 #pragma endregion
 
-    [[nodiscard]] bool isBackButtonPressed() const;
+    NODISCARD_RESULT bool isBackButtonPressed() const;
 
-    [[nodiscard]] bool isConfirmPressed() const;
+    NODISCARD_RESULT bool isConfirmPressed() const;
 
-    [[nodiscard]] sf::Vector2f getCursorDelta() const;
+    NODISCARD_RESULT sf::Vector2f getCursorDelta() const;
 
 private:
     bool readAndRelease(InputKind i) const;

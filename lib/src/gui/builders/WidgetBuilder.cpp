@@ -5,7 +5,7 @@
 #include <TGUI/TGUI.hpp>
 #include <ranges>
 
-[[nodiscard]] std::string randomString(std::size_t len)
+NODISCARD_RESULT std::string randomString(std::size_t len)
 {
     constexpr auto CHARS = std::string_view(
         "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");

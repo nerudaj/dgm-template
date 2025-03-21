@@ -1,5 +1,6 @@
 #pragma once
 
+#include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <optional>
@@ -21,7 +22,7 @@ namespace priv
 
         void addRow(const std::vector<std::string>& cells);
 
-        [[nodiscard]] tgui::Panel::Ptr build();
+        NODISCARD_RESULT tgui::Panel::Ptr build();
 
     private:
         std::optional<std::vector<std::string>> heading;
