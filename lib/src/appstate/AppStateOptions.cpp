@@ -19,6 +19,11 @@ static std::vector<std::string> getResolutionStrings()
            | std::ranges::to<std::vector>();
 }
 
+static std::string intValueFormatter(float val)
+{
+    return std::to_string(static_cast<int>(val));
+}
+
 AppStateOptions::AppStateOptions(
     dgm::App& app, DependencyContainer& dic, AppSettings& settings) noexcept
     : dgm::AppState(app)
@@ -89,7 +94,8 @@ void AppStateOptions::buildVideoOptionsLayout()
                 WidgetBuilder::createDropdown(
                     getResolutionStrings(),
                     resolutionToString(settings.video.resolution),
-                    [&](size_t idx) {
+                    [&](size_t idx)
+                    {
                         onResolutionSelected(
                             sf::VideoMode::getFullscreenModes()[idx].size);
                     }))
@@ -107,16 +113,22 @@ void AppStateOptions::buildAudioOptionsLayout()
                     settings.audio.musicVolume,
                     [&](float val) { settings.audio.musicVolume = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties {
-                        .low = 0.f, .high = 100.f, .step = 1.f }))
+                    WidgetBuilder::SliderProperties { .valueFormatter =
+                                                          intValueFormatter,
+                                                      .low = 0.f,
+                                                      .high = 100.f,
+                                                      .step = 1.f }))
             .addOption(
                 dic.strings.getString(StringId::SoundVolume),
                 WidgetBuilder::createSlider(
                     settings.audio.soundVolume,
                     [&](float val) { settings.audio.soundVolume = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties {
-                        .low = 0.f, .high = 100.f, .step = 1.f }))
+                    WidgetBuilder::SliderProperties { .valueFormatter =
+                                                          intValueFormatter,
+                                                      .low = 0.f,
+                                                      .high = 100.f,
+                                                      .step = 1.f }))
             .build(CONTENT_BGCOLOR));
 }
 
@@ -131,16 +143,22 @@ void AppStateOptions::buildInputOptionsLayout()
                     settings.input.gamepadDeadzone,
                     [&](float val) { settings.input.gamepadDeadzone = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties {
-                        .low = 0.f, .high = 100.f, .step = 1.f }))
+                    WidgetBuilder::SliderProperties { .valueFormatter =
+                                                          intValueFormatter,
+                                                      .low = 0.f,
+                                                      .high = 100.f,
+                                                      .step = 1.f }))
             .addOption(
                 dic.strings.getString(StringId::CursorSpeed),
                 WidgetBuilder::createSlider(
                     settings.input.cursorSpeed,
                     [&](float val) { settings.input.cursorSpeed = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties {
-                        .low = 0.f, .high = 100.f, .step = 1.f }))
+                    WidgetBuilder::SliderProperties { .valueFormatter =
+                                                          intValueFormatter,
+                                                      .low = 100.f,
+                                                      .high = 1000.f,
+                                                      .step = 10.f }))
             .build(CONTENT_BGCOLOR));
 }
 

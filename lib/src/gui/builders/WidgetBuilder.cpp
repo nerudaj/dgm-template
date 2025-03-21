@@ -89,8 +89,8 @@ tgui::Panel::Ptr WidgetBuilder::createSlider(
     result->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
     const auto&& ID = randomString(16);
 
-    auto&& dummyLabel = tgui::Label::create(
-        properties.valueFormatter(properties.high + properties.step));
+    auto&& dummyLabel =
+        tgui::Label::create(properties.valueFormatter(properties.high));
     dummyLabel->setTextSize(Sizers::GetMenuBarTextHeight());
     dummyLabel->setAutoSize(true);
     gui.add(dummyLabel, "DummyLabel");
