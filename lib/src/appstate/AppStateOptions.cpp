@@ -1,13 +1,14 @@
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "gui/Builders.hpp"
+#include "misc/Compatibility.hpp"
 #include <ranges>
 
 const tgui::Color CONTENT_BGCOLOR = tgui::Color(255, 255, 255, 64);
 
 std::string resolutionToString(const sf::Vector2u& vec)
 {
-    return std::format("{}x{}", vec.x, vec.y);
+    return uni::format("{}x{}", vec.x, vec.y);
 }
 
 static std::vector<std::string> getResolutionStrings()
@@ -16,7 +17,7 @@ static std::vector<std::string> getResolutionStrings()
            | std::views::transform([](const sf::VideoMode& mode)
                                    { return mode.size; })
            | std::views::transform(resolutionToString)
-           | std::ranges::to<std::vector>();
+           | uniranges::to<std::vector>();
 }
 
 static std::string intValueFormatter(float val)
@@ -113,22 +114,20 @@ void AppStateOptions::buildAudioOptionsLayout()
                     settings.audio.musicVolume,
                     [&](float val) { settings.audio.musicVolume = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties { .valueFormatter =
-                                                          intValueFormatter,
-                                                      .low = 0.f,
-                                                      .high = 100.f,
-                                                      .step = 1.f }))
+                    SliderProperties { .valueFormatter = intValueFormatter,
+                                       .low = 0.f,
+                                       .high = 100.f,
+                                       .step = 1.f }))
             .addOption(
                 dic.strings.getString(StringId::SoundVolume),
                 WidgetBuilder::createSlider(
                     settings.audio.soundVolume,
                     [&](float val) { settings.audio.soundVolume = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties { .valueFormatter =
-                                                          intValueFormatter,
-                                                      .low = 0.f,
-                                                      .high = 100.f,
-                                                      .step = 1.f }))
+                    SliderProperties { .valueFormatter = intValueFormatter,
+                                       .low = 0.f,
+                                       .high = 100.f,
+                                       .step = 1.f }))
             .build(CONTENT_BGCOLOR));
 }
 
@@ -143,22 +142,20 @@ void AppStateOptions::buildInputOptionsLayout()
                     settings.input.gamepadDeadzone,
                     [&](float val) { settings.input.gamepadDeadzone = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties { .valueFormatter =
-                                                          intValueFormatter,
-                                                      .low = 0.f,
-                                                      .high = 100.f,
-                                                      .step = 1.f }))
+                    SliderProperties { .valueFormatter = intValueFormatter,
+                                       .low = 0.f,
+                                       .high = 100.f,
+                                       .step = 1.f }))
             .addOption(
                 dic.strings.getString(StringId::CursorSpeed),
                 WidgetBuilder::createSlider(
                     settings.input.cursorSpeed,
                     [&](float val) { settings.input.cursorSpeed = val; },
                     dic.gui,
-                    WidgetBuilder::SliderProperties { .valueFormatter =
-                                                          intValueFormatter,
-                                                      .low = 100.f,
-                                                      .high = 1000.f,
-                                                      .step = 10.f }))
+                    SliderProperties { .valueFormatter = intValueFormatter,
+                                       .low = 100.f,
+                                       .high = 1000.f,
+                                       .step = 10.f }))
             .build(CONTENT_BGCOLOR));
 }
 

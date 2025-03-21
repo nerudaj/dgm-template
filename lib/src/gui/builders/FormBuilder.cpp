@@ -80,7 +80,7 @@ static tgui::Label::Ptr createRowLabel(const std::string& text)
     label->setSize("60%", "100%");
     label->setPosition("0%", "0%");
     label->setTextSize(Sizers::GetMenuBarTextHeight());
-    label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     return label;
 }
 

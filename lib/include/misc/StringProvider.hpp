@@ -4,6 +4,7 @@
 #include "types/StringTypes.hpp"
 #include <string>
 #include <vector>
+#include <utility>
 
 class [[nodiscard]] StringProvider final
 {

@@ -30,8 +30,8 @@ createCell(const std::string& str, size_t column, size_t totalColumns)
     label->setPosition(
         { tgui::Layout(std::to_string(column * columnWidth) + "%"), "0%" });
     label->setTextSize(Sizers::GetMenuBarTextHeight());
-    label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
-    label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+    label->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     return label;
 }
 

@@ -7,6 +7,13 @@
 #include <tuple>
 #include <vector>
 
+// https://github.com/llvm/llvm-project/issues/36032
+struct [[nodiscard]] OptionConfig final
+{
+    bool disabled = false;
+    std::optional<std::string> tooltipText = {};
+};
+
 class [[nodiscard]] FormBuilder final
 {
 public:
@@ -16,12 +23,6 @@ public:
     ~FormBuilder() = default;
 
 public:
-    struct OptionConfig
-    {
-        bool disabled = false;
-        std::optional<std::string> tooltipText = {};
-    };
-
     FormBuilder& addOption(
         const std::string& labelText,
         tgui::Widget::Ptr widget,

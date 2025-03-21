@@ -14,6 +14,7 @@ make_static_library ( ${LIB_TARGET_NAME}
         TGUI::TGUI
         SFML::Audio
         fmt::fmt
+        range-v3::range-v3
 )
 else ()
 make_static_library ( ${LIB_TARGET_NAME}

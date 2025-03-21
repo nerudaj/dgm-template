@@ -10,25 +10,27 @@
 
 const tgui::Color PANEL_BACKGROUND_COLOR = tgui::Color(255, 255, 255, 64);
 
+// https://github.com/llvm/llvm-project/issues/36032
+struct [[nodiscard]] WidgetOptions final
+{
+    std::optional<std::string> id = std::nullopt;
+    bool enabled = true;
+};
+
+// https://github.com/llvm/llvm-project/issues/36032
+struct [[nodiscard]] SliderProperties final
+{
+    std::function<std::string(float)> valueFormatter = [](float val)
+    { return std::to_string(val); };
+    float low = 0.f;
+    float high = 100.f;
+    float step = 1.f;
+};
+
 class WidgetBuilder final
 {
 public:
     using Label = std::string;
-
-    struct [[nodiscard]] WidgetOptions final
-    {
-        std::optional<std::string> id = std::nullopt;
-        bool enabled = true;
-    };
-
-    struct [[nodiscard]] SliderProperties final
-    {
-        std::function<std::string(float)> valueFormatter = [](float val)
-        { return std::to_string(val); };
-        float low = 0.f;
-        float high = 100.f;
-        float step = 1.f;
-    };
 
 public:
     static NODISCARD_RESULT inline tgui::Label::Ptr
@@ -54,7 +56,7 @@ public:
     static NODISCARD_RESULT tgui::Button::Ptr createButton(
         const Label& label,
         std::function<void(void)> onClick,
-        WidgetOptions options = {});
+        WidgetOptions options = WidgetOptions{});
 
     static NODISCARD_RESULT tgui::CheckBox::Ptr createCheckbox(
         bool checked,
@@ -93,7 +95,7 @@ public:
             {
                 auto converted = std::stoul(newVal.toStdString());
                 if (converted > std::numeric_limits<Number>::max())
-                    throw std::runtime_error(std::format(
+                    throw std::runtime_error(uni::format(
                         "Number is too big to fit {} bytes", sizeof(Number)));
                 onChange(static_cast<Number>(converted));
             },

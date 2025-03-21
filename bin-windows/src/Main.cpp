@@ -14,11 +14,18 @@ initializeResourceManager(const std::filesystem::path& rootDir)
 {
     dgm::ResourceManager resmgr;
 
+    auto myfont = dgm::Utility::loadFont("fonts/ChunkFive-Regular.ttf");
+
+    for (auto&& itr : std::filesystem::directory_iterator(rootDir / "assets"))
+    {
+        sf::err() << itr.path().string() << std::endl;
+    }
+
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Font>(
             rootDir / "assets" / "fonts", dgm::Utility::loadFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load font: {}", result.error().getMessage()));
     }
 
@@ -26,7 +33,7 @@ initializeResourceManager(const std::filesystem::path& rootDir)
             rootDir / "assets" / "fonts", loadTguiFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load font: {}", result.error().getMessage()));
     }
 
@@ -36,7 +43,7 @@ initializeResourceManager(const std::filesystem::path& rootDir)
             { ".png" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load texture: {}", result.error().getMessage()));
     }
 
@@ -46,7 +53,7 @@ initializeResourceManager(const std::filesystem::path& rootDir)
             { ".anim" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load animation states: {}",
             result.error().getMessage()));
     }
@@ -57,7 +64,7 @@ initializeResourceManager(const std::filesystem::path& rootDir)
             { ".clip" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load clip: {}", result.error().getMessage()));
     }
 
@@ -65,7 +72,7 @@ initializeResourceManager(const std::filesystem::path& rootDir)
             rootDir / "assets" / "sounds", dgm::Utility::loadSound, { ".wav" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load sound: {}", result.error().getMessage()));
     }
 

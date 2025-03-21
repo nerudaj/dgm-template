@@ -87,7 +87,16 @@ else()
     CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
     CPMAddPackage("gh:texus/TGUI#v${TGUI_VERSION}")
     CPMAddPackage("gh:nerudaj/dgm-lib#main")
-    CPMAddPackage("gh:fmtlib/fmt#master")
+    if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
+        CPMAddPackage("gh:fmtlib/fmt#master")
+        
+    CPMAddPackage(
+        NAME range-v3
+        GITHUB_REPOSITORY ericniebler/range-v3
+        GIT_TAG master
+        GIT_SUBMODULES "test"
+    )
+    endif ()
     # CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
 endif()
 
