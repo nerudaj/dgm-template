@@ -2,6 +2,6 @@
 
 namespace CMakeVars
 {
-    constexpr const char* TITLE = "@PROJECT_NAME@";
+    constexpr const char* TITLE = "@THE_PROJECT_TITLE@";
     constexpr const char* VERSION = "@CMAKE_PROJECT_VERSION@";
 }
