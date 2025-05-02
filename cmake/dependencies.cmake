@@ -5,11 +5,9 @@ set ( DGM_LIB_VERSION "3.0.0-rc4" )
 set ( FSM_LIB_VERSION "2.1.1" )
 set ( TGUI_VERSION "1.7.0" )
 set ( CATCH2_VERSION "v3.8.0" )
-set ( FAKEIT_VERSION "2.4.0" )
 
 CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
 CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
-CPMAddPackage("gh:eranpeer/FakeIt#${FAKEIT_VERSION}")
 
 set ( CATCH2_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/_deps/catch2" )
 make_directory( "${CATCH2_FOLDER}/include" )
