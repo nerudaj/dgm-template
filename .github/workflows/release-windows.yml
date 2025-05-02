@@ -1,0 +1,48 @@
+name: Release-Window
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.28.1'
+
+    - name: Check version
+      run: cmake --version
+
+    - name: Configure CMake
+      run: |
+        mkdir "${{ env.BUILD_DIR }}"
+        cd "${{ env.BUILD_DIR }}"
+        cmake -D USE_NSIS=ON ..
+      shell: cmd
+
+    - name: Build
+      working-directory: ${{env.BUILD_DIR}}
+      run: |
+        cmake --build . --config Release
+      shell: cmd
+
+    - name: Pack
+      working-directory: ${{env.BUILD_DIR}}
+      run: |
+        cpack
+      shell: cmd
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{github.event.repository.name}}
+        path: ${{github.workspace}}/*.exe
+        retention-days: 5
