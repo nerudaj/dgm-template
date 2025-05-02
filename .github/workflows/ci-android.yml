@@ -1,0 +1,39 @@
+name: CI-Android
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  BUILD_DIR: ${{ github.workspace }}/_build
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup cmake
+      uses: jwlawson/actions-step-cmake@v2
+      with:
+        cmake-version: '3.28.1'
+
+    - name: Check version
+      run: cmake --version
+
+    - name: Configure CMake
+      run: |
+        mkdir "${{ env.BUILD_DIR }}"
+        cd "${{ env.BUILD_DIR }}"
+        cmake -D BUILD_ANDROID=ON ..
+      shell: cmd
+
+    - name: Build
+      working-directory: ${{ github.workspace }}/bin-android
+      run: |
+        gradlew build
+      shell: cmd
