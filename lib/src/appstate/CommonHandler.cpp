@@ -19,8 +19,6 @@ void CommonHandler::handleInput(
     const auto mousePosition =
         sf::Mouse::getPosition(app.window.getSfmlWindowContext());
 
-    dic.input.update();
-
     if (dic.input.isConfirmPressed())
     {
         emulateGuiClick(dic.gui, mousePosition);

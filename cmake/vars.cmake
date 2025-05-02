@@ -2,4 +2,7 @@ set ( THE_PROJECT_NAME "Template" )
 set ( LIB_TARGET_NAME "game-lib" )
 set ( TEST_TARGET_NAME "unit-tests" )
 set ( USE_SFML_TGUI_STATIC_LINKAGE OFF )
-set ( USE_PREBUILT_LIBRARIES ON )
+set ( USE_PREBUILT_LIBRARIES OFF )
+
+set ( ANDROID_ORG "org.nerudaj.template" )
+set ( ANDROID_NATIVE_LIB_NAME "cppcore" )

@@ -1,5 +1,11 @@
 _build
 lib/include/misc/CMakeVars.hpp
 tests/include/Paths.hpp
-android/app/gradle.build.kts
-android/app/main/src/AppManifest.xml
+
+bin-android/local.properties
+bin-android/app/build.gradle.kts
+bin-android/app/src/main.AndroidManifest.xml
+bin-android/app/.cxx
+bin-android/app/build
+bin-android/.idea
+bin-android/.gradle

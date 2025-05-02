@@ -2,41 +2,69 @@
 
 Input::Input()
 {
-    controller.bindInput(
-        std::to_underlying(InputKind::BackButton), sf::Keyboard::Key::Escape);
-    controller.bindInput(
-        std::to_underlying(InputKind::BackButton), dgm::Xbox::Button::Back);
+    controller.bindInput(InputKind::BackButton, sf::Keyboard::Key::Escape);
 
-    controller.bindInput(
-        std::to_underlying(InputKind::ConfirmButton), dgm::Xbox::Button::A);
+    controller.bindInput(InputKind::Left, sf::Keyboard::Key::A);
+    controller.bindInput(InputKind::Right, sf::Keyboard::Key::D);
+    controller.bindInput(InputKind::Jump, sf::Keyboard::Key::Space);
 
-    controller.bindInput(
-        std::to_underlying(InputKind::CursorUp), dgm::Xbox::Axis::LStickYneg);
-    controller.bindInput(
-        std::to_underlying(InputKind::CursorDown), dgm::Xbox::Axis::LStickYpos);
-    controller.bindInput(
-        std::to_underlying(InputKind::CursorLeft), dgm::Xbox::Axis::LStickXneg);
-    controller.bindInput(
-        std::to_underlying(InputKind::CursorRight),
-        dgm::Xbox::Axis::LStickXpos);
+    try
+    {
+        const auto id = sf::Joystick::getIdentification(0);
 
-    controller.bindInput(
-        std::to_underlying(InputKind::Left), sf::Keyboard::Key::A);
-    controller.bindInput(
-        std::to_underlying(InputKind::Right), sf::Keyboard::Key::D);
-    controller.bindInput(
-        std::to_underlying(InputKind::Jump), sf::Keyboard::Key::Space);
+        controller.bindInput(
+            InputKind::BackButton,
+            dgm::translateGamepadCode(dgm::GamepadCode::Select, id));
+
+        controller.bindInput(
+            InputKind::ConfirmButton,
+            dgm::translateGamepadCode(dgm::GamepadCode::A, id));
+
+        controller.bindInput(
+            InputKind::CursorUp,
+            dgm::translateGamepadCode(dgm::GamepadCode::LStickUp, id));
+        controller.bindInput(
+            InputKind::CursorDown,
+            dgm::translateGamepadCode(dgm::GamepadCode::LStickDown, id));
+        controller.bindInput(
+            InputKind::CursorLeft,
+            dgm::translateGamepadCode(dgm::GamepadCode::LStickLeft, id));
+        controller.bindInput(
+            InputKind::CursorRight,
+            dgm::translateGamepadCode(dgm::GamepadCode::LStickRight, id));
+    }
+    catch (...)
+    {
+        controller.bindInput(InputKind::ConfirmButton, 0);
+        controller.bindInput(InputKind::BackButton, 10);
+        controller.bindInput(
+            InputKind::CursorLeft,
+            sf::Joystick::Axis::X,
+            dgm::AxisHalf::Negative);
+        controller.bindInput(
+            InputKind::CursorRight,
+            sf::Joystick::Axis::X,
+            dgm::AxisHalf::Positive);
+        controller.bindInput(
+            InputKind::CursorUp,
+            sf::Joystick::Axis::Y,
+            dgm::AxisHalf::Negative);
+        controller.bindInput(
+            InputKind::CursorDown,
+            sf::Joystick::Axis::Y,
+            dgm::AxisHalf::Positive);
+    }
 }
 
 float Input::getHorizontalVelocity() const
 {
-    return -controller.getInputValue(std::to_underlying(InputKind::Left))
-           + controller.getInputValue(std::to_underlying(InputKind::Right));
+    return -controller.readAnalog(InputKind::Left)
+           + controller.readAnalog(InputKind::Right);
 }
 
 bool Input::isJumpPressed() const
 {
-    return controller.isInputToggled(std::to_underlying(InputKind::Jump));
+    return controller.readDigital(InputKind::Jump);
 }
 
 bool Input::isBackButtonPressed() const
@@ -52,18 +80,14 @@ bool Input::isConfirmPressed() const
 sf::Vector2f Input::getCursorDelta() const
 {
     return sf::Vector2f {
-        controller.getInputValue(std::to_underlying(InputKind::CursorLeft))
-            + controller.getInputValue(
-                std::to_underlying(InputKind::CursorRight)),
-        -controller.getInputValue(std::to_underlying(InputKind::CursorUp))
-            - controller.getInputValue(
-                std::to_underlying(InputKind::CursorDown)),
+        controller.readAnalog(InputKind::CursorLeft)
+            + controller.readAnalog(InputKind::CursorRight),
+        -controller.readAnalog(InputKind::CursorUp)
+            - controller.readAnalog(InputKind::CursorDown),
     };
 }
 
 bool Input::readAndRelease(InputKind i) const
 {
-    const bool value = controller.isInputToggled(std::to_underlying(i));
-    if (value) controller.releaseInput(std::to_underlying(i));
-    return value;
+    return controller.readDigital(i, dgm::DigitalReadKind::OnPress);
 }

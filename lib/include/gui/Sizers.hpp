@@ -3,18 +3,18 @@
 class Sizers
 {
 public:
-    static [[nodiscard]] unsigned GetSystemDPI();
+    static unsigned GetSystemDPI();
 
-    static [[nodiscard]] unsigned GetMenuBarHeight();
+    static unsigned GetMenuBarHeight();
 
-    static [[nodiscard]] unsigned GetMenuBarTextHeight();
+    static unsigned GetMenuBarTextHeight();
 
-    static [[nodiscard]] unsigned getBaseTextSize()
+    static unsigned getBaseTextSize()
     {
         return GetMenuBarTextHeight();
     }
 
-    static [[nodiscard]] unsigned getBaseContainerHeight()
+    static unsigned getBaseContainerHeight()
     {
         return GetMenuBarHeight();
     }

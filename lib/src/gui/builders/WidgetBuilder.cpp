@@ -1,18 +1,19 @@
 #include "gui/builders/WidgetBuilder.hpp"
 #include "gui/Sizers.hpp"
 #include "gui/TguiHelper.hpp"
+#include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <ranges>
 
-[[nodiscard]] std::string randomString(std::size_t len)
+NODISCARD_RESULT std::string randomString(std::size_t len)
 {
     constexpr auto CHARS = std::string_view(
         "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     return std::views::iota(0u, len)
            | std::views::transform([CHARS](std::size_t)
                                    { return CHARS[rand() % CHARS.size()]; })
-           | std::ranges::to<std::string>();
+           | uniranges::to<std::string>();
 }
 
 tgui::Label::Ptr WidgetBuilder::createLabelInternal(
@@ -22,10 +23,10 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     label->getRenderer()->setTextColor(sf::Color::White);
     label->getRenderer()->setTextOutlineColor(tgui::Color::Black);
     label->getRenderer()->setTextOutlineThickness(1.f);
-    label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     label->setHorizontalAlignment(
-        justify ? tgui::Label::HorizontalAlignment::Center
-                : tgui::Label::HorizontalAlignment::Left);
+        justify ? tgui::HorizontalAlignment::Center
+                : tgui::HorizontalAlignment::Left);
     label->setTextSize(
         static_cast<unsigned>(Sizers::getBaseTextSize() * sizeMultiplier));
     label->setSize({ "100%", "100%" });
@@ -89,8 +90,8 @@ tgui::Panel::Ptr WidgetBuilder::createSlider(
     result->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
     const auto&& ID = randomString(16);
 
-    auto&& dummyLabel = tgui::Label::create(
-        properties.valueFormatter(properties.high + properties.step));
+    auto&& dummyLabel =
+        tgui::Label::create(properties.valueFormatter(properties.high));
     dummyLabel->setTextSize(Sizers::GetMenuBarTextHeight());
     dummyLabel->setAutoSize(true);
     gui.add(dummyLabel, "DummyLabel");
@@ -101,9 +102,8 @@ tgui::Panel::Ptr WidgetBuilder::createSlider(
     valueLabel->getRenderer()->setTextColor(sf::Color::Black);
     valueLabel->setSize(size.x, "100%");
     valueLabel->setPosition("parent.width" - size.x, "0%");
-    valueLabel->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-    valueLabel->setHorizontalAlignment(
-        tgui::Label::HorizontalAlignment::Center);
+    valueLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
+    valueLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     result->add(valueLabel, ID);
 
     auto&& slider = tgui::Slider::create(properties.low, properties.high);
@@ -199,7 +199,7 @@ tgui::Label::Ptr WidgetBuilder::createTooltip(const std::string& text)
 {
     auto label = tgui::Label::create(text);
     label->getRenderer()->setBackgroundColor(sf::Color::White);
-    label->getRenderer()->setBorders(tgui::Borders::Outline(1));
+    label->getRenderer()->setBorders(tgui::Outline(1u));
     label->getRenderer()->setBorderColor(sf::Color::Black);
     label->setTextSize(Sizers::getBaseTextSize());
     return label;

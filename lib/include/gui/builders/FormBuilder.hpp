@@ -1,10 +1,18 @@
 #pragma once
 
+#include <DGM/classes/Compatibility.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <string>
 #include <tuple>
 #include <vector>
+
+// https://github.com/llvm/llvm-project/issues/36032
+struct [[nodiscard]] OptionConfig final
+{
+    bool disabled = false;
+    std::optional<std::string> tooltipText = {};
+};
 
 class [[nodiscard]] FormBuilder final
 {
@@ -15,39 +23,33 @@ public:
     ~FormBuilder() = default;
 
 public:
-    struct OptionConfig
-    {
-        bool disabled = false;
-        std::optional<std::string> tooltipText = {};
-    };
-
-    [[nodiscard]] FormBuilder& addOption(
+    FormBuilder& addOption(
         const std::string& labelText,
         tgui::Widget::Ptr widget,
         OptionConfig config = {});
 
-    [[nodiscard]] FormBuilder& addOptionWithWidgetId(
+    FormBuilder& addOptionWithWidgetId(
         const std::string& labelText,
         tgui::Widget::Ptr widget,
         const std::string widgetId);
 
-    [[nodiscard]] FormBuilder& addOptionWithSubmit(
+    FormBuilder& addOptionWithSubmit(
         const std::string& labelText,
         tgui::Widget::Ptr widget,
         tgui::Button::Ptr submitBtn);
 
-    [[nodiscard]] FormBuilder& addSeparator();
+    FormBuilder& addSeparator();
 
-    [[nodiscard]] tgui::Panel::Ptr
+    NODISCARD_RESULT tgui::Panel::Ptr
     build(tgui::Color backgroundColor = tgui::Color::Transparent);
 
 private:
-    static [[nodiscard]] tgui::Panel::Ptr createOptionRow(
+    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRow(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         std::optional<std::string> widgetId);
 
-    static [[nodiscard]] tgui::Panel::Ptr createOptionRowWithSubmitButton(
+    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRowWithSubmitButton(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         tgui::Button::Ptr buttonPtr);

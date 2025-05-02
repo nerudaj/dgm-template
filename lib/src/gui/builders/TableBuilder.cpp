@@ -12,14 +12,14 @@ void priv::TableBuilder::addRow(const std::vector<std::string>& cells)
 }
 
 template<class Range>
-[[nodiscard]] static auto enumerate(Range&& range)
+NODISCARD_RESULT static auto enumerate(Range&& range)
 {
     return std::views::zip(
         std::views::iota(size_t { 0 }, std::ranges::size(range)),
         std::forward<Range>(range));
 }
 
-[[nodiscard]] static tgui::Label::Ptr
+NODISCARD_RESULT static tgui::Label::Ptr
 createCell(const std::string& str, size_t column, size_t totalColumns)
 {
     size_t columnWidth = 100 / totalColumns;
@@ -30,8 +30,8 @@ createCell(const std::string& str, size_t column, size_t totalColumns)
     label->setPosition(
         { tgui::Layout(std::to_string(column * columnWidth) + "%"), "0%" });
     label->setTextSize(Sizers::GetMenuBarTextHeight());
-    label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
-    label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+    label->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
+    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     return label;
 }
 

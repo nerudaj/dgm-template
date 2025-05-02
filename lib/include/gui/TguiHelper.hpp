@@ -1,5 +1,6 @@
 #pragma once
 
+#include "misc/Compatibility.hpp"
 #include <SFML/Graphics.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -7,7 +8,7 @@
 class TguiHelper final
 {
 public:
-    [[nodiscard]] static tgui::Texture
+    static NODISCARD_RESULT tgui::Texture
     convertTexture(const sf::Texture& texture)
     {
         auto result = tgui::Texture();
@@ -16,7 +17,7 @@ public:
         return result;
     }
 
-    [[nodiscard]] static tgui::Texture
+    static NODISCARD_RESULT tgui::Texture
     convertTexture(const sf::Texture& texture, const sf::IntRect& clipping)
     {
         auto result = tgui::Texture();

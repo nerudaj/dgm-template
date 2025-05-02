@@ -1,7 +1,11 @@
+#include <appstate/AppStateMainMenu.hpp>
+#include <appstate/AppStatePause.hpp>
 #include <catch_amalgamated.hpp>
-#include <fakeit.hpp>
 
 TEST_CASE("[Dummy]")
 {
-    REQUIRE(true);
+    dgm::Window window({ 1u, 1u }, "", false);
+    dgm::App app(window);
+    app.pushState<AppStateMainMenu>();
+    app.pushState<AppStatePause>();
 }

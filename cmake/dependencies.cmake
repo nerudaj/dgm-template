@@ -5,11 +5,9 @@ set ( DGM_LIB_VERSION "3.0.0-rc4" )
 set ( FSM_LIB_VERSION "2.1.1" )
 set ( TGUI_VERSION "1.7.0" )
 set ( CATCH2_VERSION "v3.8.0" )
-set ( FAKEIT_VERSION "2.4.0" )
 
 CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
 CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
-CPMAddPackage("gh:eranpeer/FakeIt#${FAKEIT_VERSION}")
 
 set ( CATCH2_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/_deps/catch2" )
 make_directory( "${CATCH2_FOLDER}/include" )
@@ -86,8 +84,18 @@ if ( ${USE_PREBUILT_LIBRARIES} )
 else()
     CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
     CPMAddPackage("gh:texus/TGUI#v${TGUI_VERSION}")
-    CPMAddPackage("gh:nerudaj/dgm-lib#v${DGM_LIB_VERSION}")
-    CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
+    CPMAddPackage("gh:nerudaj/dgm-lib#main")
+    if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
+        CPMAddPackage("gh:fmtlib/fmt#master")
+        
+    CPMAddPackage(
+        NAME range-v3
+        GITHUB_REPOSITORY ericniebler/range-v3
+        GIT_TAG master
+        GIT_SUBMODULES "test"
+    )
+    endif ()
+    # CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
 endif()
 
 if ( ${BUILD_TESTS} )

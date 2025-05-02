@@ -62,7 +62,7 @@ void AppStatePause::onExit()
     app.exit();
 }
 
-void AppStatePause::restoreFocusImpl(const std::string& msg)
+void AppStatePause::restoreFocusImpl(const std::string&)
 {
     buildLayout();
 }

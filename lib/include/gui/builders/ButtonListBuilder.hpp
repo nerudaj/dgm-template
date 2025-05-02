@@ -1,5 +1,6 @@
 #pragma once
 
+#include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <functional>
@@ -15,10 +16,10 @@ public:
     ~ButtonListBuilder() = default;
 
 public:
-    [[nodiscard]] ButtonListBuilder&
+    ButtonListBuilder&
     addButton(const std::string& label, std::function<void(void)> onClick);
 
-    [[nodiscard]] tgui::Panel::Ptr build();
+    NODISCARD_RESULT tgui::Panel::Ptr build();
 
 private:
     struct ButtonProps

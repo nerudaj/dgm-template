@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gui/HeadingLevel.hpp"
+#include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
@@ -15,7 +16,7 @@ namespace priv
         }
 
     public:
-        [[nodiscard]] inline tgui::Panel::Ptr build() const
+        NODISCARD_RESULT inline tgui::Panel::Ptr build() const
         {
             return container;
         }

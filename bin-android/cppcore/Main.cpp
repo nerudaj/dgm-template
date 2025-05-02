@@ -2,6 +2,8 @@
 #include <appstate/AppStateMainMenu.hpp>
 #include <misc/CMakeVars.hpp>
 #include <misc/DependencyContainer.hpp>
+#include <misc/Compatibility.hpp>
+#include <mutex>
 
 std::expected<tgui::Font, dgm::Error>
 loadTguiFont(const std::filesystem::path& path)
@@ -15,57 +17,57 @@ initializeResourceManager(const std::filesystem::path& rootDir)
     dgm::ResourceManager resmgr;
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Font>(
-            rootDir / "assets" / "fonts", dgm::Utility::loadFont, { ".ttf" });
+            rootDir  / "fonts", dgm::Utility::loadFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Font>(
-            rootDir / "assets" / "fonts", loadTguiFont, { ".ttf" });
+            rootDir  / "fonts", loadTguiFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
-            rootDir / "assets" / "graphics",
+            rootDir  / "graphics",
             dgm::Utility::loadTexture,
             { ".png" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load texture: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::AnimationStates>(
-            rootDir / "assets" / "graphics",
+            rootDir  / "graphics",
             dgm::Utility::loadAnimationStates,
             { ".anim" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load animation states: {}",
             result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
-            rootDir / "assets" / "graphics",
+            rootDir  / "graphics",
             dgm::Utility::loadClip,
             { ".clip" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load clip: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::SoundBuffer>(
-            rootDir / "assets" / "sounds", dgm::Utility::loadSound, { ".wav" });
+            rootDir  / "sounds", dgm::Utility::loadSound, { ".wav" });
         !result)
     {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(uni::format(
             "Could not load sound: {}", result.error().getMessage()));
     }
 
@@ -81,7 +83,7 @@ int main(int, char*[])
         .video =
             VideoSettings {
 #ifdef _DEBUG
-                .resolution = { 1280, 720 },
+                .resolution = sf::VideoMode::getDesktopMode().size,
 #else
                 .resolution = sf::VideoMode::getDesktopMode().size,
 #endif
@@ -101,7 +103,7 @@ int main(int, char*[])
     try
     {
         auto dependencies = DependencyContainer {
-            .resmgr = initializeResourceManager(".."),
+            .resmgr = initializeResourceManager(""),
             .strings = StringProvider(Language::English),
             .gui = Gui(gui, guiTheme),
             .input = Input(),
@@ -115,7 +117,7 @@ int main(int, char*[])
     }
     catch (const std::exception& ex)
     {
-        std::cerr << ex.what() << std::endl;
+        sf::err() << ex.what() << std::endl;
         return 1;
     }
 

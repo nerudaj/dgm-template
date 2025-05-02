@@ -1,4 +1,20 @@
 #include "gui/Sizers.hpp"
+#ifdef ANDROID
+unsigned Sizers::GetSystemDPI()
+{
+    return 1u;
+}
+
+unsigned Sizers::GetMenuBarHeight()
+{
+    return 22u;
+}
+
+unsigned Sizers::GetMenuBarTextHeight()
+{
+    return 18u;
+}
+#else
 #include <Windows.h>
 
 unsigned Sizers::GetSystemDPI()
@@ -18,3 +34,4 @@ unsigned Sizers::GetMenuBarTextHeight()
 {
     return static_cast<unsigned>(GetMenuBarHeight() / 2.55f);
 }
+#endif
