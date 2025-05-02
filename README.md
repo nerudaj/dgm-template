@@ -2,77 +2,90 @@
 
 ## Table of Contents
 
-**TODO:** this
+- [Project structure](#project-structure)
+- [Customizing template](#customizing-template)
+- [Propagating CMake variables into native code](#propagating-cmake-variables-into-native-code)
+- [Building for Windows](#building-for-windows)
+  - [Dependencies](#dependencies)
+  - [Setup](#setup)
+- [Building for Android](#building-for-android)
+  - [Dependencies](#dependencies-1)
+  - [Setup](#setup-1)
 
-## Dependencies
+## Project structure
 
-For Windows build, you need these:
+ * `assets` - All runtime assets that will be packaged and distributed with the game go here. If you respect the structure of subfolders, your assets will be autoloaded into `dgm::ResourceManager` on start of the app.
+ * `bin-android` - Contains entire project structure for Android Studio to work with. The only thing you should meddle with in there is `Main.cpp` in `cppcore` folder. Nothing else doesn't need touching.
+ * `bin-windows` - Contains `Main.cpp` for Windows app.
+ * `cmake` - Contains utility CMake files.
+ * `lib` - Contains the entire code of the application.
+ * `tests` - Contains unit testing source codes.
 
-* Visual Studio 2022 (v17.12+) with platform toolset v143
-* CMake v3.28.1+
+### Customizing template
 
-All build dependencies are fetched automatically by CMake.
+Start with `cmake/vars.cmake` file. Change the project name variable (affects name of the Windows solution, name of the app and name of the build target in the solution).
 
-For Android build, you need these:
+You can toy with other project names and compilation flags, but the default should work well.
 
-* Java SDK 11
-* Android NDK
-* Visual Studio 2022 (v17.12+) with Android build tools
-* CMake v3.28.1+
-* Gradle is fetched automatically through gradlew
-
-## Setup
-
-To customize the name of the project and various other values, edit `cmake/vars.cmake`.
-
-Most notably, you want to change the value of `THE_PROJECT_NAME`.
-
-**TODO:** Android-related variables
+If you plan to deploy on Android, change the value of `ANDROID_ORG` as well.
 
 ### Propagating CMake variables into native code
 
 If you need to reference certain CMake variable values in native code, add them to `lib/misc/CMakeVars.hpp.in`. During configure, this file is configured into `lib/misc/CMakeVars.hpp` and you can include it easily in code through `#include <misc/CMakeVars.hpp>`.
 
-## Project structure
+## Building for Windows
 
-* `android` - Contains Graddle wrapper and definition of the Android project. Build of Android is managed through CMake.
-* `assets` - Folder where you should put ALL game assets - textures, fonts, icons, levels, everything.
-* `bin` - Project for Windows executable / Android native library. This one handles the start of the program, instantiation of top-level classes, loading resources, etc.
-* `cmake` - Folder for various `.cmake` scripts. Most notably `dependencies.cmake` that handles external dependencies and `vars.cmake` that handles some project-level variables, like project name.
-* `lib` - Project for the game engine, all of the game logic, application logic, etc.
-* `tests` - Project for writing unit tests.
+### Dependencies
 
-## How to build
+* Visual Studio 2022 (v17.12+) with platform toolset v143
+* CMake v3.28.1+
+* Optional: NSIS v3+ (for packaging)
 
-### Windows
+### Setup
 
-Considering you only have Visual Studio 2022 installed (otherwise you need to tell CMake you want to use MSVC through `-G`). In project root directory:
+Configure cmake:
 
 ```sh
-# Create build folder
 mkdir _build
 cd _build
 
-# Configure everything, download build dependencies
-# Generate MSVC solution file for development
 # of USE_NSIS=ON, configures cpack to use NSIS instead of zip (generates installer)
 cmake [-D USE_NSIS=ON] ..
-cmake --build . --config Release # or Debug; builds everything
-ctest -C Release # to run unit tests on previously built configuration
-cpack # generates either a zip package or NSIS installer
 ```
 
-### Android
+This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, then CPack would use NSIS (must be installed) instead of Zip for packaging.
 
-Works pretty much the same as Windows build, the only difference is CMake option used:
+Or you can build the whole thing from the command line:
+
+```sh
+cmake --build . --config Release
+ctest -C Release
+cpack
+```
+
+## Building for Android
+
+## Dependencies
+
+* Java SDK 11
+* Android NDK
+* CMake v3.28.1+
+* Gradle is fetched automatically through gradlew
+
+## Setup
+
+Configure cmake:
 
 ```sh
 mkdir _build
 cd _build
-
-# Generates project files under `android` so you can open that folder in Android Studio
 cmake -D BUILD_ANDROID=ON ..
-cmake --build . --config Release
-# No unit tests supported in this setup
-cpack # generates a zip package containing .apk
+```
+
+This will generate `bin-android/local.properties`, `bin-android/app/build.gradle.kts` and `bin-android/app/src/main/AppManifest.xml`. After that you can open the `bin-android` folder as a project in Android Studio and continue from there.
+
+Or you can build the whole thing from the command-line (inside `bin-android`):
+
+```sh
+gradlew build
 ```
