@@ -83,7 +83,7 @@ if ( ${USE_PREBUILT_LIBRARIES} )
 
 else()
     CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
-    CPMAddPackage("gh:texus/TGUI#v${TGUI_VERSION}")
+    CPMAddPackage("gh:texus/TGUI#${TGUI_VERSION}")
     CPMAddPackage("gh:nerudaj/dgm-lib#main")
     if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
         CPMAddPackage("gh:fmtlib/fmt#master")
