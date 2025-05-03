@@ -3,7 +3,7 @@ set ( NLOHMANN_VERSION "3.11.3" )
 set ( SFML_VERSION "3.0.0" )
 set ( DGM_LIB_VERSION "3.0.0-rc4" )
 set ( FSM_LIB_VERSION "2.1.1" )
-set ( TGUI_VERSION "1.8.0" )
+set ( TGUI_VERSION "1.x" )
 set ( CATCH2_VERSION "v3.8.0" )
 
 CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
