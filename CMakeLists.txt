@@ -4,9 +4,12 @@ include ( "cmake/vars.cmake" )
 include ( "cmake/cpp-init.cmake" )
 
 cpp_init()
-get_version_from_git ( PROJECT_VERSION_VARIABLE GIT_FULL_VERSION )
+get_version_from_git (
+    PROJECT_VERSION_VARIABLE GIT_PROJECT_VERSION
+    FULL_VERSION_VARIABLE FULL_PROJECT_VERSION
+)
 
-project ( ${THE_PROJECT_NAME} VERSION ${PROJECT_VERSION_VARIABLE} )
+project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
 option ( BUILD_TESTS "Build unit testing target" ON )
 option ( BUILD_ANDROID "Perform Android build instead of Windows" OFF )
@@ -31,4 +34,5 @@ endif ()
 
 # TODO: packaging
 
+set ( CPACK_GENERATOR "ZIP" )
 include ( CPack )
