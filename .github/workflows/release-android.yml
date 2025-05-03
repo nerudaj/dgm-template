@@ -35,13 +35,20 @@ jobs:
       shell: cmd
 
     - name: Build
-      working-directory: ${{ github.workspace }}/bin-android
+      working-directory: ${{ env.BUILD_DIR }}
       run: |
         gradlew build
       shell: cmd
-    
-    - name: Store artifact
+
+    - name: Pack
+      working-directory: ${{env.BUILD_DIR}}
       run: |
-        echo Not yet implemented
-        exit 1
+        cpack
       shell: cmd
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{github.event.repository.name}}
+        path: ${{github.workspace}}/*.zip
+        retention-days: 5

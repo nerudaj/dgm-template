@@ -37,11 +37,13 @@ jobs:
       run: |
         mkdir "${{ env.BUILD_DIR }}"
         cd "${{ env.BUILD_DIR }}"
-        cmake -D BUILD_ANDROID=ON ..
+        cmake -D CMAKE_BUILD_SYSTEM=Android ..
       shell: cmd
 
     - name: Build
-      working-directory: ${{ github.workspace }}/bin-android
+      working-directory: ${{ env.BUILD_DIR }}
       run: |
         gradlew build
       shell: cmd
+
+    # TODO: Publish APK as artifact

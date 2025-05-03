@@ -12,13 +12,53 @@ get_version_from_git (
 project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
 option ( BUILD_TESTS "Build unit testing target" ON )
-option ( BUILD_ANDROID "Perform Android build instead of Windows" OFF )
 option ( USE_NSIS "Use NSIS for packaging" OFF )
 
 
-if ( ${BUILD_ANDROID} )
-    add_subdirectory( "bin-android" )
+if ( ${CMAKE_BUILD_SYSTEM} STREQUAL "Android" )
+    message ( "Configuring for Android build" )
+
+    set ( CURRENT_USER_NAME $ENV{USERNAME} )
+
+    message ( "Detected current user: ${CURRENT_USER_NAME}" )
+
+    make_directory ( "${CMAKE_CURRENT_BINARY_DIR}/app/src/main" )
+
+    file ( COPY
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle"
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/build.gradle.kts"
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle.properties"
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew"
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew.bat"
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/settings.gradle.kts"
+        DESTINATION
+            ${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/infiles/local.properties.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/local.properties"
+    )
+
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/infiles/build.gradle.kts.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/app/build.gradle.kts"
+    )
+    
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/infiles/proguard-rules.pro.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/app/proguard-rules.pro"
+    )
+
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/android/infiles/AndroidManifest.xml.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/app/src/main/AndroidManifest.xml"
+    )
+    
+    message ("Use the following command to build the APK: gradlew build" )
 else ()
+    message ("Configuring for Windows build")
+
     set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/Compiled" )
 
     include ( "cmake/dependencies.cmake" )
