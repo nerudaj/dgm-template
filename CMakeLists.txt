@@ -24,15 +24,23 @@ if ( ${CMAKE_BUILD_SYSTEM} STREQUAL "Android" )
 
     make_directory ( "${CMAKE_CURRENT_BINARY_DIR}/app/src/main" )
 
-    file ( COPY
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle"
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/build.gradle.kts"
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle.properties"
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew"
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew.bat"
-        "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/settings.gradle.kts"
+    file (
+        COPY
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/build.gradle.kts"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradle.properties"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/gradlew.bat"
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/gradle/settings.gradle.kts"
         DESTINATION
             ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    
+    file (
+        COPY
+            "${CMAKE_CURRENT_SOURCE_DIR}/android/res"
+        DESTINATION
+            "${CMAKE_CURRENT_BINARY_DIR}/app/src/main"
     )
 
     configure_file (
