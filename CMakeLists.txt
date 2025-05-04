@@ -16,7 +16,7 @@ option ( USE_NSIS "Use NSIS for packaging" OFF )
 
 set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
-if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
+if ( "${CMAKE_BUILD_SYSTEM}" STREQUAL "Android" )
     message ( "Configuring for Android build" )
 
     set ( CURRENT_USER_NAME $ENV{USERNAME} )
