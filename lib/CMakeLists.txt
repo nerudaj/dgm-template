@@ -28,14 +28,18 @@ make_static_library ( ${LIB_TARGET_NAME}
 endif ()
 
 target_precompile_headers( ${LIB_TARGET_NAME}
-    vector
-    string
-    algorithm
-    functional
-    utility
-    variant
-    tuple
-    iostream
-    fstream
-    json.h
+    PUBLIC
+        <vector>
+        <string>
+        <algorithm>
+        <functional>
+        <utility>
+        <variant>
+        <tuple>
+        <iostream>
+        <fstream>
+        <map>
+        <unordered_map>
+        <set>
+        <nlohmann/json.hpp>
 )
