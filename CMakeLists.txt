@@ -63,6 +63,14 @@ if ( ${CMAKE_BUILD_SYSTEM} STREQUAL "Android" )
         "${CMAKE_CURRENT_BINARY_DIR}/app/src/main/AndroidManifest.xml"
     )
     
+    install (
+        FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/app-release-unsigned.apk"
+            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/output-metadata.json"
+        DESTINATION
+            "."
+    )
+    
     message ("Use the following command to build the APK: gradlew build" )
 else ()
     message ("Configuring for Windows build")

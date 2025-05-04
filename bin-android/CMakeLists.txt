@@ -1,12 +1,12 @@
 cmake_minimum_required ( VERSION 3.28 )
 
-include ( ../../cmake/vars.cmake )
-include ( ../../cmake/cpp-init.cmake )
+include ( ../cmake/vars.cmake )
+include ( ../cmake/cpp-init.cmake )
 
 bootstrap_cpm ()
 
 set ( USE_PREBUILT_LIBRARIES OFF )
-include ( ../../cmake/dependencies.cmake )
+include ( ../cmake/dependencies.cmake )
 
 project ( ${ANDROID_NATIVE_LIB_NAME} )
 
@@ -17,7 +17,7 @@ set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -u \
     Java_com_google_androidgamesdk_GameActivity_initializeNativeCode")
     
-add_subdirectory ( ../../lib "${CMAKE_CURRENT_BINARY_DIR}/lib" )
+add_subdirectory ( ../lib "${CMAKE_CURRENT_BINARY_DIR}/lib" )
     
 add_library(${PROJECT_NAME} SHARED
     Main.cpp)
