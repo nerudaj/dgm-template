@@ -3,6 +3,8 @@ name: CI-Android
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - '*'
   pull_request:
     branches: [ "main" ]
   schedule:
@@ -46,4 +48,15 @@ jobs:
         gradlew build
       shell: cmd
 
-    # TODO: Publish APK as artifact
+    - name: Pack
+      working-directory: ${{env.BUILD_DIR}}
+      run: |
+        cpack
+      shell: cmd
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{github.event.repository.name}}
+        path: ${{github.workspace}}/*.zip
+        retention-days: 5

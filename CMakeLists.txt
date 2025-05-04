@@ -14,6 +14,7 @@ project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 option ( BUILD_TESTS "Build unit testing target" ON )
 option ( USE_NSIS "Use NSIS for packaging" OFF )
 
+set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
 if ( ${CMAKE_BUILD_SYSTEM} STREQUAL "Android" )
     message ( "Configuring for Android build" )
@@ -65,7 +66,7 @@ if ( ${CMAKE_BUILD_SYSTEM} STREQUAL "Android" )
     
     install (
         FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/app-release-unsigned.apk"
+            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/${OUTPUT_FILE_NAME}.apk"
             "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/output-metadata.json"
         DESTINATION
             "."
@@ -88,7 +89,7 @@ else ()
     endif ()
 endif ()
 
-# TODO: packaging
-
 set ( CPACK_GENERATOR "ZIP" )
+set ( CPACK_PACKAGE_FILE_NAME "${OUTPUT_FILE_NAME}" )
+
 include ( CPack )
