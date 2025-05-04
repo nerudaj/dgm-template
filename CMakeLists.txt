@@ -89,7 +89,7 @@ else ()
     endif ()
     
     install (
-        DIRECTORY   "resources"
+        DIRECTORY   "assets"
         DESTINATION "."
     )
 endif ()
