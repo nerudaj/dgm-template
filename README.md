@@ -1,3 +1,5 @@
+[![CI-Windows](https://github.com/nerudaj/dgm-template/actions/workflows/ci-windows.yml/badge.svg?branch=main)](https://github.com/nerudaj/dgm-template/actions/workflows/ci-windows.yml) [![CI-Android](https://github.com/nerudaj/dgm-template/actions/workflows/ci-android.yml/badge.svg?branch=main)](https://github.com/nerudaj/dgm-template/actions/workflows/ci-android.yml)
+
 # dgm project template
 
 ## Table of Contents
@@ -79,13 +81,12 @@ Configure cmake:
 ```sh
 mkdir _build
 cd _build
-cmake -D BUILD_ANDROID=ON ..
+cmake -D CMAKE_BUILD_SYSTEM=Android ..
 ```
 
-This will generate `bin-android/local.properties`, `bin-android/app/build.gradle.kts` and `bin-android/app/src/main/AppManifest.xml`. After that you can open the `bin-android` folder as a project in Android Studio and continue from there.
-
-Or you can build the whole thing from the command-line (inside `bin-android`):
+This will generate `bin-android/local.properties`, `bin-android/app/build.gradle.kts` and `bin-android/app/src/main/AppManifest.xml`. After that you can open the `_build` folder as a project in Android Studio and continue from there.
 
 ```sh
-gradlew build
+cmake --build . --target android-build
+cpack
 ```

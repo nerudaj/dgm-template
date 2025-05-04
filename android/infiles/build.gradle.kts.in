@@ -1,16 +1,11 @@
-val NDK_VERSION by extra(project.properties["NDK_VERSION"] as? String ?: "26.1.10909125")
-val ARCH_ABI by extra(project.properties["ARCH_ABI"] as? String ?: "arm64-v8a")
-val MIN_SDK by extra((project.properties["MIN_SDK"] as? String ?: "21").toInt())
-val TARGET_SDK by extra((project.properties["TARGET_SDK"] as? String ?: "33").toInt())
-
 plugins {
     id("com.android.application")
 }
 
 android {
     namespace = "@ANDROID_ORG@"
-    ndkVersion = NDK_VERSION
-    compileSdk = TARGET_SDK
+    ndkVersion = "@ANDROID_NDK_VERSION@"
+    compileSdk = @ANDROID_TARGET_SDK@
 	
 	sourceSets {
         getByName("main") {
@@ -20,12 +15,13 @@ android {
 	
     defaultConfig {
         applicationId = "@ANDROID_ORG@"
-        minSdk = MIN_SDK
-        targetSdk = TARGET_SDK
+        minSdk = @ANDROID_MIN_SDK@
+        targetSdk = @ANDROID_TARGET_SDK@
         versionCode = 1
-        versionName = "1.0"
+        versionName = "@CMAKE_PROJECT_VERSION@"
+
         ndk {
-            abiFilters.add(ARCH_ABI)
+            abiFilters.add("@ANDROID_ARCH_ABI@")
         }
         externalNativeBuild {
             cmake {
@@ -37,6 +33,7 @@ android {
 	
     buildTypes {
         release {
+            // By default, assembleRelease uses RelWithDebInfo build type
             externalNativeBuild {
                 cmake {
                     arguments.add("-DCMAKE_BUILD_TYPE=Release")
@@ -47,11 +44,22 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
+    
     externalNativeBuild {
         cmake {
-            path("@PROJECT_SOURCE_DIR@/bin-android/cppcore/CMakeLists.txt")
+            path("@PROJECT_SOURCE_DIR@/bin-android/CMakeLists.txt")
 			version = "3.28.1"
         }
+    }
+    
+    // Override default name which is app-<configuration>-unsigned.apk
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                output.outputFileName = "@THE_PROJECT_NAME@-v@CMAKE_PROJECT_VERSION@.apk"
+            }
     }
 }
 
