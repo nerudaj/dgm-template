@@ -45,3 +45,16 @@ jobs:
       run: |
         ctest -C Release --output-on-failure
       shell: cmd
+
+    - name: Pack
+      working-directory: ${{env.BUILD_DIR}}
+      run: |
+        cpack
+      shell: cmd
+
+    - name: Store artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows-CI-Build
+        path: ${{env.BUILD_DIR}}/*.zip
+        retention-days: 1

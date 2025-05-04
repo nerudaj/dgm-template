@@ -87,6 +87,11 @@ else ()
         enable_testing()
         add_subdirectory ( "tests" )
     endif ()
+    
+    install (
+        DIRECTORY   "assets"
+        DESTINATION "."
+    )
 endif ()
 
 set ( CPACK_GENERATOR "ZIP" )
