@@ -26,3 +26,20 @@ make_static_library ( ${LIB_TARGET_NAME}
         SFML::Audio
 )
 endif ()
+
+target_precompile_headers( ${LIB_TARGET_NAME}
+    PUBLIC
+        <vector>
+        <string>
+        <algorithm>
+        <functional>
+        <utility>
+        <variant>
+        <tuple>
+        <iostream>
+        <fstream>
+        <map>
+        <unordered_map>
+        <set>
+        <nlohmann/json.hpp>
+)
