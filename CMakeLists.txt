@@ -66,8 +66,8 @@ if ( "${CMAKE_BUILD_SYSTEM}" STREQUAL "Android" )
     
     install (
         FILES
-            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/${OUTPUT_FILE_NAME}.apk"
-            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/release/output-metadata.json"
+            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/$<CONFIG>/${OUTPUT_FILE_NAME}.apk"
+            "${CMAKE_CURRENT_BINARY_DIR}/app/build/outputs/apk/$<CONFIG>/output-metadata.json"
         DESTINATION
             "."
     )
