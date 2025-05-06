@@ -4,7 +4,6 @@ set ( TEST_TARGET_NAME "unit-tests" )
 
 # C++ vars
 set ( USE_SFML_TGUI_STATIC_LINKAGE OFF )
-set ( USE_PREBUILT_LIBRARIES OFF )
 
 # Android vars
 set ( ANDROID_ORG "org.nerudaj.template" )

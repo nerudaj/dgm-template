@@ -1,105 +1,36 @@
+include ( add-catch.cmake )
+
 set ( CXXOPTS_VERSION "3.2.1" )
 set ( NLOHMANN_VERSION "3.11.3" )
-set ( SFML_VERSION "3.0.0" )
-set ( DGM_LIB_VERSION "3.0.0-rc4" )
+set ( SFML_VERSION "master" )
+set ( DGM_LIB_VERSION "main" )
 set ( FSM_LIB_VERSION "2.1.1" )
 set ( TGUI_VERSION "1.x" )
 set ( CATCH2_VERSION "v3.8.0" )
+set ( RANGEV3_VERSION "master" )
+set ( FMTLIB_VERSION "master" )
 
 CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
 CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
 
-set ( CATCH2_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/_deps/catch2" )
-make_directory( "${CATCH2_FOLDER}/include" )
-
-file ( DOWNLOAD
-    https://github.com/catchorg/Catch2/releases/download/${CATCH2_VERSION}/catch_amalgamated.hpp
-    "${CATCH2_FOLDER}/include/catch_amalgamated.hpp"
-)
-
-file ( DOWNLOAD
-    https://github.com/catchorg/Catch2/releases/download/${CATCH2_VERSION}/catch_amalgamated.cpp
-    "${CATCH2_FOLDER}/catch_amalgamated.cpp"
-)
-
-message ( "==== CATCH2 DOWNLOADED ===" )
-
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
+CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
+
 set ( TGUI_BACKEND SFML_GRAPHICS )
 set ( TGUI_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
+CPMAddPackage("gh:texus/TGUI#${TGUI_VERSION}")
 
-if ( ${USE_PREBUILT_LIBRARIES} )
+CPMAddPackage("gh:nerudaj/dgm-lib#{DGM_LIB_VERSION}")
+CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
+AddCatch( "${CATCH2_VERSION}" )
 
-    message ( "=== FETCHING PREBUILT DEPENDENCIES ===")
-
-    fetch_prebuilt_dependency(
-        SFML
-        URL https://github.com/SFML/SFML/releases/download/${SFML_VERSION}/SFML-${SFML_VERSION}-windows-vc17-64-bit.zip
-    )
-    message ( "==== SFML DOWNLOADED ===" )
-
-    fetch_prebuilt_dependency (
-        DGM
-        URL https://github.com/nerudaj/dgm-lib/releases/download/v${DGM_LIB_VERSION}/dgm-lib-v${DGM_LIB_VERSION}-Windows-x64-MSVC-143-for-SFML-${SFML_VERSION}.zip
-    )
-    message ( "==== DGM-LIB DOWNLOADED ===" )
-
-    fetch_prebuilt_dependency (
-        FSM
-        URL https://github.com/nerudaj/fsm-lib/releases/download/v${FSM_LIB_VERSION}/fsm-lib-v${FSM_LIB_VERSION}-Windows-x64-MSVC-143.zip
-    )
-    message ( "==== FSM-LIB DOWNLOADED ===" )
-
-    fetch_prebuilt_dependency (
-        TGUI
-        URL https://github.com/texus/TGUI/releases/download/v${TGUI_VERSION}/TGUI-${TGUI_VERSION}-vc17-64bit-for-SFML-${SFML_VERSION}.zip
-    )
-    set ( TGUI_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/_deps/TGUI-src" )
-    message ( "==== TGUI DOWNLOADED ===" )
-
-    message ( "=== FETCHING OK ===" )
-
-    set ( Ogg_DIR "${SFML_FOLDER}/lib/cmake/Ogg" )
-    find_package ( SFML
-        3.0.0 REQUIRED
-        COMPONENTS Main Window Graphics Audio
-        PATHS "${SFML_FOLDER}/lib/cmake"
-    )
-
-    find_package ( TGUI 
-        1.7.0 REQUIRED
-        PATHS "${TGUI_FOLDER}/lib/cmake"
-    )
-
-    find_package ( dgm-lib
-        3.0.0 REQUIRED
-        PATHS "${DGM_FOLDER}/lib/cmake"
-    )
-
-    find_package ( fsm-lib
-        2.1.0 REQUIRED
-        PATHS "${FSM_FOLDER}/lib/cmake"
-    )
-
-else()
-    CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
-    CPMAddPackage("gh:texus/TGUI#${TGUI_VERSION}")
-    CPMAddPackage("gh:nerudaj/dgm-lib#main")
-    if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
-        CPMAddPackage("gh:fmtlib/fmt#master")
-        
+if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
+    CPMAddPackage("gh:fmtlib/fmt#${FMTLIB_VERSION}")
+    
     CPMAddPackage(
         NAME range-v3
         GITHUB_REPOSITORY ericniebler/range-v3
-        GIT_TAG master
+        GIT_TAG ${RANGEV3_VERSION}
         GIT_SUBMODULES "test"
     )
-    endif ()
-    # CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
-endif()
-
-if ( ${BUILD_TESTS} )
-    add_library ( catch2 STATIC "${CATCH2_FOLDER}/include/catch_amalgamated.hpp" "${CATCH2_FOLDER}/catch_amalgamated.cpp" )
-    target_include_directories( catch2 PUBLIC "${CATCH2_FOLDER}/include" )
-    message ( "=== CATCH CONFIGURED ===" )
 endif ()
