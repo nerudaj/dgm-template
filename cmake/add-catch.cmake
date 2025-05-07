@@ -1,4 +1,4 @@
-macro ( add_catch CATCH2_VERSION )
+macro ( AddCatch CATCH2_VERSION )
     set ( CATCH2_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/_deps/catch2" )
     make_directory( "${CATCH2_FOLDER}/include" )
 

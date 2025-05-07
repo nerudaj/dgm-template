@@ -1,8 +1,8 @@
-include ( add-catch.cmake )
+include ( "${CMAKE_CURRENT_LIST_DIR}/add-catch.cmake" )
 
 set ( CXXOPTS_VERSION "3.2.1" )
 set ( NLOHMANN_VERSION "3.11.3" )
-set ( SFML_VERSION "master" )
+set ( SFML_VERSION "3.0.0" )
 set ( DGM_LIB_VERSION "main" )
 set ( FSM_LIB_VERSION "2.1.1" )
 set ( TGUI_VERSION "1.x" )
@@ -20,7 +20,7 @@ set ( TGUI_BACKEND SFML_GRAPHICS )
 set ( TGUI_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
 CPMAddPackage("gh:texus/TGUI#${TGUI_VERSION}")
 
-CPMAddPackage("gh:nerudaj/dgm-lib#{DGM_LIB_VERSION}")
+CPMAddPackage("gh:nerudaj/dgm-lib#${DGM_LIB_VERSION}")
 CPMAddPackage("gh:nerudaj/fsm-lib#v${FSM_LIB_VERSION}")
 AddCatch( "${CATCH2_VERSION}" )
 
