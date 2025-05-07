@@ -9,7 +9,7 @@
 class [[nodiscard]] Gui final
 {
 public:
-    Gui(tgui::Gui& gui, tgui::Theme& theme) noexcept : gui(gui), theme(theme) {}
+    Gui(dgm::Window& window) noexcept : gui(window.getSfmlWindowContext()) {}
 
 public:
     template<class T>
@@ -59,7 +59,11 @@ public:
         gui.setWindow(window);
     }
 
+    void setFont(const tgui::Font& font)
+    {
+        gui.setFont(font);
+    }
+
 private:
-    tgui::Gui& gui;
-    tgui::Theme& theme; // TODO: is this used?
+    tgui::Gui gui;
 };
