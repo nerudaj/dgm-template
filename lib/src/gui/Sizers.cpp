@@ -1,5 +1,53 @@
 #include "gui/Sizers.hpp"
+
 #ifdef ANDROID
+
+#include <jni/Resources.hpp>
+
+/**
+ * Lazy-initialized base-size provider for Android.
+ */
+struct [[nodiscard]] BaseSizeProviderSingleton final
+{
+private:
+    BaseSizeProviderSingleton()
+    {
+        // TODO: get activity states
+
+        auto core = Core::attachCurrentThread(vm, env);
+
+        auto resources = jni::Resources::getSystem(env);
+        baseSize = spToPx(
+            14,
+            resources.GetDisplayMetrics().getDensity());
+    }
+
+public:
+    BaseSizeProviderSingleton(BaseSizeProviderSingleton&&) = delete;
+    BaseSizeProviderSingleton(const BaseSizeProviderSingleton&) = delete;
+
+public:
+    BaseSizeProviderSingleton& getInstance()
+    {
+        static BaseSizeProviderSingleton instance;
+        return instance;
+    }
+
+    [[nodiscard]] unsigned getBaseFontSize() const noexcept
+    {
+        return baseSize;
+    }
+
+private:
+    unsigned spToPx(unsigned sp, float density)
+    {
+        return static_cast<unsigned>(sp * density);
+    }
+
+private:
+    unsigned baseSize = 0;
+};
+
 unsigned Sizers::GetSystemDPI()
 {
     return 1u;
@@ -12,7 +60,7 @@ unsigned Sizers::GetMenuBarHeight()
 
 unsigned Sizers::GetMenuBarTextHeight()
 {
-    return 18u;
+    return BaseSizeProviderSingleton::getInstance().getBaseFontSize();
 }
 #else
 #include <Windows.h>
