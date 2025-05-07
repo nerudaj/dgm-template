@@ -81,6 +81,7 @@ void AppStateOptions::buildVideoOptionsLayout()
     content->removeAllWidgets();
     content->add(
         FormBuilder()
+#ifndef ANDROID
             .addOption(
                 dic.strings.getString(StringId::EnableFullscreen),
                 WidgetBuilder::createCheckbox(
@@ -100,6 +101,7 @@ void AppStateOptions::buildVideoOptionsLayout()
                         onResolutionSelected(
                             sf::VideoMode::getFullscreenModes()[idx].size);
                     }))
+#endif
             .build(CONTENT_BGCOLOR));
 }
 
