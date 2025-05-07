@@ -51,7 +51,7 @@ jobs:
     - name: Pack
       working-directory: ${{env.BUILD_DIR}}
       run: |
-        cpack
+        cpack -C Debug
       shell: cmd
 
     - name: Store artifact
