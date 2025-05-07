@@ -2,7 +2,7 @@
 
 #ifdef ANDROID
 
-#include <jni/Resources.hpp>
+#include <jni/Jni.hpp>
 
 /**
  * Lazy-initialized base-size provider for Android.
@@ -12,14 +12,9 @@ struct [[nodiscard]] BaseSizeProviderSingleton final
 private:
     BaseSizeProviderSingleton()
     {
-        // TODO: get activity states
-
-        auto core = Core::attachCurrentThread(vm, env);
-
-        auto resources = jni::Resources::getSystem(env);
-        baseSize = spToPx(
-            14,
-            resources.GetDisplayMetrics().getDensity());
+        auto core = jni::Core::attachCurrentThread(activity.vm, &activity.env);
+        auto resources = jni::Resources::getSystem(core.getEnv());
+        pixelDensity = resources.GetDisplayMetrics().getDensity();
     }
 
 public:
@@ -35,7 +30,12 @@ public:
 
     [[nodiscard]] unsigned getBaseFontSize() const noexcept
     {
-        return baseSize;
+        return spToPx(14, pixelDensity);
+    }
+
+    [[nodiscard]] unsigned getBaseContainerHeight() const noexcept
+    {
+        return spToPx(22, pixelDensity);
     }
 
 private:
@@ -45,41 +45,31 @@ private:
     }
 
 private:
-    unsigned baseSize = 0;
+    float pixelDensity = 0.f;
 };
 
-unsigned Sizers::GetSystemDPI()
+unsigned Sizers::getBaseContainerHeight()
 {
-    return 1u;
+    return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight();
 }
 
-unsigned Sizers::GetMenuBarHeight()
-{
-    return 22u;
-}
-
-unsigned Sizers::GetMenuBarTextHeight()
+unsigned Sizers::getBaseFontSize()
 {
     return BaseSizeProviderSingleton::getInstance().getBaseFontSize();
 }
 #else
 #include <Windows.h>
 
-unsigned Sizers::GetSystemDPI()
+unsigned Sizers::getBaseContainerHeight()
 {
-    return GetDpiForSystem();
-}
-
-unsigned Sizers::GetMenuBarHeight()
-{
-    const unsigned dpi = GetSystemDPI();
+    const unsigned dpi = GetDpiForSystem();
     return GetSystemMetricsForDpi(SM_CYCAPTION, dpi)
            + GetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi)
            + GetSystemMetricsForDpi(SM_CYEDGE, dpi) * 2;
 }
 
-unsigned Sizers::GetMenuBarTextHeight()
+unsigned Sizers::getBaseFontSize()
 {
-    return static_cast<unsigned>(GetMenuBarHeight() / 2.55f);
+    return static_cast<unsigned>(getBaseContainerHeight() / 2.55f);
 }
 #endif

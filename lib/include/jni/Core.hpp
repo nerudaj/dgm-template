@@ -2,13 +2,15 @@
 
 #ifdef ANDROID
 
+#include <jni/Jni.hpp>
+
 namespace jni
 {
 
 class Core
 {
 private:
-    Core(JavaVM* vm) : vm(vm) {}
+    Core(JavaVM* vm, JNIEnv* env) : vm(vm), env(env) {}
 
 public:
     Core(Core&& other) noexcept
@@ -23,10 +25,16 @@ public:
     }
 
 public:
-    static Core attachCurrentThread(JavaVM* vm, JNIEnv** env);
+    static Core attachCurrentThread();
+
+    [[nodiscard]] JNIEnv* getEnv()
+    {
+        return env;
+    }
 
 private:
     JavaVM* vm = nullptr;
+    JNIEnv* env = nullptr;
 };
 
 }
