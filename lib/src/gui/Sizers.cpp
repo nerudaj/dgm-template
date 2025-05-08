@@ -1,8 +1,12 @@
 #include "gui/Sizers.hpp"
 
+constexpr float CONTAINER_PADDING_MULTIPLIER = 2.55f;
+
 #ifdef ANDROID
 
 #include <jni/Jni.hpp>
+
+constexpr float ANDROID_BASE_UNSCALED_FONT_SIZE = 14;
 
 /**
  * Lazy-initialized base-size provider for Android.
@@ -30,12 +34,14 @@ public:
 
     [[nodiscard]] unsigned getBaseFontSize() const noexcept
     {
-        return spToPx(14, pixelDensity);
+        return spToPx(ANDROID_BASE_UNSCALED_FONT_SIZE, pixelDensity);
     }
 
     [[nodiscard]] unsigned getBaseContainerHeight() const noexcept
     {
-        return spToPx(22, pixelDensity);
+        return spToPx(
+            static_cast<unsigned>(ANDROID_BASE_UNSCALED_FONT_SIZE * CONTAINER_PADDING_MULTIPLIER),
+            pixelDensity);
     }
 
 private:
@@ -70,6 +76,6 @@ unsigned Sizers::getBaseContainerHeight()
 
 unsigned Sizers::getBaseFontSize()
 {
-    return static_cast<unsigned>(getBaseContainerHeight() / 2.55f);
+    return static_cast<unsigned>(getBaseContainerHeight() / CONTAINER_PADDING_MULTIPLIER);
 }
 #endif
