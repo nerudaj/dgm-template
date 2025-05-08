@@ -13,3 +13,4 @@ set ( ANDROID_ARCH_ABI "arm64-v8a" )
 set ( ANDROID_NDK_VERSION "26.1.10909125" )
 set ( ANDROID_MIN_SDK "21" )
 set ( ANDROID_TARGET_SDK "33" )
+set ( ANDROID_ENFORCED_ORIENTATION "landscape" ) # landscape | portrait
