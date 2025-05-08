@@ -1,37 +1,81 @@
 #include "gui/Sizers.hpp"
+
+constexpr float CONTAINER_PADDING_MULTIPLIER = 2.55f;
+
 #ifdef ANDROID
-unsigned Sizers::GetSystemDPI()
+
+#include <jni/Jni.hpp>
+
+constexpr float ANDROID_BASE_UNSCALED_FONT_SIZE = 14;
+
+/**
+ * Lazy-initialized base-size provider for Android.
+ */
+struct [[nodiscard]] BaseSizeProviderSingleton final
 {
-    return 1u;
+private:
+    BaseSizeProviderSingleton()
+    {
+        auto core = jni::Core::attachCurrentThread();
+        auto resources = jni::Resources::getSystem(core.getEnv());
+        pixelDensity = resources.getDisplayMetrics().getDensity();
+    }
+
+public:
+    BaseSizeProviderSingleton(BaseSizeProviderSingleton&&) = delete;
+    BaseSizeProviderSingleton(const BaseSizeProviderSingleton&) = delete;
+
+public:
+    static BaseSizeProviderSingleton& getInstance()
+    {
+        static BaseSizeProviderSingleton instance;
+        return instance;
+    }
+
+    [[nodiscard]] unsigned getBaseFontSize() const noexcept
+    {
+        return spToPx(ANDROID_BASE_UNSCALED_FONT_SIZE, pixelDensity);
+    }
+
+    [[nodiscard]] unsigned getBaseContainerHeight() const noexcept
+    {
+        return spToPx(
+            static_cast<unsigned>(ANDROID_BASE_UNSCALED_FONT_SIZE * CONTAINER_PADDING_MULTIPLIER),
+            pixelDensity);
+    }
+
+private:
+    static unsigned spToPx(unsigned sp, float density)
+    {
+        return static_cast<unsigned>(sp * density);
+    }
+
+private:
+    float pixelDensity = 0.f;
+};
+
+unsigned Sizers::getBaseContainerHeight()
+{
+    return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight();
 }
 
-unsigned Sizers::GetMenuBarHeight()
+unsigned Sizers::getBaseFontSize()
 {
-    return 22u;
-}
-
-unsigned Sizers::GetMenuBarTextHeight()
-{
-    return 18u;
+    return BaseSizeProviderSingleton::getInstance().getBaseFontSize();
 }
 #else
 #include <Windows.h>
 
-unsigned Sizers::GetSystemDPI()
+unsigned Sizers::getBaseContainerHeight()
 {
-    return GetDpiForSystem();
-}
-
-unsigned Sizers::GetMenuBarHeight()
-{
-    const unsigned dpi = GetSystemDPI();
+    const unsigned dpi = GetDpiForSystem();
     return GetSystemMetricsForDpi(SM_CYCAPTION, dpi)
            + GetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi)
            + GetSystemMetricsForDpi(SM_CYEDGE, dpi) * 2;
 }
 
-unsigned Sizers::GetMenuBarTextHeight()
+unsigned Sizers::getBaseFontSize()
 {
-    return static_cast<unsigned>(GetMenuBarHeight() / 2.55f);
+    return static_cast<unsigned>(getBaseContainerHeight() / CONTAINER_PADDING_MULTIPLIER);
 }
 #endif

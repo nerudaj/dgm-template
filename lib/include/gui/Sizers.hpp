@@ -1,21 +1,9 @@
 #pragma once
 
-class Sizers
+class Sizers final
 {
 public:
-    static unsigned GetSystemDPI();
+    [[nodiscard]] static unsigned getBaseFontSize();
 
-    static unsigned GetMenuBarHeight();
-
-    static unsigned GetMenuBarTextHeight();
-
-    static unsigned getBaseTextSize()
-    {
-        return GetMenuBarTextHeight();
-    }
-
-    static unsigned getBaseContainerHeight()
-    {
-        return GetMenuBarHeight();
-    }
+    [[nodiscard]] static unsigned getBaseContainerHeight();
 };
