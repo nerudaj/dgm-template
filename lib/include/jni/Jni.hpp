@@ -7,6 +7,6 @@
 #include <SFML/System/NativeActivity.hpp>
 #include <jni/Core.hpp>
 #include <jni/DisplayMetrics.hpp>
-#include <Resources.hpp>
+#include <jni/Resources.hpp>
 
 #endif

@@ -15,13 +15,13 @@ private:
 public:
     Core(Core&& other) noexcept
     {
-        std::swap(m_vm, other.m_vm);
+        std::swap(vm, other.vm);
     }
     Core(const Core&&) = delete;
     ~Core()
     {
-        if (m_vm)
-            m_vm->DetachCurrentThread();
+        if (vm)
+            vm->DetachCurrentThread();
     }
 
 public:

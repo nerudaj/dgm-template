@@ -12,9 +12,9 @@ struct [[nodiscard]] BaseSizeProviderSingleton final
 private:
     BaseSizeProviderSingleton()
     {
-        auto core = jni::Core::attachCurrentThread(activity.vm, &activity.env);
+        auto core = jni::Core::attachCurrentThread();
         auto resources = jni::Resources::getSystem(core.getEnv());
-        pixelDensity = resources.GetDisplayMetrics().getDensity();
+        pixelDensity = resources.getDisplayMetrics().getDensity();
     }
 
 public:
@@ -22,7 +22,7 @@ public:
     BaseSizeProviderSingleton(const BaseSizeProviderSingleton&) = delete;
 
 public:
-    BaseSizeProviderSingleton& getInstance()
+    static BaseSizeProviderSingleton& getInstance()
     {
         static BaseSizeProviderSingleton instance;
         return instance;
@@ -39,7 +39,7 @@ public:
     }
 
 private:
-    unsigned spToPx(unsigned sp, float density)
+    static unsigned spToPx(unsigned sp, float density)
     {
         return static_cast<unsigned>(sp * density);
     }

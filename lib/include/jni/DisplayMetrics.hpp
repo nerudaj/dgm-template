@@ -6,6 +6,7 @@
 
 namespace jni
 {
+class Resources;
 
 class [[nodiscard]] DisplayMetrics final
 {
@@ -17,6 +18,8 @@ private:
         jclass metricsClass = env->FindClass("android/util/DisplayMetrics");
         densityField = env->GetFieldID(metricsClass, "density", "F");
     }
+
+    friend class Resources;
 
 public:
     [[nodiscard]] float getDensity() const

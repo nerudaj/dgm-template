@@ -2,7 +2,7 @@
 
 #ifdef ANDROID
 
-#include <jni/JniDisplayMetrics.hpp>
+#include <jni/DisplayMetrics.hpp>
 
 #include <android/native_activity.h>
 
@@ -27,7 +27,7 @@ public:
 
     DisplayMetrics getDisplayMetrics() const
     {
-        return JniDisplayMetrics(
+        return DisplayMetrics(
             env,
             env->CallObjectMethod(resources, getDisplayMetricsMethod));
     }
