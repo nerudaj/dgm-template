@@ -79,7 +79,7 @@ static tgui::Label::Ptr createRowLabel(const std::string& text)
     label->getRenderer()->setTextColor(sf::Color::Black);
     label->setSize("60%", "100%");
     label->setPosition("0%", "0%");
-    label->setTextSize(Sizers::GetMenuBarTextHeight());
+    label->setTextSize(Sizers::getBaseFontSize());
     label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     return label;
 }

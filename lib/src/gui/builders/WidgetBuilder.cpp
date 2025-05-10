@@ -28,7 +28,7 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
         justify ? tgui::HorizontalAlignment::Center
                 : tgui::HorizontalAlignment::Left);
     label->setTextSize(
-        static_cast<unsigned>(Sizers::getBaseTextSize() * sizeMultiplier));
+        static_cast<unsigned>(Sizers::getBaseFontSize() * sizeMultiplier));
     label->setSize({ "100%", "100%" });
     return label;
 }
@@ -45,7 +45,8 @@ WidgetBuilder::createPanel(const tgui::Layout2d& size, const tgui::Color color)
 tgui::Panel::Ptr WidgetBuilder::createRow(tgui::Color bgcolor)
 {
     auto&& row = tgui::Panel::create();
-    row->setSize("100%", std::to_string(Sizers::GetMenuBarHeight()).c_str());
+    row->setSize(
+        "100%", std::to_string(Sizers::getBaseContainerHeight()).c_str());
     row->getRenderer()->setBackgroundColor(bgcolor);
     return row;
 }
@@ -57,7 +58,7 @@ tgui::Button::Ptr WidgetBuilder::createButton(
 {
     auto&& button = tgui::Button::create(label);
     button->onClick(onClick);
-    button->setTextSize(Sizers::getBaseTextSize());
+    button->setTextSize(Sizers::getBaseFontSize());
     button->setSize({ "100%", "100%" });
 
     applyOptionsToWidget(options, button);
@@ -92,13 +93,13 @@ tgui::Panel::Ptr WidgetBuilder::createSlider(
 
     auto&& dummyLabel =
         tgui::Label::create(properties.valueFormatter(properties.high));
-    dummyLabel->setTextSize(Sizers::GetMenuBarTextHeight());
+    dummyLabel->setTextSize(Sizers::getBaseFontSize());
     dummyLabel->setAutoSize(true);
     gui.add(dummyLabel, "DummyLabel");
     auto size = dummyLabel->getSizeLayout();
 
     auto&& valueLabel = tgui::Label::create(properties.valueFormatter(value));
-    valueLabel->setTextSize(Sizers::GetMenuBarTextHeight());
+    valueLabel->setTextSize(Sizers::getBaseFontSize());
     valueLabel->getRenderer()->setTextColor(sf::Color::Black);
     valueLabel->setSize(size.x, "100%");
     valueLabel->setPosition("parent.width" - size.x, "0%");
@@ -173,7 +174,7 @@ tgui::Tabs::Ptr WidgetBuilder::createTabbedContent(
 {
     auto&& tabs = tgui::Tabs::create();
     tabs->setSize({ "100%", "100%" });
-    tabs->setTextSize(Sizers::getBaseTextSize());
+    tabs->setTextSize(Sizers::getBaseFontSize());
 
     for (auto&& label : tabLabels)
     {
@@ -201,7 +202,7 @@ tgui::Label::Ptr WidgetBuilder::createTooltip(const std::string& text)
     label->getRenderer()->setBackgroundColor(sf::Color::White);
     label->getRenderer()->setBorders(tgui::Outline(1u));
     label->getRenderer()->setBorderColor(sf::Color::Black);
-    label->setTextSize(Sizers::getBaseTextSize());
+    label->setTextSize(Sizers::getBaseFontSize());
     return label;
 }
 
