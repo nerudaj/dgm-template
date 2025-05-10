@@ -84,9 +84,9 @@ cd _build
 cmake -D CMAKE_BUILD_SYSTEM=Android ..
 ```
 
-This will generate `bin-android/local.properties`, `bin-android/app/build.gradle.kts` and `bin-android/app/src/main/AppManifest.xml`. After that you can open the `_build` folder as a project in Android Studio and continue from there.
+After that you can open the `_build` folder as a project in Android Studio and continue from there. Or you can directly invoke Gradle and build from the command line:
 
 ```sh
-cmake --build . --target android-build
+gradlew build
 cpack
 ```

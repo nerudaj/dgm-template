@@ -11,6 +11,7 @@
     <activity android:name="android.app.NativeActivity"
               android:icon="@drawable/sfml_logo"
               android:configChanges="keyboardHidden|orientation|screenSize"
+              android:screenOrientation="@ANDROID_ENFORCED_ORIENTATION@"
               android:exported="true">
 
         <meta-data android:name="android.app.lib_name" android:value="@ANDROID_NATIVE_LIB_NAME@" />
