@@ -1,34 +1,35 @@
 #pragma once
 
+#include "Paths.hpp"
 #include <misc/DependencyContainer.hpp>
 #include <misc/ResourceLoader.hpp>
-
-struct [[nodiscard]] TestContext final
-{
-    dgm::Window window;
-    DependencyContainer dic;
-};
 
 class Helper final
 {
 public:
-    dgm::Window createDummyWindow()
+    static dgm::Window createDummyWindow()
     {
         return dgm::Window(dgm::WindowSettings {
-            .resolution = {1u, 1u},
+            .resolution = { 1u, 1u },
             .title = "",
-            .useFullscrren = false,
+            .useFullscreen = false,
         });
     }
 
-    DependencyContainer createDummyDependencies(dgm::Window& window)
+    static DependencyContainer createDummyDependencies(dgm::Window& window)
     {
-        return DependencyContainer
-        {
-            .resmgr = ResourceLoader::loadResources(),
-            .strings = StringProvider(Language::English),
-            .gui = Gui(window),
-            .input = Input(),
-        };
+        return DependencyContainer(window, ROOT_DIR, Language::English);
+    }
+};
+
+class GuiHelper
+{
+public:
+    static void clickButton(tgui::Button::Ptr button)
+    {
+        button->leftMousePressed(
+            button->getPosition() + button->getSize() / 2.f);
+        button->leftMouseReleased(
+            button->getPosition() + button->getSize() / 2.f);
     }
 };

@@ -2,7 +2,6 @@
 #include <appstate/AppStateMainMenu.hpp>
 #include <misc/CMakeVars.hpp>
 #include <misc/DependencyContainer.hpp>
-#include <misc/ResourceLoader.hpp>
 
 int main(int, char*[])
 {
@@ -29,12 +28,8 @@ int main(int, char*[])
 
     try
     {
-        auto dependencies = DependencyContainer {
-            .resmgr = ResourceLoader::loadResources(".."),
-            .strings = StringProvider(Language::English),
-            .gui = Gui(window),
-            .input = Input(),
-        };
+        auto dependencies =
+            DependencyContainer(window, "..", Language::English);
 
         dependencies.gui.setFont(
             dependencies.resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));

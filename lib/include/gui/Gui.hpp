@@ -1,5 +1,6 @@
 #pragma once
 
+#include <DGM/dgm.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
 #include <memory>

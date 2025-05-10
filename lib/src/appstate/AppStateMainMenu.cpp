@@ -45,7 +45,8 @@ void AppStateMainMenu::buildLayout()
                                  [&] { onOptions(); })
                              .addButton(
                                  dic.strings.getString(StringId::ExitButton),
-                                 [&] { onExit(); })
+                                 [&] { onExit(); },
+                                 "MainMenu_Button_Exit")
                              .build())
             .withNoBackButton()
             .withNoSubmitButton()

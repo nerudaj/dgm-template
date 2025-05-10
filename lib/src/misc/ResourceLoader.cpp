@@ -1,5 +1,7 @@
-#include <misc/ResourceLoader.hpp>
-
+#include "misc/ResourceLoader.hpp"
+#include "misc/Compatibility.hpp"
+#include <TGUI/Backend/SFML-Graphics.hpp>
+#include <TGUI/Tgui.hpp>
 #include <expected>
 
 static std::expected<tgui::Font, dgm::Error>
@@ -12,13 +14,6 @@ dgm::ResourceManager
 ResourceLoader::loadResources(const std::filesystem::path& rootDir)
 {
     dgm::ResourceManager resmgr;
-
-    auto myfont = dgm::Utility::loadFont("fonts/ChunkFive-Regular.ttf");
-
-    for (auto&& itr : std::filesystem::directory_iterator(rootDir / "assets"))
-    {
-        sf::err() << itr.path().string() << std::endl;
-    }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Font>(
             rootDir / "assets" / "fonts", dgm::Utility::loadFont, { ".ttf" });

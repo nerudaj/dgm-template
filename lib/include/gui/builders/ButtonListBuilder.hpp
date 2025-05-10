@@ -16,8 +16,10 @@ public:
     ~ButtonListBuilder() = default;
 
 public:
-    ButtonListBuilder&
-    addButton(const std::string& label, std::function<void(void)> onClick);
+    ButtonListBuilder& addButton(
+        const std::string& label,
+        std::function<void(void)> onClick,
+        const std::string& buttonId = "");
 
     NODISCARD_RESULT tgui::Panel::Ptr build();
 
@@ -26,6 +28,7 @@ private:
     {
         std::string label;
         std::function<void(void)> onClick;
+        std::string buttonId;
     };
 
     std::vector<ButtonProps> buttonProps;
