@@ -6,9 +6,11 @@
 #include <ranges>
 
 ButtonListBuilder& ButtonListBuilder::addButton(
-    const std::string& label, std::function<void(void)> onClick)
+    const std::string& label,
+    std::function<void(void)> onClick,
+    const std::string& buttonId)
 {
-    buttonProps.emplace_back(label, onClick);
+    buttonProps.emplace_back(label, onClick, buttonId);
     return *this;
 }
 
@@ -31,7 +33,11 @@ tgui::Panel::Ptr ButtonListBuilder::build()
         button->setTextSize(Sizers::getBaseFontSize() * 2u);
         button->setPosition(
             { "0%", Sizers::getBaseContainerHeight() * idx * 2.1f });
-        panel->add(button);
+
+        if (props.buttonId.empty())
+            panel->add(button);
+        else
+            panel->add(button, props.buttonId);
     }
 
     return outerPanel;
