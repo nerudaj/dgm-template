@@ -29,7 +29,7 @@ int main(int, char*[])
     {
         auto dependencies = DependencyContainer(window, "", Language::English);
 
-        gui.setFont(
+        dependencies.gui.setFont(
             dependencies.resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
 
         app.pushState<AppStateMainMenu>(dependencies, settings);
