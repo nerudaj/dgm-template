@@ -12,7 +12,7 @@ class [[nodiscard]] VirtualCursor final
 {
 public:
     VirtualCursor(
-        const sf::RenderWindow& window,
+        sf::RenderWindow& window,
         Input& input,
         const sf::Texture& cursorTexture)
         : window(window), input(input), sprite(cursorTexture)
@@ -20,17 +20,21 @@ public:
     }
 
 public:
-    void update(const dgm::Time& time);
+    void update(const dgm::Time& time, const float cursorSpeed);
 
-    void emulateClick(Gui& gui);
+    [[nodiscard]] const sf::Vector2f& getPosition() const noexcept
+    {
+        return position;
+    }
 
-    void draw(dgm::Window& window);
+    void draw();
 
 private:
-    void clampPosition(const sf::Vector2u& windowSize);
+    static sf::Vector2f clampPositionByWindow(
+        const sf::Vector2f& currentPosition, const sf::Vector2u& windowSize);
 
 private:
-    const sf::RenderWindow& window;
+    sf::RenderWindow& window;
     Input& input;
     sf::Sprite sprite;
     sf::Vector2f position;

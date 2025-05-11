@@ -45,6 +45,7 @@ void AppStateOptions::update() {}
 void AppStateOptions::draw()
 {
     dic.gui.draw();
+    dic.virtualCursor.draw();
 }
 
 void AppStateOptions::buildLayout()

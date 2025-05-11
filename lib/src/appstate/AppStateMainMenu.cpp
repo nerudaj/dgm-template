@@ -23,6 +23,7 @@ void AppStateMainMenu::update() {}
 void AppStateMainMenu::draw()
 {
     dic.gui.draw();
+    dic.virtualCursor.draw();
 }
 
 void AppStateMainMenu::restoreFocusImpl(const std::string&)

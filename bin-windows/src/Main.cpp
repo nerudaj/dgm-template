@@ -24,6 +24,7 @@ int main(int, char*[])
         .title = CMakeVars::TITLE,
         .useFullscreen = settings.video.fullscreen,
     });
+    window.getSfmlWindowContext().setMouseCursorVisible(false);
     auto&& app = dgm::App(window);
 
     try

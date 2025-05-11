@@ -2,6 +2,7 @@
 
 #include "gui/Gui.hpp"
 #include "input/Input.hpp"
+#include "input/VirtualCursor.hpp"
 #include "misc/ResourceLoader.hpp"
 #include "misc/StringProvider.hpp"
 #include <DGM/dgm.hpp>
@@ -12,6 +13,7 @@ struct [[nodiscard]] DependencyContainer final
     dgm::ResourceManager resmgr;
     const StringProvider strings;
     Input input;
+    VirtualCursor virtualCursor;
 
     DependencyContainer(
         dgm::Window& window,
@@ -23,6 +25,11 @@ struct [[nodiscard]] DependencyContainer final
         : gui(window)
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
+        , input()
+        , virtualCursor(
+              window.getSfmlWindowContext(),
+              input,
+              resmgr.get<sf::Texture>("cursor.png"))
     {
     }
 };
