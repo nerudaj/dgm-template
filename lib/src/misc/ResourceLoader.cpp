@@ -16,7 +16,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     dgm::ResourceManager resmgr;
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Font>(
-            rootDir / "fonts", dgm::Utility::loadFont, { ".ttf" });
+            assetDir / "fonts", dgm::Utility::loadFont, { ".ttf" });
         !result)
     {
         throw std::runtime_error(uni::format(
@@ -24,7 +24,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Font>(
-            rootDir / "fonts", loadTguiFont, { ".ttf" });
+            assetDir / "fonts", loadTguiFont, { ".ttf" });
         !result)
     {
         throw std::runtime_error(uni::format(
@@ -32,7 +32,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
-            rootDir / "graphics",
+            assetDir / "graphics",
             dgm::Utility::loadTexture,
             { ".png" });
         !result)
@@ -42,7 +42,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::AnimationStates>(
-            rootDir / "graphics",
+            assetDir / "graphics",
             dgm::Utility::loadAnimationStates,
             { ".anim" });
         !result)
@@ -53,7 +53,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
-            rootDir / "graphics",
+            assetDir / "graphics",
             dgm::Utility::loadClip,
             { ".clip" });
         !result)
@@ -63,7 +63,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::SoundBuffer>(
-            rootDir / "sounds", dgm::Utility::loadSound, { ".wav" });
+            assetDir / "sounds", dgm::Utility::loadSound, { ".wav" });
         !result)
     {
         throw std::runtime_error(uni::format(
