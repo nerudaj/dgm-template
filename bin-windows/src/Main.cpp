@@ -8,31 +8,27 @@ int main(int, char*[])
     // TODO: Resolve appdata folder
     // TODO: Attept to load settings from appdata
 
-    auto&& settings = AppSettings {
-        .video =
-            VideoSettings {
-#ifdef _DEBUG
-                .resolution = { 1280, 720 },
-#else
-                .resolution = sf::VideoMode::getDesktopMode().size,
-#endif
-            },
-    };
-
-    auto&& window = dgm::Window(dgm::WindowSettings {
-        .resolution = settings.video.resolution,
-        .title = CMakeVars::TITLE,
-        .useFullscreen = settings.video.fullscreen,
-    });
-    auto&& app = dgm::App(window);
-
     try
     {
-        auto dependencies =
-            DependencyContainer(window, "..", Language::English);
+        auto&& settings = AppSettings {
+            .video =
+                VideoSettings {
+#ifdef _DEBUG
+                    .resolution = { 1280, 720 },
+#else
+                    .resolution = sf::VideoMode::getDesktopMode().size,
+#endif
+                },
+        };
 
-        dependencies.gui.setFont(
-            dependencies.resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
+        auto&& window = dgm::Window(dgm::WindowSettings {
+            .resolution = settings.video.resolution,
+            .title = CMakeVars::TITLE,
+            .useFullscreen = settings.video.fullscreen,
+        });
+        auto&& app = dgm::App(window);
+        auto&& dependencies =
+            DependencyContainer(window, "../assets", Language::English);
 
         app.pushState<AppStateMainMenu>(dependencies, settings);
         app.run();

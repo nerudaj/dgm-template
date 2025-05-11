@@ -24,5 +24,6 @@ struct [[nodiscard]] DependencyContainer final
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
     {
+        gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
     }
 };

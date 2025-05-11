@@ -18,7 +18,7 @@ public:
 
     static DependencyContainer createDummyDependencies(dgm::Window& window)
     {
-        return DependencyContainer(window, ROOT_DIR, Language::English);
+        return DependencyContainer(window, ASSETS_PATH, Language::English);
     }
 };
 

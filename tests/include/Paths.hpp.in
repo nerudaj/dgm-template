@@ -2,5 +2,4 @@
 
 #include <filesystem>
 
-const std::filesystem::path ROOT_DIR = "@PROJECT_SOURCE_DIR@";
 const std::filesystem::path ASSETS_PATH = "@PROJECT_SOURCE_DIR@/assets";
