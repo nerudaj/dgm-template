@@ -56,7 +56,7 @@ public:
     static NODISCARD_RESULT tgui::Button::Ptr createButton(
         const Label& label,
         std::function<void(void)> onClick,
-        WidgetOptions options = WidgetOptions{});
+        WidgetOptions options = WidgetOptions {});
 
     static NODISCARD_RESULT tgui::CheckBox::Ptr createCheckbox(
         bool checked,
