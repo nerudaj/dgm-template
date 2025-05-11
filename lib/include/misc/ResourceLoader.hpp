@@ -7,5 +7,5 @@
 class ResourceLoader final
 {
 public:
-    static dgm::ResourceManager loadResources(const std::filesystem::path& rootDir);
+    static dgm::ResourceManager loadResources(const std::filesystem::path& assetDir);
 };

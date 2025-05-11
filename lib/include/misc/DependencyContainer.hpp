@@ -31,5 +31,6 @@ struct [[nodiscard]] DependencyContainer final
               input,
               resmgr.get<sf::Texture>("cursor.png"))
     {
+        gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
     }
 };
