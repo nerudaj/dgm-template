@@ -7,6 +7,9 @@ string ( TOLOWER "${THE_PROJECT_NAME}" PROJECT_NAME_LOWERCASE )
 # C++ vars
 set ( USE_SFML_TGUI_STATIC_LINKAGE OFF )
 
+# Installer
+set ( INSTALLER_ABOUT_URL "https://mygame.org/" )
+
 # Android vars
 set ( ANDROID_ORG "org.nerudaj.${PROJECT_NAME_LOWERCASE}" )
 set ( ANDROID_NATIVE_LIB_NAME "cppcore" )

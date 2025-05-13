@@ -9,6 +9,12 @@ get_version_from_git (
     FULL_VERSION_VARIABLE FULL_PROJECT_VERSION
 )
 
+if ( "${CMAKE_BUILD_SYSTEM}" STREQUAL "Android" )
+    set ( BUILDING_ANDROID ON )
+else ()
+    set ( BUILDING_ANDROID OFF )
+endif ()
+
 project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
 option ( BUILD_TESTS "Build unit testing target" ON )
@@ -16,7 +22,11 @@ option ( USE_NSIS "Use NSIS for packaging" OFF )
 
 set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
-if ( "${CMAKE_BUILD_SYSTEM}" STREQUAL "Android" )
+if ( ${BUILDING_ANDROID} AND ${USE_NSIS} )
+    message ( FATAL_ERROR "Cannot use NSIS for Android build! Exiting." )
+endif ()
+
+if ( ${BUILDING_ANDROID} )
     message ( "Configuring for Android build" )
 
     set ( CURRENT_USER_NAME $ENV{USERNAME} )
@@ -94,7 +104,28 @@ else ()
     )
 endif ()
 
-set ( CPACK_GENERATOR "ZIP" )
+if ( ${USE_NSIS} )
+    include ( InstallRequiredSystemLibraries )
+    set ( CPACK_GENERATOR "NSIS" )
+    cmake_path ( CONVERT "C:/Games" TO_NATIVE_PATH_LIST CPACK_NSIS_INSTALL_ROOT )
+    set ( CPACK_NSIS_MODIFY_PATH "OFF")
+	set ( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON" )
+	#set ( CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/resources/graphics/appicon.ico" )
+	set ( CPACK_NSIS_URL_INFO_ABOUT "${INSTALLER_ABOUT_URL}" )
+    
+    set ( CPACK_NSIS_DISPLAY_NAME "${THE_PROJECT_NAME}" )
+    set ( CPACK_NSIS_PACKAGE_NAME "${THE_PROJECT_NAME}" )
+    set ( CPACK_PACKAGE_INSTALL_DIRECTORY "${THE_PROJECT_NAME}" )
+    set ( CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${THE_PROJECT_NAME}" )
+    
+    # Create desktop shortcut pointing to correct location
+    list ( APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  SetOutPath '$INSTDIR\\bin'" )
+    list ( APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  CreateShortcut '$DESKTOP\\${THE_PROJECT_NAME}.lnk' '$INSTDIR\\bin\\${THE_PROJECT_NAME}.exe'" )
+    list ( APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "  CreateShortcut '$SMPROGRAMS\\$STARTMENU_FOLDER\\${THE_PROJECT_NAME}.lnk' '$INSTDIR\\bin\\${THE_PROJECT_NAME}.exe'" )
+    string (REPLACE ";" "\n" CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}")
+else ()
+    set ( CPACK_GENERATOR "ZIP" )
+endif ()
 set ( CPACK_PACKAGE_FILE_NAME "${OUTPUT_FILE_NAME}" )
 
 include ( CPack )
