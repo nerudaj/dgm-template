@@ -9,8 +9,8 @@ void VirtualCursor::update(const dgm::Time& time, const float cursorSpeed)
         return;
     };
 
-    position += clampPositionByWindow(
-        delta * cursorSpeed * time.getDeltaTime(), window.getSize());
+    position = clampPositionByWindow(
+        position + delta * cursorSpeed * time.getDeltaTime(), window.getSize());
     sf::Mouse::setPosition(sf::Vector2i(position), window);
 }
 

@@ -1,7 +1,10 @@
 #include "appstate/CommonHandler.hpp"
 
 void CommonHandler::handleInput(
-    dgm::App& app, DependencyContainer& dic, const InputSettings& settings)
+    dgm::App& app,
+    DependencyContainer& dic,
+    const InputSettings& settings,
+    CommonHandlerOptions options)
 {
     dic.virtualCursor.update(app.time, settings.cursorSpeed);
 
@@ -18,5 +21,9 @@ void CommonHandler::handleInput(
     if (dic.input.isConfirmPressed())
     {
         dic.gui.emulateClick(dic.virtualCursor.getPosition());
+    }
+    else if (!options.disableGoBack && dic.input.isBackButtonPressed())
+    {
+        app.popState();
     }
 }

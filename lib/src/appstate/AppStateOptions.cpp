@@ -5,6 +5,7 @@
 #include <ranges>
 
 const tgui::Color CONTENT_BGCOLOR = tgui::Color(255, 255, 255, 64);
+constexpr const char* TABS_ID = "Options_Tabs";
 
 std::string resolutionToString(const sf::Vector2u& vec)
 {
@@ -38,6 +39,18 @@ AppStateOptions::AppStateOptions(
 void AppStateOptions::input()
 {
     CommonHandler::handleInput(app, dic, settings.input);
+
+    auto tabs = dic.gui.get<tgui::Tabs>(TABS_ID);
+    if (dic.input.isMenuCycleLeftPressed())
+    {
+        tabs->select(
+            (tabs->getSelectedIndex() + tabs->getTabsCount() - 1)
+            % tabs->getTabsCount());
+    }
+    else if (dic.input.isMenuCycleRightPressed())
+    {
+        tabs->select((tabs->getSelectedIndex() + 1) % tabs->getTabsCount());
+    }
 }
 
 void AppStateOptions::update() {}
@@ -64,7 +77,10 @@ void AppStateOptions::buildLayout()
                             dic.strings.getString(StringId::InputOptionsTab),
                         },
                         [&](const tgui::String& tabName)
-                        { onTabClicked(tabName); }))
+                        { onTabClicked(tabName); },
+                        WidgetOptions {
+                            .id = TABS_ID,
+                        }))
                     .withContent(content)
                     .build())
             .withBackButton(WidgetBuilder::createButton(

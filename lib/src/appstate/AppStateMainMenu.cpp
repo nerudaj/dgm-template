@@ -15,7 +15,13 @@ AppStateMainMenu::AppStateMainMenu(
 
 void AppStateMainMenu::input()
 {
-    CommonHandler::handleInput(app, dic, settings.input);
+    CommonHandler::handleInput(
+        app,
+        dic,
+        settings.input,
+        CommonHandlerOptions {
+            .disableGoBack = true,
+        });
 }
 
 void AppStateMainMenu::update() {}
