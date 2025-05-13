@@ -24,7 +24,7 @@ set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
 if ( ${BUILDING_ANDROID} AND ${USE_NSIS} )
     message ( FATAL_ERROR "Cannot use NSIS for Android build! Exiting." )
-endif
+endif ()
 
 if ( ${BUILDING_ANDROID} )
     message ( "Configuring for Android build" )
