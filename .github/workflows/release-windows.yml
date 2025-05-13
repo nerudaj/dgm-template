@@ -6,6 +6,9 @@ on:
       - '*'
   workflow_dispatch:
 
+env:
+  BUILD_DIR: ${{ github.workspace }}/_build
+
 jobs:
   build:
     runs-on: windows-2022
