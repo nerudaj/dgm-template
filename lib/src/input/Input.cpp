@@ -1,5 +1,4 @@
 #include "input/Input.hpp"
-#include <print>
 
 Input::Input()
 {
