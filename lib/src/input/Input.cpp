@@ -61,6 +61,8 @@ Input::Input()
             InputKind::CursorDown,
             sf::Joystick::Axis::Y,
             dgm::AxisHalf::Positive);
+        controller.bindInput(InputKind::MenuCycleLeft, 8);
+        controller.bindInput(InputKind::MenuCycleRight, 9);
     }
 }
 
