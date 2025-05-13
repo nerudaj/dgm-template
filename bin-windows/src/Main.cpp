@@ -30,6 +30,8 @@ int main(int, char*[])
         auto&& dependencies =
             DependencyContainer(window, "../assets", Language::English);
 
+        window.getSfmlWindowContext().setMouseCursorVisible(false);
+
         app.pushState<AppStateMainMenu>(dependencies, settings);
         app.run();
     }

@@ -15,7 +15,13 @@ AppStateMainMenu::AppStateMainMenu(
 
 void AppStateMainMenu::input()
 {
-    CommonHandler::handleInput(app, dic, settings.input);
+    CommonHandler::handleInput(
+        app,
+        dic,
+        settings.input,
+        CommonHandlerOptions {
+            .disableGoBack = true,
+        });
 }
 
 void AppStateMainMenu::update() {}
@@ -23,6 +29,7 @@ void AppStateMainMenu::update() {}
 void AppStateMainMenu::draw()
 {
     dic.gui.draw();
+    dic.virtualCursor.draw();
 }
 
 void AppStateMainMenu::restoreFocusImpl(const std::string&)

@@ -65,6 +65,18 @@ public:
         gui.setFont(font);
     }
 
+    void emulateClick(const sf::Vector2f& position)
+    {
+        gui.handleEvent(sf::Event::MouseButtonPressed {
+            .button = sf::Mouse::Button::Left,
+            .position = sf::Vector2i(position),
+        });
+        gui.handleEvent(sf::Event::MouseButtonReleased {
+            .button = sf::Mouse::Button::Left,
+            .position = sf::Vector2i(position),
+        });
+    }
+
 private:
     tgui::Gui gui;
 };

@@ -14,6 +14,7 @@ void AppStatePause::update() {}
 void AppStatePause::draw()
 {
     dic.gui.draw();
+    dic.virtualCursor.draw();
 }
 
 void AppStatePause::buildLayout()

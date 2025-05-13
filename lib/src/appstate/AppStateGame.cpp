@@ -8,6 +8,14 @@ void AppStateGame::input()
     {
         app.pushState<AppStatePause>(dic, settings);
     }
+
+    while (const auto event = app.window.pollEvent())
+    {
+        if (event->is<sf::Event::Closed>())
+        {
+            app.exit();
+        }
+    }
 }
 
 void AppStateGame::update()

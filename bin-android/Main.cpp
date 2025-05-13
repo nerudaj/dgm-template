@@ -28,6 +28,8 @@ int main(int, char*[])
         auto&& app = dgm::App(window);
         auto&& dependencies = DependencyContainer(window, "", Language::English);
 
+        window.getSfmlWindowContext().setMouseCursorVisible(false);
+
         app.pushState<AppStateMainMenu>(dependencies, settings);
         app.run();
     }

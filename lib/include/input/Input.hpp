@@ -11,6 +11,8 @@ enum class [[nodiscard]] InputKind
     CursorDown,
     CursorLeft,
     CursorRight,
+    MenuCycleLeft,
+    MenuCycleRight,
     Left,
     Right,
     Jump,
@@ -29,6 +31,10 @@ public:
 
     NODISCARD_RESULT bool isJumpPressed() const;
 #pragma endregion
+
+    NODISCARD_RESULT bool isMenuCycleLeftPressed() const;
+
+    NODISCARD_RESULT bool isMenuCycleRightPressed() const;
 
     NODISCARD_RESULT bool isBackButtonPressed() const;
 

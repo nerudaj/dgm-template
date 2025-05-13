@@ -1,28 +1,12 @@
 #include "appstate/CommonHandler.hpp"
 
-static void emulateGuiClick(Gui& gui, const sf::Vector2i& mousePos)
-{
-    gui.handleEvent(sf::Event::MouseButtonPressed {
-        .button = sf::Mouse::Button::Left,
-        .position = mousePos,
-    });
-
-    gui.handleEvent(sf::Event::MouseButtonReleased {
-        .button = sf::Mouse::Button::Left,
-        .position = mousePos,
-    });
-}
-
 void CommonHandler::handleInput(
-    dgm::App& app, DependencyContainer& dic, const InputSettings& settings)
+    dgm::App& app,
+    DependencyContainer& dic,
+    const InputSettings& settings,
+    CommonHandlerOptions options)
 {
-    const auto mousePosition =
-        sf::Mouse::getPosition(app.window.getSfmlWindowContext());
-
-    if (dic.input.isConfirmPressed())
-    {
-        emulateGuiClick(dic.gui, mousePosition);
-    }
+    dic.virtualCursor.update(app.time, settings.cursorSpeed);
 
     while (const auto event = app.window.pollEvent())
     {
@@ -34,9 +18,12 @@ void CommonHandler::handleInput(
         }
     }
 
-    auto delta = dic.input.getCursorDelta() * settings.cursorSpeed
-                 * app.time.getDeltaTime();
-
-    sf::Mouse::setPosition(
-        mousePosition + sf::Vector2i(delta), app.window.getSfmlWindowContext());
+    if (dic.input.isConfirmPressed())
+    {
+        dic.gui.emulateClick(dic.virtualCursor.getPosition());
+    }
+    else if (!options.disableGoBack && dic.input.isBackButtonPressed())
+    {
+        app.popState();
+    }
 }

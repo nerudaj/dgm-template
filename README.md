@@ -13,6 +13,7 @@
 - [Building for Android](#building-for-android)
   - [Dependencies](#dependencies-1)
   - [Setup](#setup-1)
+- [Known issues](#known-issues)
 
 ## Project structure
 
@@ -90,3 +91,8 @@ After that you can open the `_build` folder as a project in Android Studio and c
 gradlew build
 cpack
 ```
+
+## Known issues
+
+* TGUI seems to incorrectly compute offsets on Android. For example textured menu backgrounds are cropped at 50% height. Positions of containers in Options menu are shifted to right, which doesn't happen on Windows, etc.
+* Graphic assets bigger than 1024 px in a single dimension will make unit tests in CI fail, since there are some sanity tests that are loading resources and the build agents don't have enough VRAM.
