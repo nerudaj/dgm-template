@@ -31,6 +31,11 @@ public:
 
     void update(const dgm::Time& time);
 
+    bool isDetectionInProgress() const
+    {
+        return runMode != RunMode::Idle;
+    }
+
 private:
     enum class [[nodiscard]] RunMode
     {

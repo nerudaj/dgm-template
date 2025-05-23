@@ -48,7 +48,6 @@ tgui::ScrollablePanel::Ptr WidgetBuilder::createScrollablePanel(
     auto&& panel = tgui::ScrollablePanel::create(size);
     panel->setPosition({ "0%", "0%" });
     panel->getRenderer()->setBackgroundColor(color);
-    panel->getVerticalScrollbar()->setPolicy(tgui::Scrollbar::Policy::Always);
     return panel;
 }
 

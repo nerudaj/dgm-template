@@ -40,6 +40,13 @@ AppStateOptions::AppStateOptions(
 
 void AppStateOptions::input()
 {
+    if (inputDetector.isDetectionInProgress())
+    {
+        inputDetector.update(app.time);
+        CommonHandler::swallowAllEvents(app);
+        return;
+    }
+
     CommonHandler::handleInput(app, dic, settings.input);
 
     auto tabs = dic.gui.get<tgui::Tabs>(TABS_ID);
@@ -53,8 +60,6 @@ void AppStateOptions::input()
     {
         tabs->select((tabs->getSelectedIndex() + 1) % tabs->getTabsCount());
     }
-
-    inputDetector.update(app.time);
 }
 
 void AppStateOptions::update() {}
@@ -227,6 +232,7 @@ void AppStateOptions::buildBindingsOptionsLayout()
                         std::visit(hwInputMapper, kmbBinding),
                         [&]()
                         {
+                            markButtonRebinding<KmbBinding>(action);
                             inputDetector.startCheckingInputs(
                                 [&](KmbBinding b)
                                 { onInputDetected(action, b, bindings); },
@@ -245,6 +251,7 @@ void AppStateOptions::buildBindingsOptionsLayout()
                         std::visit(hwInputMapper, gamepadBinding),
                         [&]()
                         {
+                            markButtonRebinding<GamepadBinding>(action);
                             inputDetector.startCheckingInputs(
                                 [&](GamepadBinding b)
                                 { onInputDetected(action, b, bindings); },

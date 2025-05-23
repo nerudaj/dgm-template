@@ -50,6 +50,7 @@ private:
         auto btn = dic.gui.get<tgui::Button>(getBindButtonId<BindType>(action));
         btn->setText(HwInputToStringMapper {}.getMapping(newBinding));
         dic.input.updateBindings(settings.bindings);
+        dic.input.forceRelease(action);
     }
 
     template<class BindType>
@@ -63,6 +64,13 @@ private:
             return uni::format("BindButton_{}_KMB", std::to_underlying(action));
         else
             return uni::format("BindButton_{}_GMP", std::to_underlying(action));
+    }
+
+    template<class BindType>
+    void markButtonRebinding(InputKind action)
+    {
+        dic.gui.get<tgui::Button>(getBindButtonId<BindType>(action))
+            ->setText("...");
     }
 
 private:

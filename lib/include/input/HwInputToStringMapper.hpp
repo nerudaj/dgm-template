@@ -78,7 +78,7 @@ public:
 
     NODISCARD_RESULT StringType operator()(auto)
     {
-        return "---";
+        return "<not bound>";
     }
 
     NODISCARD_RESULT StringType getMapping(KmbBinding binding)
