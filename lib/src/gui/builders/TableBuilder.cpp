@@ -1,14 +1,20 @@
 #include "gui/builders/TableBuilder.hpp"
 #include "gui/Sizers.hpp"
 #include "gui/builders/WidgetBuilder.hpp"
+#include "types/SemanticTypes.hpp"
 #include <cassert>
 #include <ranges>
 
-void priv::TableBuilder::addRow(const std::vector<std::string>& cells)
+void priv::TableBuilder::addRow(const std::vector<tgui::Widget::Ptr>& cells)
 {
     assert(!heading || heading->size() == cells.size());
     assert(rowsOfCells.empty() || rowsOfCells.front().size() == cells.size());
     rowsOfCells.push_back(cells);
+}
+
+void priv::TableBuilder::addSeparator()
+{
+    rowsOfCells.push_back({});
 }
 
 template<class Range>
@@ -19,20 +25,18 @@ NODISCARD_RESULT static auto enumerate(Range&& range)
         std::forward<Range>(range));
 }
 
-NODISCARD_RESULT static tgui::Label::Ptr
-createCell(const std::string& str, size_t column, size_t totalColumns)
+NODISCARD_RESULT static tgui::Widget::Ptr
+createCell(const tgui::Widget::Ptr& content, size_t column, size_t totalColumns)
 {
     size_t columnWidth = 100 / totalColumns;
 
-    auto label = tgui::Label::create(str);
-    label->getRenderer()->setTextColor(tgui::Color::Black);
-    label->setSize({ tgui::Layout(std::to_string(columnWidth) + "%"), "100%" });
-    label->setPosition(
+    auto cell = WidgetBuilder::createPanel(
+        { tgui::Layout(std::to_string(columnWidth) + "%"), "100%" });
+    cell->setPosition(
         { tgui::Layout(std::to_string(column * columnWidth) + "%"), "0%" });
-    label->setTextSize(Sizers::getBaseFontSize());
-    label->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
-    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    return label;
+    cell->add(content);
+
+    return cell;
 }
 
 tgui::Panel::Ptr priv::TableBuilder::build()
@@ -50,7 +54,10 @@ tgui::Panel::Ptr priv::TableBuilder::build()
 
         for (auto&& [columnIdx, cellText] : enumerate(heading.value()))
         {
-            row->add(createCell(cellText, columnIdx, columnCount));
+            row->add(createCell(
+                WidgetBuilder::createTextLabel(cellText, "justify"_true),
+                columnIdx,
+                columnCount));
         }
 
         panel->add(row);
@@ -65,9 +72,16 @@ tgui::Panel::Ptr priv::TableBuilder::build()
         auto&& rowWidget = WidgetBuilder::createRow(color);
         rowWidget->setPosition({ "0%", rowWidget->getSize().y * rowIdx++ });
 
-        for (auto&& [columnIdx, cellText] : enumerate(row))
+        if (row.empty()) // separator
         {
-            rowWidget->add(createCell(cellText, columnIdx, columnCount));
+            rowWidget->add(WidgetBuilder::createSeparator());
+        }
+        else
+        {
+            for (auto&& [columnIdx, cellText] : enumerate(row))
+            {
+                rowWidget->add(createCell(cellText, columnIdx, columnCount));
+            }
         }
 
         panel->add(rowWidget);

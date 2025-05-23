@@ -73,24 +73,13 @@ tgui::Panel::Ptr FormBuilder::build(tgui::Color backgroundColor)
     return panel;
 }
 
-static tgui::Label::Ptr createRowLabel(const std::string& text)
-{
-    auto&& label = tgui::Label::create(text);
-    label->getRenderer()->setTextColor(sf::Color::Black);
-    label->setSize("60%", "100%");
-    label->setPosition("0%", "0%");
-    label->setTextSize(Sizers::getBaseFontSize());
-    label->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    return label;
-}
-
 tgui::Panel::Ptr FormBuilder::createOptionRow(
     const std::string& labelText,
     tgui::Widget::Ptr widgetPtr,
     std::optional<std::string> widgetId)
 {
     auto&& row = WidgetBuilder::createRow();
-    row->add(createRowLabel(labelText));
+    row->add(WidgetBuilder::createTextLabel(labelText));
 
     auto&& widgetPanel = tgui::Panel::create({ "40%", "100%" });
     widgetPanel->setPosition("60%", "0%");
@@ -120,7 +109,7 @@ tgui::Panel::Ptr FormBuilder::createOptionRowWithSubmitButton(
     tgui::Button::Ptr buttonPtr)
 {
     auto&& row = WidgetBuilder::createRow();
-    row->add(createRowLabel(labelText));
+    row->add(WidgetBuilder::createTextLabel(labelText));
 
     auto&& widgetPanel = tgui::Panel::create({ "25%", "100%" });
     widgetPanel->setPosition("60%", "0%");

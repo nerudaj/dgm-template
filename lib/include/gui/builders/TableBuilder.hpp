@@ -20,13 +20,15 @@ namespace priv
         {
         }
 
-        void addRow(const std::vector<std::string>& cells);
+        void addRow(const std::vector<tgui::Widget::Ptr>& cells);
+
+        void addSeparator();
 
         NODISCARD_RESULT tgui::Panel::Ptr build();
 
     private:
         std::optional<std::vector<std::string>> heading;
-        std::vector<std::vector<std::string>> rowsOfCells;
+        std::vector<std::vector<tgui::Widget::Ptr>> rowsOfCells;
     };
 } // namespace priv
 

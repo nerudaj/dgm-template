@@ -1,7 +1,9 @@
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "gui/Builders.hpp"
+#include "input/InputKindToStringMapper.hpp"
 #include "misc/Compatibility.hpp"
+#include "types/Overloads.hpp"
 #include <ranges>
 
 const tgui::Color CONTENT_BGCOLOR = tgui::Color(255, 255, 255, 64);
@@ -31,7 +33,7 @@ AppStateOptions::AppStateOptions(
     : dgm::AppState(app)
     , dic(dic)
     , settings(settings)
-    , content(WidgetBuilder::createPanel())
+    , content(WidgetBuilder::createScrollablePanel())
 {
     buildLayout();
 }
@@ -51,6 +53,8 @@ void AppStateOptions::input()
     {
         tabs->select((tabs->getSelectedIndex() + 1) % tabs->getTabsCount());
     }
+
+    inputDetector.update(app.time);
 }
 
 void AppStateOptions::update() {}
@@ -75,6 +79,7 @@ void AppStateOptions::buildLayout()
                             dic.strings.getString(StringId::VideoOptionsTab),
                             dic.strings.getString(StringId::AudioOptionsTab),
                             dic.strings.getString(StringId::InputOptionsTab),
+                            dic.strings.getString(StringId::BindingsOptionsTab),
                         },
                         [&](const tgui::String& tabName)
                         { onTabClicked(tabName); },
@@ -87,8 +92,6 @@ void AppStateOptions::buildLayout()
                 dic.strings.getString(StringId::Back), [&] { onBack(); }))
             .withNoSubmitButton()
             .build());
-
-    // TODO: configure controls
 
     buildVideoOptionsLayout();
 }
@@ -178,6 +181,95 @@ void AppStateOptions::buildInputOptionsLayout()
             .build(CONTENT_BGCOLOR));
 }
 
+template<class V, class T>
+bool doesVariantContain(const V& v, T t)
+{
+    if (std::holds_alternative<T>(v)) return std::get<T>(v) == t;
+    return false;
+}
+
+void AppStateOptions::buildBindingsOptionsLayout()
+{
+    auto&& inputKindMapper = InputKindToStringMapper(dic.strings);
+    auto&& hwInputMapper = HwInputToStringMapper();
+
+    auto tableBuilder = TableBuilder().withHeading({
+        dic.strings.getString(StringId::BindingHeadingAction),
+        dic.strings.getString(StringId::BindingHeadingKMB),
+        dic.strings.getString(StringId::BindingsHeadingGamepad),
+    });
+
+    auto buttonOrNothing = [](tgui::Button::Ptr ptr,
+                              bool useNothing) -> tgui::Widget::Ptr
+    {
+        if (useNothing) WidgetBuilder::createTextLabel("");
+        return ptr;
+    };
+
+    auto addSectionToTable = [&](std::map<InputKind, Binding>& bindings)
+    {
+        for (auto&& [action, binding] : bindings)
+        {
+            auto&& [kmbBinding, gamepadBinding] = binding;
+
+            const bool isEscapeKey =
+                doesVariantContain(kmbBinding, sf::Keyboard::Key::Escape);
+            const bool noKmb =
+                doesVariantContain(kmbBinding, std::monostate {});
+            const bool noGmp =
+                doesVariantContain(gamepadBinding, std::monostate {});
+
+            tableBuilder.addRow({
+                WidgetBuilder::createTextLabel(
+                    inputKindMapper.inputKindToString(action)),
+                buttonOrNothing(
+                    WidgetBuilder::createSmallerButton(
+                        std::visit(hwInputMapper, kmbBinding),
+                        [&]()
+                        {
+                            inputDetector.startCheckingInputs(
+                                [&](KmbBinding b)
+                                { onInputDetected(action, b, bindings); },
+                                [&]()
+                                {
+                                    onInputDetected(
+                                        action, kmbBinding, bindings);
+                                });
+                        },
+                        WidgetOptions { .id =
+                                            getBindButtonId<KmbBinding>(action),
+                                        .enabled = !isEscapeKey }),
+                    noKmb),
+                buttonOrNothing(
+                    WidgetBuilder::createSmallerButton(
+                        std::visit(hwInputMapper, gamepadBinding),
+                        [&]()
+                        {
+                            inputDetector.startCheckingInputs(
+                                [&](GamepadBinding b)
+                                { onInputDetected(action, b, bindings); },
+                                [&]()
+                                {
+                                    onInputDetected(
+                                        action, gamepadBinding, bindings);
+                                });
+                        },
+                        WidgetOptions {
+                            .id = getBindButtonId<GamepadBinding>(action),
+                        }),
+                    noGmp),
+            });
+        }
+    };
+
+    addSectionToTable(settings.bindings.ingameBindings);
+    tableBuilder.addSeparator();
+    addSectionToTable(settings.bindings.menuBindings);
+
+    content->removeAllWidgets();
+    content->add(tableBuilder.build());
+}
+
 void AppStateOptions::onTabClicked(const tgui::String& tabName)
 {
     if (tabName == dic.strings.getString(StringId::VideoOptionsTab))
@@ -186,6 +278,8 @@ void AppStateOptions::onTabClicked(const tgui::String& tabName)
         buildAudioOptionsLayout();
     else if (tabName == dic.strings.getString(StringId::InputOptionsTab))
         buildInputOptionsLayout();
+    else if (tabName == dic.strings.getString(StringId::BindingsOptionsTab))
+        buildBindingsOptionsLayout();
 }
 
 void AppStateOptions::onBack()

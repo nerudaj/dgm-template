@@ -26,7 +26,7 @@ int main(int, char*[])
             .useFullscreen = settings.video.fullscreen,
         });
         auto&& app = dgm::App(window);
-        auto&& dependencies = DependencyContainer(window, "", Language::English);
+        auto&& dependencies = DependencyContainer(window, "", Language::English, settings);
 
         window.getSfmlWindowContext().setMouseCursorVisible(false);
 
