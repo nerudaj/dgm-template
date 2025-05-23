@@ -13,10 +13,22 @@ public:
 
     explicit constexpr BrandedType(T&& value) : value(std::move(value)) {}
 
-    constexpr auto&& get(this auto&& self)
+#ifdef ANDROID
+    constexpr const T& get() const noexcept
+    {
+        return value;
+    }
+
+    constexpr T& get() noexcept
+    {
+        return value;
+    }
+#else
+    constexpr auto&& get(this auto&& self) noexcept
     {
         return self.value;
     }
+#endif
 
 private:
     T value;
