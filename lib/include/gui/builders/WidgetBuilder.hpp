@@ -34,9 +34,9 @@ public:
 
 public:
     static NODISCARD_RESULT inline tgui::Label::Ptr
-    createTextLabel(const std::string& text)
+    createTextLabel(const std::string& text, bool justify = false)
     {
-        return createLabelInternal(text, 1.f);
+        return createLabelInternal(text, 1.f, justify);
     }
 
     static NODISCARD_RESULT inline tgui::Label::Ptr createHeading(
@@ -50,10 +50,19 @@ public:
         const tgui::Layout2d& size = { "100%", "100%" },
         const tgui::Color color = tgui::Color::Transparent);
 
+    static NODISCARD_RESULT tgui::ScrollablePanel::Ptr createScrollablePanel(
+        const tgui::Layout2d& size = { "100%", "100%" },
+        const tgui::Color color = tgui::Color::Transparent);
+
     static NODISCARD_RESULT tgui::Panel::Ptr
     createRow(tgui::Color bgcolor = tgui::Color::Transparent);
 
     static NODISCARD_RESULT tgui::Button::Ptr createButton(
+        const Label& label,
+        std::function<void(void)> onClick,
+        WidgetOptions options = WidgetOptions {});
+
+    static NODISCARD_RESULT tgui::Button::Ptr createSmallerButton(
         const Label& label,
         std::function<void(void)> onClick,
         WidgetOptions options = WidgetOptions {});

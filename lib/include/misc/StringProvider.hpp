@@ -3,8 +3,8 @@
 #include "enums/Language.hpp"
 #include "types/StringTypes.hpp"
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 class [[nodiscard]] StringProvider final
 {
@@ -22,8 +22,10 @@ public:
 
     constexpr const CharType* getString(StringId id) const noexcept
     {
-        return strings[std::to_underlying(current)][std::to_underlying(id)]
-            .data();
+        const auto result =
+            strings[std::to_underlying(current)][std::to_underlying(id)].data();
+        if (!result) return "--missing string--";
+        return result;
     }
 
 private:

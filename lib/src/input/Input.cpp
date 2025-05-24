@@ -1,74 +1,19 @@
 #include "input/Input.hpp"
+#include "types/Overloads.hpp"
 
-Input::Input()
+void Input::updateBindings(const BindingsSettings& settings)
 {
-    controller.bindInput(InputKind::BackButton, sf::Keyboard::Key::Escape);
+    controller = configureController(settings);
+}
 
-    controller.bindInput(InputKind::Left, sf::Keyboard::Key::A);
-    controller.bindInput(InputKind::Right, sf::Keyboard::Key::D);
-    controller.bindInput(InputKind::Jump, sf::Keyboard::Key::Space);
-
-    try
-    {
-        const auto id = sf::Joystick::getIdentification(0);
-
-        controller.bindInput(
-            InputKind::BackButton,
-            dgm::translateGamepadCode(dgm::GamepadCode::Select, id));
-
-        controller.bindInput(
-            InputKind::ConfirmButton,
-            dgm::translateGamepadCode(dgm::GamepadCode::A, id));
-
-        controller.bindInput(
-            InputKind::CursorUp,
-            dgm::translateGamepadCode(dgm::GamepadCode::LStickUp, id));
-        controller.bindInput(
-            InputKind::CursorDown,
-            dgm::translateGamepadCode(dgm::GamepadCode::LStickDown, id));
-        controller.bindInput(
-            InputKind::CursorLeft,
-            dgm::translateGamepadCode(dgm::GamepadCode::LStickLeft, id));
-        controller.bindInput(
-            InputKind::CursorRight,
-            dgm::translateGamepadCode(dgm::GamepadCode::LStickRight, id));
-
-        controller.bindInput(
-            InputKind::MenuCycleLeft,
-            dgm::translateGamepadCode(dgm::GamepadCode::LBumper, id));
-
-        controller.bindInput(
-            InputKind::MenuCycleRight,
-            dgm::translateGamepadCode(dgm::GamepadCode::RBumper, id));
-    }
-    catch (...)
-    {
-        controller.bindInput(InputKind::ConfirmButton, 0);
-        controller.bindInput(InputKind::BackButton, 10);
-        controller.bindInput(
-            InputKind::CursorLeft,
-            sf::Joystick::Axis::X,
-            dgm::AxisHalf::Negative);
-        controller.bindInput(
-            InputKind::CursorRight,
-            sf::Joystick::Axis::X,
-            dgm::AxisHalf::Positive);
-        controller.bindInput(
-            InputKind::CursorUp,
-            sf::Joystick::Axis::Y,
-            dgm::AxisHalf::Negative);
-        controller.bindInput(
-            InputKind::CursorDown,
-            sf::Joystick::Axis::Y,
-            dgm::AxisHalf::Positive);
-        controller.bindInput(InputKind::MenuCycleLeft, 8);
-        controller.bindInput(InputKind::MenuCycleRight, 9);
-    }
+void Input::forceRelease(InputKind action)
+{
+    controller.forceRelease(action);
 }
 
 float Input::getHorizontalVelocity() const
 {
-    return -controller.readAnalog(InputKind::Left)
+    return controller.readAnalog(InputKind::Left)
            + controller.readAnalog(InputKind::Right);
 }
 
@@ -110,4 +55,39 @@ sf::Vector2f Input::getCursorDelta() const
 bool Input::readAndRelease(InputKind i) const
 {
     return controller.readDigital(i, dgm::DigitalReadKind::OnPress);
+}
+
+dgm::Controller<InputKind>
+Input::configureController(const BindingsSettings& settings)
+{
+    auto controller = dgm::Controller<InputKind>();
+
+    auto bindActions = [&](auto bindings)
+    {
+        for (auto&& [action, binding] : bindings)
+        {
+            auto&& [kmbBinding, gamepadBinding] = binding;
+
+            std::visit(
+                overloads { [&](sf::Keyboard::Key key)
+                            { controller.bindInput(action, key); },
+                            [&](sf::Mouse::Button mbtn)
+                            { controller.bindInput(action, mbtn); },
+                            [&](auto) {} },
+                kmbBinding);
+            std::visit(
+                overloads {
+                    [&](GamepadButton btn)
+                    { controller.bindInput(action, btn.get()); },
+                    [&](std::pair<sf::Joystick::Axis, dgm::AxisHalf> joy)
+                    { controller.bindInput(action, joy); },
+                    [&](auto) {} },
+                gamepadBinding);
+        }
+    };
+
+    bindActions(settings.ingameBindings);
+    bindActions(settings.menuBindings);
+
+    return controller;
 }

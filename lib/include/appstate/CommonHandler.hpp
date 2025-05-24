@@ -17,4 +17,6 @@ public:
         DependencyContainer& dic,
         const InputSettings& settings,
         CommonHandlerOptions options = {});
+
+    static void swallowAllEvents(dgm::App& app);
 };

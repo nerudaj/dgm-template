@@ -5,5 +5,6 @@
 #include <string>
 
 using CharType = char;
-using StringView = std::basic_string_view<CharType>;
-using Localization = std::map<StringId, StringView>;
+using StringType = std::basic_string<CharType>;
+using StringViewType = std::basic_string_view<CharType>;
+using Localization = std::map<StringId, StringViewType>;

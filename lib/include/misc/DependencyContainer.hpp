@@ -5,6 +5,7 @@
 #include "input/VirtualCursor.hpp"
 #include "misc/ResourceLoader.hpp"
 #include "misc/StringProvider.hpp"
+#include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
 
 struct [[nodiscard]] DependencyContainer final
@@ -18,14 +19,15 @@ struct [[nodiscard]] DependencyContainer final
     DependencyContainer(
         dgm::Window& window,
         const std::filesystem::path& rootDir,
-        Language primaryLang)
+        Language primaryLang,
+        const AppSettings& settings)
         // Gui needs to be instantiated before Resource manager
         // since we need to have gui backend defined before
         // other tgui objects (like fonts) can be created.
         : gui(window)
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
-        , input()
+        , input(settings.bindings)
         , virtualCursor(
               window.getSfmlWindowContext(),
               input,

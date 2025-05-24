@@ -27,3 +27,11 @@ void CommonHandler::handleInput(
         app.popState();
     }
 }
+
+void CommonHandler::swallowAllEvents(dgm::App& app)
+{
+    while (const auto event = app.window.pollEvent())
+    {
+        if (event->is<sf::Event::Closed>()) app.exit();
+    }
+}

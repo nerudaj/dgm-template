@@ -9,7 +9,11 @@ class [[nodiscard]] AppStatePause final : public dgm::AppState
 public:
     AppStatePause(
         dgm::App& app, DependencyContainer& dic, AppSettings& settings) noexcept
-        : dgm::AppState(app, dgm::AppStateConfig {})
+        : dgm::AppState(
+              app,
+              dgm::AppStateConfig {
+                  .shouldDrawUnderlyingState = true,
+              })
         , dic(dic)
         , settings(settings)
     {

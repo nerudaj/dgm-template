@@ -42,6 +42,15 @@ WidgetBuilder::createPanel(const tgui::Layout2d& size, const tgui::Color color)
     return panel;
 }
 
+tgui::ScrollablePanel::Ptr WidgetBuilder::createScrollablePanel(
+    const tgui::Layout2d& size, const tgui::Color color)
+{
+    auto&& panel = tgui::ScrollablePanel::create(size);
+    panel->setPosition({ "0%", "0%" });
+    panel->getRenderer()->setBackgroundColor(color);
+    return panel;
+}
+
 tgui::Panel::Ptr WidgetBuilder::createRow(tgui::Color bgcolor)
 {
     auto&& row = tgui::Panel::create();
@@ -60,6 +69,24 @@ tgui::Button::Ptr WidgetBuilder::createButton(
     button->onClick(onClick);
     button->setTextSize(Sizers::getBaseFontSize());
     button->setSize({ "100%", "100%" });
+
+    applyOptionsToWidget(options, button);
+
+    return button;
+}
+
+NODISCARD_RESULT tgui::Button::Ptr WidgetBuilder::createSmallerButton(
+    const Label& label,
+    std::function<void(void)> onClick,
+    WidgetOptions options)
+{
+    auto&& button = tgui::Button::create(label);
+    button->onClick(onClick);
+    button->setTextSize(Sizers::getBaseFontSize());
+    button->setSize({ "90%", "80%" });
+    button->setPosition({ "5%", "10%" });
+    button->getRenderer()->setRoundedBorderRadius(10.f);
+    button->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
 
     applyOptionsToWidget(options, button);
 
