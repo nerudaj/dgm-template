@@ -39,9 +39,9 @@ createCell(const tgui::Widget::Ptr& content, size_t column, size_t totalColumns)
     return cell;
 }
 
-tgui::Panel::Ptr priv::TableBuilder::build()
+tgui::Widget::Ptr priv::TableBuilder::build()
 {
-    auto&& panel = WidgetBuilder::createPanel();
+    auto&& panel = WidgetBuilder::createScrollablePanel();
 
     assert(heading || !rowsOfCells.empty());
 
