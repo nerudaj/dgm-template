@@ -15,7 +15,7 @@ CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
 
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
 #CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
-CPMAddPackage("gh:nerudaj/feature-android-joystick-support")
+CPMAddPackage("gh:nerudaj/SFML#feature-android-joystick-support")
 
 set ( TGUI_BACKEND SFML_GRAPHICS )
 set ( TGUI_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
