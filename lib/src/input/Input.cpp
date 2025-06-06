@@ -80,7 +80,7 @@ Input::configureController(const BindingsSettings& settings)
                     [&](GamepadButton btn)
                     { controller.bindInput(action, btn.get()); },
                     [&](std::pair<sf::Joystick::Axis, dgm::AxisHalf> joy)
-                    { controller.bindInput(action, joy); },
+                    { controller.bindInput(action, joy.first, joy.second); },
                     [&](auto) {} },
                 gamepadBinding);
         }
