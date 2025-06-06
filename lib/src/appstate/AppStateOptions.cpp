@@ -224,9 +224,12 @@ void AppStateOptions::buildBindingsOptionsLayout()
             const bool noGmp =
                 doesVariantContain(gamepadBinding, std::monostate {});
 
+            auto label = WidgetBuilder::createTextLabel(
+                inputKindMapper.inputKindToString(action));
+            label->getRenderer()->setPadding({ "5%", "0%", "0%", "0%" });
+
             tableBuilder.addRow({
-                WidgetBuilder::createTextLabel(
-                    inputKindMapper.inputKindToString(action)),
+                label,
                 buttonOrNothing(
                     WidgetBuilder::createSmallerButton(
                         std::visit(hwInputMapper, kmbBinding),
