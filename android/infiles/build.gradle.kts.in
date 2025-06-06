@@ -32,11 +32,23 @@ android {
     }
     
     signingConfigs {
-        create("release") {
-            storeFile = file(System.getenv("APK_KEYSTORE_PATH"))
-            storePassword = System.getenv("APK_KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("APK_SIGNING_KEY_ALIAS")
-            keyPassword = System.getenv("APK_SIGNING_KEY_PASSWORD")
+        val storeFilePath = System.getenv("APK_KEYSTORE_PATH")
+        val storePassword = System.getenv("APK_KEYSTORE_PASSWORD")
+        val keyAlias = System.getenv("APK_SIGNING_KEY_ALIAS")
+        val keyPassword = System.getenv("APK_SIGNING_KEY_PASSWORD")
+        
+        if (
+            !storeFilePath.isNullOrBlank() &&
+            !storePassword.isNullOrBlank() &&
+            !keyAlias.isNullOrBlank() &&
+            !keyPassword.isNullOrBlank()
+        ) {
+            create("release") {
+                storeFile = file(storeFilePath)
+                this.storePassword = storePassword
+                this.keyAlias = keyAlias
+                this.keyPassword = keyPassword
+            }
         }
     }
 	
@@ -49,7 +61,7 @@ android {
                 }
             }
 
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }

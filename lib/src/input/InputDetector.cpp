@@ -1,5 +1,3 @@
-#pragma once
-
 #include "input/InputDetector.hpp"
 
 constexpr const float AXIS_THRESHOLD_NEG = -80.f;
