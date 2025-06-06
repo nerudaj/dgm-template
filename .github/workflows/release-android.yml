@@ -44,17 +44,17 @@ jobs:
         cd "${{ env.BUILD_DIR }}"
         cmake -D CMAKE_BUILD_SYSTEM=Android ..
       shell: cmd
-      env:
-        APK_KEYSTORE_PATH: ${{ env.KEYSTORE_PATH }}
-        APK_KEYSTORE_PASSWORD: ${{ secrets.APK_KEYSTORE_PASSWORD }}
-        APK_SIGNING_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
-        APK_SIGNING_KEY_PASSWORD: ${{ secrets.APK_KEYSTORE_PASSWORD }}
 
     - name: Build
       working-directory: ${{ env.BUILD_DIR }}
       run: |
         gradlew build
       shell: cmd
+      env:
+        APK_KEYSTORE_PATH: ${{ env.KEYSTORE_PATH }}
+        APK_KEYSTORE_PASSWORD: ${{ secrets.APK_KEYSTORE_PASSWORD }}
+        APK_SIGNING_KEY_ALIAS: ${{ secrets.APK_KEY_ALIAS }}
+        APK_SIGNING_KEY_PASSWORD: ${{ secrets.APK_KEYSTORE_PASSWORD }}
 
     - name: Pack
       working-directory: ${{env.BUILD_DIR}}
