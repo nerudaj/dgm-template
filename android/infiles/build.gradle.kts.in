@@ -33,10 +33,10 @@ android {
     
     signingConfigs {
         release {
-            storeFile = file("@APK_KEYSTORE_PATH@")
-            storePassword = "@APK_KEYSTORE_PASSWORD@"
-            keyAlias = "@APK_SIGNING_KEY_ALIAS@"
-            keyPassword = "@APK_SIGNING_KEY_PASSWORD@"
+            storeFile = file(System.getenv("APK_KEYSTORE_PATH"))
+            storePassword = System.getenv("APK_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("APK_SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("APK_SIGNING_KEY_PASSWORD")
         }
     }
 	
@@ -48,8 +48,8 @@ android {
                     arguments.add("-DCMAKE_BUILD_TYPE=Release")
                 }
             }
-        
-            signingConfig = signingConfigs.release
+
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
@@ -76,3 +76,5 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
+
+val myEnvVar: String? = 
