@@ -30,6 +30,15 @@ android {
             }
         }
     }
+    
+    signingConfigs {
+        release {
+            storeFile = file("@APK_KEYSTORE_PATH@")
+            storePassword = "@APK_KEYSTORE_PASSWORD@"
+            keyAlias = "@APK_SIGNING_KEY_ALIAS@"
+            keyPassword = "@APK_SIGNING_KEY_PASSWORD@"
+        }
+    }
 	
     buildTypes {
         release {
@@ -40,6 +49,7 @@ android {
                 }
             }
         
+            signingConfig = signingConfigs.release
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
