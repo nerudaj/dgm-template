@@ -1,4 +1,4 @@
-#include "misc/ResourceLoader.hpp"
+#include "loaders/ResourceLoader.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
@@ -32,9 +32,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
-            assetDir / "graphics",
-            dgm::Utility::loadTexture,
-            { ".png" });
+            assetDir / "graphics", dgm::Utility::loadTexture, { ".png" });
         !result)
     {
         throw std::runtime_error(uni::format(
@@ -53,9 +51,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
-            assetDir / "graphics",
-            dgm::Utility::loadClip,
-            { ".clip" });
+            assetDir / "graphics", dgm::Utility::loadClip, { ".clip" });
         !result)
     {
         throw std::runtime_error(uni::format(

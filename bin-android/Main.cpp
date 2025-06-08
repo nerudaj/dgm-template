@@ -3,7 +3,6 @@
 #include <misc/CMakeVars.hpp>
 #include <misc/Compatibility.hpp>
 #include <misc/DependencyContainer.hpp>
-#include <misc/ResourceLoader.hpp>
 #include <SFML/System/Err.hpp>
 #include <mutex>
 
