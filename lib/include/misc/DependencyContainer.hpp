@@ -3,7 +3,7 @@
 #include "gui/Gui.hpp"
 #include "input/Input.hpp"
 #include "input/VirtualCursor.hpp"
-#include "misc/ResourceLoader.hpp"
+#include "loaders/ResourceLoader.hpp"
 #include "misc/StringProvider.hpp"
 #include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
