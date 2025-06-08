@@ -1,7 +1,7 @@
 include ( "${CMAKE_CURRENT_LIST_DIR}/add-catch.cmake" )
 
-set ( CXXOPTS_VERSION "3.2.1" )
-set ( NLOHMANN_VERSION "3.11.3" )
+set ( CXXOPTS_VERSION "3.3.1" )
+set ( NLOHMANN_VERSION "3.12.0" )
 set ( SFML_VERSION "3.0.0" )
 set ( DGM_LIB_VERSION "main" )
 set ( FSM_LIB_VERSION "2.1.1" )
@@ -14,7 +14,8 @@ CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
 CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
 
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
-CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
+#CPMAddPackage("gh:SFML/SFML#${SFML_VERSION}")
+CPMAddPackage("gh:nerudaj/SFML#feature-android-joystick-support")
 
 set ( TGUI_BACKEND SFML_GRAPHICS )
 set ( TGUI_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
