@@ -92,6 +92,10 @@ gradlew build
 cpack
 ```
 
+## Signing APKs
+
+The `Release-Android` pipeline is capable of automatically signing the release APKs for you, provided you have appropriate secrets defined for this repo. Read [this guide](docs/ApkSigning.md) for more details.
+
 ## Known issues
 
 * TGUI seems to incorrectly compute offsets on Android. For example textured menu backgrounds are cropped at 50% height. Positions of containers in Options menu are shifted to right, which doesn't happen on Windows, etc.
