@@ -1,15 +1,15 @@
 #include "Helper.hpp"
 #include "Paths.hpp"
 #include <catch_amalgamated.hpp>
-#include <loaders/models/TiledModels.hpp>
+#include <loaders/TiledLoader.hpp>
 #include <nlohmann/json.hpp>
 
 TEST_CASE("[TiledLoader]")
 {
     SECTION("Can load demo file")
     {
-        auto json = Helper::loadAllText(TESTFILES_PATH / "tiled-map-01.json");
-        tiled::FiniteMapModel model = nlohmann::json::parse(json);
+        tiled::FiniteMapModel model =
+            TiledLoader::loadLevel(TESTFILES_PATH / "tiled-map-01.json");
 
         REQUIRE(model.width == 64u);
         REQUIRE(model.height == 64u);

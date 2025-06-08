@@ -2,8 +2,8 @@
 
 #include "Paths.hpp"
 #include <fstream>
+#include <loaders/ResourceLoader.hpp>
 #include <misc/DependencyContainer.hpp>
-#include <misc/ResourceLoader.hpp>
 
 class Helper final
 {
