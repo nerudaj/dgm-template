@@ -21,6 +21,7 @@ void AppStateGame::input()
 void AppStateGame::update()
 {
     gameRulesEngine.update(app.time);
+    renderingEngine.update(app.time);
 
     gameEvents.processEvents(
         [&](const DummyGameEvent& e)

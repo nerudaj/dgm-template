@@ -1,5 +1,10 @@
 #include "game/engine/RenderingEngine.hpp"
 
+void RenderingEngine::update(const dgm::Time& time)
+{
+    fpsCounter.update(time.getDeltaTime());
+}
+
 void RenderingEngine::draw(dgm::Window& window)
 {
     sprite.setTextureRect(scene.dummy.animation.getCurrentFrame());
@@ -8,4 +13,7 @@ void RenderingEngine::draw(dgm::Window& window)
 
     scene.dummy.body.debugRender(window); // rendering hitbox
     window.draw(sprite);
+
+    text.setString(fpsCounter.getText());
+    window.draw(text);
 }
