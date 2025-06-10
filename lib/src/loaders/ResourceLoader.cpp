@@ -1,4 +1,5 @@
 #include "loaders/ResourceLoader.hpp"
+#include "loaders/TiledLoader.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
@@ -8,6 +9,19 @@ static std::expected<tgui::Font, dgm::Error>
 loadTguiFont(const std::filesystem::path& path)
 {
     return tgui::Font(path.string());
+}
+
+static std::expected<tiled::FiniteMapModel, dgm::Error>
+loadTiledMap(const std::filesystem::path& path)
+{
+    try
+    {
+        return TiledLoader::loadLevel(path);
+    }
+    catch (const std::exception& ex)
+    {
+        return std::unexpected { dgm::Error(ex.what()) };
+    }
 }
 
 dgm::ResourceManager
