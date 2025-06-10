@@ -9,7 +9,7 @@ get_version_from_git (
     FULL_VERSION_VARIABLE FULL_PROJECT_VERSION
 )
 
-if ( "${CMAKE_BUILD_SYSTEM}" STREQUAL "Android" )
+if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
     set ( BUILDING_ANDROID ON )
 else ()
     set ( BUILDING_ANDROID OFF )

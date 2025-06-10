@@ -39,7 +39,7 @@ jobs:
       run: |
         mkdir "${{ env.BUILD_DIR }}"
         cd "${{ env.BUILD_DIR }}"
-        cmake -D CMAKE_BUILD_SYSTEM=Android ..
+        cmake -D CMAKE_SYSTEM_NAME=Android ..
       shell: cmd
 
     - name: Build
