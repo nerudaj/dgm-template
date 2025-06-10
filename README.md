@@ -82,7 +82,7 @@ Configure cmake:
 ```sh
 mkdir _build
 cd _build
-cmake -D CMAKE_BUILD_SYSTEM=Android ..
+cmake -D CMAKE_SYSTEM_NAME=Android ..
 ```
 
 After that you can open the `_build` folder as a project in Android Studio and continue from there. Or you can directly invoke Gradle and build from the command line:
