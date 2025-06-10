@@ -42,15 +42,25 @@ namespace tiled
             { RenderOrder::LeftUp, "left-up" },
         });
 
+    enum class [[nodiscard]] DrawOrder
+    {
+        TopDown,
+    };
+
+    NLOHMANN_JSON_SERIALIZE_ENUM(
+        DrawOrder, { { DrawOrder::TopDown, "topdown" } });
+
     enum class [[nodiscard]] LayerType
     {
         TileLayer,
+        ObjectGroup,
     };
 
     NLOHMANN_JSON_SERIALIZE_ENUM(
         LayerType,
         {
             { LayerType::TileLayer, "tilelayer" },
+            { LayerType::ObjectGroup, "objectgroup" },
         });
 
     enum class [[nodiscard]] MapType
@@ -90,22 +100,22 @@ namespace tiled
             { StaggerIndex::Even, "even" },
         });
 
-    struct LayerModel
+    struct TileLayerModel
     {
         unsigned id = 0;
         std::string name = "";
+        LayerType type;
         std::vector<int> data = {};
         int x = 0;
         int y = 0;
         unsigned width = 0;
         unsigned height = 0;
         unsigned opacity = 0;
-        LayerType type = {};
         bool visible = true;
     };
 
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-        LayerModel,
+        TileLayerModel,
         id,
         name,
         data,
@@ -124,6 +134,60 @@ namespace tiled
     };
 
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(TilesetModel, firstgid, source);
+
+    struct ObjectModel
+    {
+        int id = 0;
+        float x = 0;
+        float y = 0;
+        unsigned width = 0;
+        unsigned height = 0;
+        std::string name;
+        std::string type;
+        int rotation = 0;
+        bool point = true;
+        bool visible = true;
+    };
+
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+        ObjectModel,
+        id,
+        x,
+        y,
+        width,
+        height,
+        name,
+        type,
+        rotation,
+        point,
+        visible);
+
+    struct ObjectGroupModel
+    {
+        int id = 0;
+        int x = 0;
+        int y = 0;
+        std::string name;
+        std::vector<ObjectModel> objects = {};
+        DrawOrder draworder;
+        LayerType type;
+        bool visible = true;
+        unsigned opacity = 0;
+    };
+
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+        ObjectGroupModel,
+        id,
+        x,
+        y,
+        name,
+        objects,
+        draworder,
+        type,
+        visible,
+        opacity);
+
+    using LayerModel = std::variant<TileLayerModel, ObjectGroupModel>;
 
     struct FiniteMapModel
     {
@@ -167,3 +231,42 @@ namespace tiled
         version);
 
 } // namespace tiled
+
+namespace nlohmann
+{
+    template<>
+    struct adl_serializer<tiled::LayerModel>
+    {
+        static void to_json(json& j, const tiled::LayerModel& opt)
+        {
+            if (std::holds_alternative<tiled::TileLayerModel>(opt))
+            {
+                j = std::get<tiled::TileLayerModel>(opt);
+            }
+            else
+            {
+                j = std::get<tiled::ObjectGroupModel>(opt);
+            }
+        }
+
+        static void from_json(const json& j, tiled::LayerModel& opt)
+        {
+            if (j.contains("type"))
+            {
+                tiled::LayerType type;
+                j["type"].get_to(type);
+
+                if (type == tiled::LayerType::TileLayer)
+                {
+                    tiled::TileLayerModel model = j;
+                    opt = model;
+                }
+                else
+                {
+                    tiled::ObjectGroupModel model = j;
+                    opt = model;
+                }
+            }
+        }
+    };
+} // namespace nlohmann
