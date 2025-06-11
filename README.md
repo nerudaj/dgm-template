@@ -18,11 +18,16 @@
 ## Project structure
 
  * `assets` - All runtime assets that will be packaged and distributed with the game go here. If you respect the structure of subfolders, your assets will be autoloaded into `dgm::ResourceManager` on start of the app.
+ * `assets-private` - Assets that should be under version control, but not directly installed with the game, such as application icon or project files for Gimp or similar programs.
  * `bin-android` - Contains entire project structure for Android Studio to work with. The only thing you should meddle with in there is `Main.cpp` in `cppcore` folder. Nothing else doesn't need touching.
  * `bin-windows` - Contains `Main.cpp` for Windows app.
  * `cmake` - Contains utility CMake files.
  * `lib` - Contains the entire code of the application.
  * `tests` - Contains unit testing source codes.
+
+## Documentaiton
+
+Follow [this link](docs/Readme.md)
 
 ### Customizing template
 
