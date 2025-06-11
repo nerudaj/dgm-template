@@ -14,7 +14,10 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4with:
+      with:
+        fetch-depth: 0
+        tags: true
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
