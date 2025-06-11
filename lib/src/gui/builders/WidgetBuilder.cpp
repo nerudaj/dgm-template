@@ -2,6 +2,7 @@
 #include "gui/Sizers.hpp"
 #include "gui/TguiHelper.hpp"
 #include "misc/Compatibility.hpp"
+#include "types/SemanticTypes.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <ranges>
@@ -125,13 +126,10 @@ tgui::Panel::Ptr WidgetBuilder::createSlider(
     gui.add(dummyLabel, "DummyLabel");
     auto size = dummyLabel->getSizeLayout();
 
-    auto&& valueLabel = tgui::Label::create(properties.valueFormatter(value));
-    valueLabel->setTextSize(Sizers::getBaseFontSize());
-    valueLabel->getRenderer()->setTextColor(sf::Color::Black);
+    auto&& valueLabel =
+        createTextLabel(properties.valueFormatter(value), "justify"_true);
     valueLabel->setSize(size.x, "100%");
     valueLabel->setPosition("parent.width" - size.x, "0%");
-    valueLabel->setVerticalAlignment(tgui::VerticalAlignment::Center);
-    valueLabel->setHorizontalAlignment(tgui::HorizontalAlignment::Center);
     result->add(valueLabel, ID);
 
     auto&& slider = tgui::Slider::create(properties.low, properties.high);

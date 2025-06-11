@@ -21,7 +21,7 @@ public:
         std::function<void(void)> onClick,
         const std::string& buttonId = "");
 
-    NODISCARD_RESULT tgui::Panel::Ptr build();
+    NODISCARD_RESULT tgui::Container::Ptr build();
 
 private:
     struct ButtonProps
