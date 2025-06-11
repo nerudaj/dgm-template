@@ -8,7 +8,7 @@ Second, boot up your Android Studio with your project, locate the `res` director
 
 ![New image asset](images/android_icon_generation.png)
 
-Set up the dialog as shown on the screen and provide the path to your full icon. Click next and finish. This will generate your icons in the build folder so navigate to the folder in which you've configured CMake and go to: `app/src/main/res`, copy all `mipmap-*` folders and paste them into the root of the repo into `android/res`, confirm overwrite files.
+Set up the dialog as shown on the screen and provide the path to your full icon. Click next and finish. This will generate your icons in the build folder so navigate to the folder in which you've configured CMake and go to: `app/src/main/res`, rename all `mipmap-*` folders to `drawable-*`, copy them, and paste them into the root of the repo into `android/res`, confirm overwrite files.
 
 ## Windows
 
