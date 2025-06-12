@@ -18,6 +18,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        tags: true
 
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v2
