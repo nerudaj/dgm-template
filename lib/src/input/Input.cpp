@@ -45,9 +45,9 @@ bool Input::isConfirmPressed() const
 sf::Vector2f Input::getCursorDelta() const
 {
     return sf::Vector2f {
-        controller.readAnalog(InputKind::CursorLeft)
+        -controller.readAnalog(InputKind::CursorLeft)
             + controller.readAnalog(InputKind::CursorRight),
-        controller.readAnalog(InputKind::CursorUp)
+        -controller.readAnalog(InputKind::CursorUp)
             + controller.readAnalog(InputKind::CursorDown),
     };
 }
