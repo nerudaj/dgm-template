@@ -50,11 +50,24 @@ Scene AppStateGame::buildScene(const dgm::ResourceManager& resmgr)
         dgm::Animation(resmgr.get<dgm::AnimationStates>("mrman.png.anim"), 4);
     animation.setState("idle", true);
 
+    auto world = box::createWorld();
+    auto&& ground =
+        box::createStaticBox(world, b2Vec2(20.f, 22.f), b2Vec2(40.f, 1.f));
+    auto&& playerBody = box::createDynamicBall(
+        world,
+        b2Vec2(20.f, 10.f),
+        1.f,
+        DynamicBodyProperties {
+            .restitution = 0.f,
+        });
+
     return Scene {
         .dummy =
             DummyEntity {
-                .body = dgm::Rect({ 100.f, 100.f }, { 32.f, 60.f }),
+                .body = playerBody,
                 .animation = std::move(animation),
             },
+        .world = std::move(world),
+        .ground = ground,
     };
 }

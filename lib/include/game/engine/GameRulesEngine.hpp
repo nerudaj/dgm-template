@@ -25,7 +25,7 @@ public:
 private:
     void updateDummyAnimation(
         dgm::Animation& animation,
-        const sf::Vector2f& forward,
+        const b2Vec2& forward,
         const dgm::Time& time);
 
     void updateDummy(DummyEntity& dummy, const float deltaTime);

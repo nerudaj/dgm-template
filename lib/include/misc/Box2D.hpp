@@ -1,11 +1,11 @@
 #pragma once
 
-#include <box2d/box2d.h>
 #include "misc/CoordConverter.hpp"
 #include <DGM/classes/Time.hpp>
+#include <box2d/box2d.h>
 
-using PhysicsWorld = b2World;
-using PhysicsBody = b2Body;
+using PhysicsWorld = std::unique_ptr<b2World>;
+using PhysicsBody = b2Body&;
 using PhysicsCollider = b2Fixture;
 
 struct DynamicBodyProperties
@@ -15,35 +15,42 @@ struct DynamicBodyProperties
     float restitution = 0.2f; // Bounciness
 };
 
-namespace box{
-    constexpr float GRAVITY = b2Vec2(0.0f, 9.8f);
+namespace box
+{
+    const static inline b2Vec2 GRAVITY = b2Vec2(0.0f, 9.8f);
 
-    b2World createWorld() {
-        return b2World(GRAVITY);
+    static PhysicsWorld createWorld()
+    {
+        return std::make_unique<b2World>(GRAVITY);
     }
 
-    PhysicsWorld
-    createBody(PhysicsWorld& world, b2Vec2 position, b2BodyType type = b2_staticBody)
+    static PhysicsBody createBody(
+        PhysicsWorld& world, b2Vec2 position, b2BodyType type = b2_staticBody)
     {
         b2BodyDef bodyDef;
         bodyDef.position.Set(position.x, position.y);
         bodyDef.type = type;
-        return world.CreateBody(&bodyDef);
+        return *world->CreateBody(&bodyDef);
     }
 
-    PhysicsBody
+    static PhysicsBody
     createStaticBox(PhysicsWorld& world, b2Vec2 position, b2Vec2 size)
     {
-        auto body = createBody(world, position);
+        auto&& body = createBody(world, position);
         b2PolygonShape boxShape;
         boxShape.SetAsBox(size.x / 2.0f, size.y / 2.0f);
-        body->CreateFixture(&boxShape, 0.0f);
+        body.CreateFixture(&boxShape, 0.0f);
         return body;
     }
 
-    PhysicsBody createDynamicBall(PhysicsWorld& world, b2Vec2 position, float radius, const DynamicBodyProperties& properties = {}) {
-        auto body = createBody(world, position, b2_dynamicBody);
-        
+    static PhysicsBody createDynamicBall(
+        PhysicsWorld& world,
+        b2Vec2 position,
+        float radius,
+        const DynamicBodyProperties& properties = {})
+    {
+        auto&& body = createBody(world, position, b2_dynamicBody);
+
         b2CircleShape circleShape;
         circleShape.m_radius = radius;
 
@@ -53,13 +60,15 @@ namespace box{
         fixtureDef.friction = properties.friction;
         fixtureDef.restitution = properties.restitution;
 
-        body->CreateFixture(&fixtureDef);
+        body.CreateFixture(&fixtureDef);
         return body;
-    }	
-}
-
-namespace box {
-    inline void updateWorld(PhysicsWorld& world, const dgm::Time& time){
-        world.Step(time.getDeltaTime(), 6, 2);
     }
-}
+} // namespace box
+
+namespace box
+{
+    static inline void updateWorld(PhysicsWorld& world, const dgm::Time& time)
+    {
+        world->Step(time.getDeltaTime(), 6, 2);
+    }
+} // namespace box
