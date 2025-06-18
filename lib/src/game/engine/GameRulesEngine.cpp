@@ -4,23 +4,24 @@
 
 void GameRulesEngine::update(const dgm::Time& time)
 {
+    box::updateWorld(scene.world, time);
+
     updateDummy(scene.dummy, time.getDeltaTime());
-    updateDummyAnimation(scene.dummy.animation, scene.dummy.forward, time);
+    updateDummyAnimation(
+        scene.dummy.animation, scene.dummy.body.GetLinearVelocity(), time);
 }
 
 #pragma region "Demo logic, delete in production"
 
 void GameRulesEngine::updateDummyAnimation(
-    dgm::Animation& animation,
-    const sf::Vector2f& forward,
-    const dgm::Time& time)
+    dgm::Animation& animation, const b2Vec2& forward, const dgm::Time& time)
 {
     // Updating animations should be a job of a dedicated
     // component but this is a simple demo
 
     if (animation.getStateName() != "land")
     {
-        if (forward.y < 0.f)
+        if (forward.y > 0.f)
         {
             if (animation.getStateName() != "jump")
                 gameEventQueue.pushEvent<DummyGameEvent>(
@@ -58,10 +59,17 @@ void GameRulesEngine::updateDummyAnimation(
 
 void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
 {
-    const float JUMP_IMPULSE = -256.f;
+    const float JUMP_IMPULSE = -10.f;
+    const float SPEED = 10.f; // 4 meters per second
+    const auto forward = input.getHorizontalVelocity() * SPEED * deltaTime;
+    const auto jump = input.isJumpPressed() * JUMP_IMPULSE;
+    scene.dummy.body.ApplyLinearImpulseToCenter(b2Vec2(forward, jump), true);
+    scene.dummy.facingLeft = scene.dummy.body.GetLinearVelocity().x < 0.f;
+    scene.dummy.body.SetLinearDamping(10.f);
+
+    /*
     const float GRAVITY = 256.f;
     const float MAX_FALL_SPEED = 256.f;
-    const float SPEED = 128.f;
     const float VERTICAL_LIMIT = 400.f;
 
     // Apply horizontal impulse
@@ -88,7 +96,7 @@ void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
         dummy.forward.y = 0.f;
         dummy.body.setPosition(
             { pos.x, VERTICAL_LIMIT - dummy.body.getSize().y });
-    }
+    }*/
 }
 
 #pragma region

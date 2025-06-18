@@ -3,16 +3,22 @@
 void RenderingEngine::update(const dgm::Time& time)
 {
     fpsCounter.update(time.getDeltaTime());
+    ground.setPosition(
+        CoordConverter::worldToScreen(scene.ground.GetPosition()));
+    playerCollider.setPosition(
+        CoordConverter::worldToScreen(scene.dummy.body.GetPosition()));
+    playerSprite.setPosition(playerCollider.getPosition());
 }
 
 void RenderingEngine::draw(dgm::Window& window)
 {
-    sprite.setTextureRect(scene.dummy.animation.getCurrentFrame());
-    sprite.setPosition(scene.dummy.body.getCenter());
-    sprite.setScale({ scene.dummy.facingLeft ? -1.f : 1.f, 1.f });
+    window.draw(ground);
 
-    scene.dummy.body.debugRender(window); // rendering hitbox
-    window.draw(sprite);
+    playerSprite.setTextureRect(scene.dummy.animation.getCurrentFrame());
+    playerSprite.setScale({ scene.dummy.facingLeft ? -1.f : 1.f, 1.f });
+
+    window.draw(playerSprite);
+    window.draw(playerCollider);
 
     text.setString(fpsCounter.getText());
     window.draw(text);
