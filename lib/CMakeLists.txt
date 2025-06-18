@@ -8,6 +8,7 @@ configure_file (
 if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
 make_static_library ( ${LIB_TARGET_NAME}
     DEPS
+	box2d
         nlohmann_json::nlohmann_json
         dgm::dgm-lib
         #fsm::fsm-lib
@@ -19,6 +20,7 @@ make_static_library ( ${LIB_TARGET_NAME}
 else ()
 make_static_library ( ${LIB_TARGET_NAME}
     DEPS
+	box2d
         nlohmann_json::nlohmann_json
         dgm::dgm-lib
         #fsm::fsm-lib
