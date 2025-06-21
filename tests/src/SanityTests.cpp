@@ -9,4 +9,10 @@ TEST_CASE("[Sanity]")
         auto dic = Helper::createDummyDependencies(window);
         REQUIRE(true);
     }
+
+    SECTION("Can default-create settings and serialize-deserialize them")
+    {
+        const std::string& json = nlohmann::json(AppSettings {}).dump(4);
+        const AppSettings settings = nlohmann::json::parse(json);
+    }
 }

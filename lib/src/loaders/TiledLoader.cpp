@@ -1,4 +1,5 @@
 #include "loaders/TiledLoader.hpp"
+#include <DGM/classes/Utility.hpp>
 #include <SFML/System/FileInputStream.hpp>
 #include <nlohmann/json.hpp>
 
@@ -28,8 +29,9 @@ static nlohmann::json readStreamAsJson(sf::InputStream& stream)
 
 tiled::FiniteMapModel TiledLoader::loadLevel(const std::filesystem::path& path)
 {
-    sf::FileInputStream stream(path);
-    auto json = readStreamAsJson(stream);
-    tiled::FiniteMapModel map = json;
-    return map;
+    auto file = dgm::Utility::loadFileAllText(path);
+    if (!file) throw std::runtime_error(file.error().getMessage());
+
+    tiled::FiniteMapModel model = nlohmann::json::parse(file.value());
+    return model;
 }
