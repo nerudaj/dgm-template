@@ -34,19 +34,19 @@ dgm::Camera RenderingEngine::createFullscreenCamera(
         { 1.f, 1.f },
     };
 
-    const auto& desiredAspectRatio = desiredResolution.x / desiredResolution.y;
-    const auto& currentAspectRatio = currentResolution.x / currentResolution.y;
+    const auto&& desiredAspectRatio = desiredResolution.x / desiredResolution.y;
+    const auto&& currentAspectRatio = currentResolution.x / currentResolution.y;
 
     if (currentAspectRatio > desiredAspectRatio)
     {
         // Narrow desired into wider current
-        viewport.size.x = desiredResolution.x / currentResolution.x;
+        viewport.size.x = desiredResolution.y / currentResolution.y;
         viewport.position.x = (1.f - viewport.size.x) / 2.f;
     }
     else if (currentAspectRatio < desiredAspectRatio)
     {
         // Wider desired into narrower current
-        viewport.size.y = desiredResolution.y / currentResolution.y;
+        viewport.size.y = desiredResolution.x / currentResolution.x;
         viewport.position.y = (1.f - viewport.size.y) / 2.f;
     }
 
