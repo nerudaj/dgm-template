@@ -16,8 +16,7 @@
 std::filesystem::path getAppdataPath()
 {
 #ifdef ANDROID
-    const auto appdataPath =
-        std::filesystem::path(sf::getNativeActivity()->internalDataPath);
+    return std::filesystem::path(sf::getNativeActivity()->externalDataPath);
 #else
     PWSTR raw;
     std::wstring result;
@@ -39,7 +38,15 @@ std::expected<std::string, dgm::Error>
 InternalStorage::loadFile(const std::filesystem::path& file)
 {
     const auto appdataPath = getAppdataPath();
-    return dgm::Utility::loadFileAllText(appdataPath / file);
+    std::ifstream load(appdataPath / file);
+    load.seekg(0, std::ios::end);
+    size_t fileLen = load.tellg();
+    load.seekg(0, std::ios::beg);
+
+    auto&& result = std::string(fileLen, '\0');
+    load.read(result.data(), fileLen);
+
+    return result;
 }
 
 void InternalStorage::saveFile(
