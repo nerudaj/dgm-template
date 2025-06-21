@@ -1,5 +1,6 @@
 #include "loaders/ResourceLoader.hpp"
 #include "loaders/TiledLoader.hpp"
+#include "misc/AppStorage.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
@@ -81,4 +82,35 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     return resmgr;
+}
+
+AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
+{
+    auto settingsJson = InternalStorage::loadFile(file);
+
+    if (settingsJson)
+    {
+        try
+        {
+            AppSettings settings = nlohmann::json::parse(settingsJson.value());
+            return settings;
+        }
+        catch (const std::exception& ex)
+        {
+            sf::err() << ex.what() << std::endl;
+        }
+    }
+
+    return AppSettings {
+        .video =
+            VideoSettings {
+#ifdef ANDROID
+                .resolution = sf::VideoMode::getDesktopMode().size,
+#elif _DEBUG
+                .resolution = { 1280, 720 },
+#else
+                .resolution = sf::VideoMode::getDesktopMode().size,
+#endif
+            },
+    };
 }
