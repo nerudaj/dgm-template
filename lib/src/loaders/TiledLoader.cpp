@@ -5,7 +5,7 @@
 
 tiled::FiniteMapModel TiledLoader::loadLevel(const std::filesystem::path& path)
 {
-    auto file = dgm::Utility::loadFileAllText(path);
+    auto file = dgm::Utility::loadAssetAllText(path);
     if (!file) throw std::runtime_error(file.error().getMessage());
 
     tiled::FiniteMapModel model = nlohmann::json::parse(file.value());

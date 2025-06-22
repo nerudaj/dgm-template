@@ -86,7 +86,7 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
 
 AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
 {
-    auto settingsJson = InternalStorage::loadFile(file);
+    auto settingsJson = AppStorage::loadFile(file);
 
     if (settingsJson)
     {
@@ -100,17 +100,10 @@ AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
             sf::err() << ex.what() << std::endl;
         }
     }
+    else
+    {
+        sf::err() << settingsJson.error().getMessage() << std::endl;
+    }
 
-    return AppSettings {
-        .video =
-            VideoSettings {
-#ifdef ANDROID
-                .resolution = sf::VideoMode::getDesktopMode().size,
-#elif _DEBUG
-                .resolution = { 1280, 720 },
-#else
-                .resolution = sf::VideoMode::getDesktopMode().size,
-#endif
-            },
-    };
+    return AppSettings {};
 }

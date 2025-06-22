@@ -30,29 +30,27 @@ std::filesystem::path getAppdataPath()
     using convert_type = std::codecvt_utf8<wchar_t>;
     std::wstring_convert<convert_type, wchar_t> converter;
 
-    return CMakeVars::TITLE / std::filesystem::path(converter.to_bytes(result));
+    return std::filesystem::path(converter.to_bytes(result)) / CMakeVars::TITLE;
 #endif
 }
 
 std::expected<std::string, dgm::Error>
-InternalStorage::loadFile(const std::filesystem::path& file)
+AppStorage::loadFile(const std::filesystem::path& file)
 {
     const auto appdataPath = getAppdataPath();
-    std::ifstream load(appdataPath / file);
-    load.seekg(0, std::ios::end);
-    size_t fileLen = load.tellg();
-    load.seekg(0, std::ios::beg);
-
-    auto&& result = std::string(fileLen, '\0');
-    load.read(result.data(), fileLen);
-
-    return result;
+    return dgm::Utility::loadFileAllText(appdataPath / file);
 }
 
-void InternalStorage::saveFile(
+void AppStorage::saveFile(
     const std::filesystem::path& file, const std::string& data)
 {
     const auto appdataPath = getAppdataPath();
+#ifndef ANDROID
+    if (!std::filesystem::exists(appdataPath))
+    {
+        std::filesystem::create_directory(appdataPath);
+    }
+#endif
     std::ofstream save(appdataPath / file);
     save.write(data.c_str(), data.size());
 }

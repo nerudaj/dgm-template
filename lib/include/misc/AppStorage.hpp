@@ -4,7 +4,7 @@
 #include <expected>
 #include <string>
 
-class InternalStorage
+class AppStorage
 {
 public:
     static std::expected<std::string, dgm::Error>
