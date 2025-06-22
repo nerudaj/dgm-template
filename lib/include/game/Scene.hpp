@@ -14,4 +14,5 @@ struct DummyEntity
 struct [[nodiscard]] Scene final
 {
     DummyEntity dummy;
+    sf::Vector2f groundPosition;
 };

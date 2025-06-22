@@ -62,7 +62,6 @@ void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
     const float GRAVITY = 256.f;
     const float MAX_FALL_SPEED = 256.f;
     const float SPEED = 128.f;
-    const float VERTICAL_LIMIT = 400.f;
 
     // Apply horizontal impulse
     const float airControlNerf = dummy.forward.y == 0.f ? 1.f : 0.75f;
@@ -83,11 +82,11 @@ void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
         dummy.forward.x < 0.f || dummy.forward.x == 0.f && dummy.facingLeft;
 
     auto pos = dummy.body.getPosition();
-    if (pos.y + dummy.body.getSize().y > VERTICAL_LIMIT)
+    if (pos.y + dummy.body.getSize().y > scene.groundPosition.y)
     {
         dummy.forward.y = 0.f;
         dummy.body.setPosition(
-            { pos.x, VERTICAL_LIMIT - dummy.body.getSize().y });
+            { pos.x, scene.groundPosition.y - dummy.body.getSize().y });
     }
 }
 
