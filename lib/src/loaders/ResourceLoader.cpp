@@ -1,5 +1,6 @@
 #include "loaders/ResourceLoader.hpp"
 #include "loaders/TiledLoader.hpp"
+#include "misc/AppStorage.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
@@ -109,4 +110,28 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     }
 
     return resmgr;
+}
+
+AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
+{
+    auto settingsJson = AppStorage::loadFile(file);
+
+    if (settingsJson)
+    {
+        try
+        {
+            AppSettings settings = nlohmann::json::parse(settingsJson.value());
+            return settings;
+        }
+        catch (const std::exception& ex)
+        {
+            sf::err() << ex.what() << std::endl;
+        }
+    }
+    else
+    {
+        sf::err() << settingsJson.error().getMessage() << std::endl;
+    }
+
+    return AppSettings {};
 }
