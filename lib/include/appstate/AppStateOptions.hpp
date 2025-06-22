@@ -1,9 +1,9 @@
 #pragma once
 
-#include "input/HwInputToStringMapper.hpp"
 #include "input/InputDetector.hpp"
 #include "misc/DependencyContainer.hpp"
 #include "settings/AppSettings.hpp"
+#include "strings/HwInputToStringMapper.hpp"
 #include <DGM/dgm.hpp>
 
 class [[nodiscard]] AppStateOptions final : public dgm::AppState

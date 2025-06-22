@@ -2,8 +2,8 @@
 #include "appstate/CommonHandler.hpp"
 #include "gui/Builders.hpp"
 #include "gui/Sizers.hpp"
-#include "input/InputKindToStringMapper.hpp"
 #include "misc/Compatibility.hpp"
+#include "strings/InputKindToStringMapper.hpp"
 #include "types/Overloads.hpp"
 #include <ranges>
 
