@@ -28,4 +28,5 @@ namespace sf
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Vector2u, x, y);
 }
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(VideoSettings, resolution, fullscreen);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+    VideoSettings, resolution, fullscreen, uiScale);
