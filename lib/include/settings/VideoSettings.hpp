@@ -20,6 +20,7 @@ struct [[nodiscard]] VideoSettings final
 #else
         true;
 #endif
+    float uiScale = 1.f;
 };
 
 namespace sf

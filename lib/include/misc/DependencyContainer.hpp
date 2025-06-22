@@ -34,5 +34,7 @@ struct [[nodiscard]] DependencyContainer final
               resmgr.get<sf::Texture>("cursor.png"))
     {
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
+        // NOTE: You can create your own theme file and use it here
+        // gui.setTheme(resmgr.get<tgui::Theme::Ptr>("TransparentGrey.txt"));
     }
 };

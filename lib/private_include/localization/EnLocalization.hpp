@@ -19,6 +19,8 @@ const std::map<StringId, StringViewType> EN_LOCALIZATION = {
     { BindingsOptionsTab, "Bindings" },
     { EnableFullscreen, "Fullscreen" },
     { SetResolution, "Resolution" },
+    { SetUiScale, "Set UI scale" },
+    { SetTheme, "Set theme" },
     { SoundVolume, "Sound volume" },
     { MusicVolume, "Music volume" },
     { GamepadDeadzone, "Gamepad deadzone" },

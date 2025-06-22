@@ -9,7 +9,27 @@
 static std::expected<tgui::Font, dgm::Error>
 loadTguiFont(const std::filesystem::path& path)
 {
-    return tgui::Font(path.string());
+    try
+    {
+        return tgui::Font(path.string());
+    }
+    catch (const std::exception& ex)
+    {
+        return std::unexpected(dgm::Error(ex.what()));
+    }
+}
+
+static std::expected<tgui::Theme::Ptr, dgm::Error>
+loadTguiTheme(const std::filesystem::path& path)
+{
+    try
+    {
+        return tgui::Theme::create(path.string());
+    }
+    catch (const std::exception& ex)
+    {
+        return std::unexpected(dgm::Error(ex.what()));
+    }
 }
 
 static std::expected<tiled::FiniteMapModel, dgm::Error>
@@ -44,6 +64,14 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
     {
         throw std::runtime_error(uni::format(
             "Could not load font: {}", result.error().getMessage()));
+    }
+
+    if (auto result = resmgr.loadResourcesFromDirectory<tgui::Theme::Ptr>(
+            assetDir / "ui-themes", loadTguiTheme, { ".txt" });
+        !result)
+    {
+        throw std::runtime_error(uni::format(
+            "Could not load theme: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
