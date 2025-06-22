@@ -50,7 +50,7 @@ tgui::Widget::Ptr priv::TableBuilder::build()
 
     if (heading)
     {
-        auto&& row = WidgetBuilder::createRow(tgui::Color::White);
+        auto&& row = WidgetBuilder::createRow(tgui::Color::Transparent);
 
         for (auto&& [columnIdx, cellText] : enumerate(heading.value()))
         {
@@ -68,7 +68,7 @@ tgui::Widget::Ptr priv::TableBuilder::build()
     for (auto&& row : rowsOfCells)
     {
         auto&& color = rowIdx % 2 == 0 ? tgui::Color(255, 255, 255, 128)
-                                       : tgui::Color(255, 255, 255, 192);
+                                       : tgui::Color::Transparent;
         auto&& rowWidget = WidgetBuilder::createRow(color);
         rowWidget->setPosition({ "0%", rowWidget->getSize().y * rowIdx++ });
 
