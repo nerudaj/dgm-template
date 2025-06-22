@@ -6,4 +6,5 @@ struct [[nodiscard]] VideoSettings final
 {
     sf::Vector2u resolution = { 1280, 720 };
     bool fullscreen = false;
+    float uiScale = 1.f;
 };

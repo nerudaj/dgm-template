@@ -22,6 +22,10 @@ public:
 private:
     void buildLayout();
 
+    // Rebuilds layout if there is an appropriate change, such as ui scale or
+    // resolution change
+    void refresh();
+
     void buildVideoOptionsLayout();
 
     void buildAudioOptionsLayout();
