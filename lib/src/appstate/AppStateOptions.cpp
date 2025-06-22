@@ -138,7 +138,6 @@ void AppStateOptions::buildVideoOptionsLayout()
 #endif
             .addOption(
                 dic.strings.getString(StringId::SetUiScale),
-
                 WidgetBuilder::createSlider(
                     settings.video.uiScale,
                     [&](float val)
@@ -150,6 +149,20 @@ void AppStateOptions::buildVideoOptionsLayout()
                     },
                     dic.gui,
                     SliderProperties { .low = 1.f, .high = 2.f, .step = 0.1f }))
+#ifdef _DEBUG
+            .addOption(
+                dic.strings.getString(StringId::SetTheme),
+                WidgetBuilder::createDropdown(
+                    dic.resmgr.getLoadedResourceIds<tgui::Theme::Ptr>().value(),
+                    "",
+                    [&](size_t idx)
+                    {
+                        dic.gui.setTheme(dic.resmgr.get<tgui::Theme::Ptr>(
+                            dic.resmgr.getLoadedResourceIds<tgui::Theme::Ptr>()
+                                .value()[idx]));
+                        refresh();
+                    }))
+#endif
             .build(CONTENT_BGCOLOR));
 }
 

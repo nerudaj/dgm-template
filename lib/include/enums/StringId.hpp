@@ -18,6 +18,7 @@ enum class [[nodiscard]] StringId
     EnableFullscreen,
     SetResolution,
     SetUiScale,
+    SetTheme,
     SoundVolume,
     MusicVolume,
     GamepadDeadzone,
