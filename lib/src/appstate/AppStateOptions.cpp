@@ -1,6 +1,7 @@
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "gui/Builders.hpp"
+#include "gui/Sizers.hpp"
 #include "input/InputKindToStringMapper.hpp"
 #include "misc/Compatibility.hpp"
 #include "types/Overloads.hpp"
@@ -101,6 +102,14 @@ void AppStateOptions::buildLayout()
     buildVideoOptionsLayout();
 }
 
+void AppStateOptions::refresh()
+{
+    // must be recreated, otherwise it disappears for some reason
+    content = WidgetBuilder::createPanel();
+
+    buildLayout();
+}
+
 void AppStateOptions::buildVideoOptionsLayout()
 {
     content->removeAllWidgets();
@@ -127,6 +136,20 @@ void AppStateOptions::buildVideoOptionsLayout()
                             sf::VideoMode::getFullscreenModes()[idx].size);
                     }))
 #endif
+            .addOption(
+                dic.strings.getString(StringId::SetUiScale),
+
+                WidgetBuilder::createSlider(
+                    settings.video.uiScale,
+                    [&](float val)
+                    {
+                        settings.video.uiScale = val;
+                        Sizers::setUiScale(val);
+                        // TODO: should refresh view, but the user should not be
+                        // clicking anything
+                    },
+                    dic.gui,
+                    SliderProperties { .low = 1.f, .high = 2.f, .step = 0.1f }))
             .build(CONTENT_BGCOLOR));
 }
 
@@ -303,10 +326,7 @@ void AppStateOptions::onResolutionSelected(const sf::Vector2u& resolution)
     app.window.changeResolution(resolution);
     dic.gui.setWindow(app.window.getSfmlWindowContext());
 
-    // must be recreated, otherwise it disappears for some reason
-    content = WidgetBuilder::createPanel();
-
-    buildLayout();
+    refresh();
 
     // TODO: Open "Are you sure dialog?"
 }
