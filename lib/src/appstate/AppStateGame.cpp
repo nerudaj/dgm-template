@@ -56,5 +56,6 @@ Scene AppStateGame::buildScene(const dgm::ResourceManager& resmgr)
                 .body = dgm::Rect({ 100.f, 100.f }, { 32.f, 60.f }),
                 .animation = std::move(animation),
             },
+        .groundPosition = { 0.f, 400.f },
     };
 }

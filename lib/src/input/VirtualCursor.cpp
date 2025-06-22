@@ -2,15 +2,19 @@
 
 void VirtualCursor::update(const dgm::Time& time, const float cursorSpeed)
 {
-    const auto delta = input.getCursorDelta();
-    if (delta == sf::Vector2f(0.f, 0.f))
+    const auto cursorDelta = input.getCursorDelta();
+    const auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+    if (cursorDelta != sf::Vector2f {})
     {
-        position = sf::Vector2f(sf::Mouse::getPosition(window));
-        return;
-    };
+        position = clampPositionByWindow(
+            position + cursorDelta * cursorSpeed * time.getDeltaTime(),
+            window.getSize());
+    }
+    else if (mousePos != sf::Vector2f {})
+    {
+        position = mousePos;
+    }
 
-    position = clampPositionByWindow(
-        position + delta * cursorSpeed * time.getDeltaTime(), window.getSize());
     sf::Mouse::setPosition(sf::Vector2i(position), window);
 }
 

@@ -110,7 +110,7 @@ if ( ${USE_NSIS} )
     cmake_path ( CONVERT "C:/Games" TO_NATIVE_PATH_LIST CPACK_NSIS_INSTALL_ROOT )
     set ( CPACK_NSIS_MODIFY_PATH "OFF")
 	set ( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON" )
-	#set ( CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/resources/graphics/appicon.ico" )
+	set ( CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/assets-private/appicon.ico" )
 	set ( CPACK_NSIS_URL_INFO_ABOUT "${INSTALLER_ABOUT_URL}" )
     
     set ( CPACK_NSIS_DISPLAY_NAME "${THE_PROJECT_NAME}" )
