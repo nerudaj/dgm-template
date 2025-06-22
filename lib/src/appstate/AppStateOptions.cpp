@@ -267,7 +267,7 @@ void AppStateOptions::buildBindingsOptionsLayout()
             tableBuilder.addRow({
                 label,
                 buttonOrNothing(
-                    WidgetBuilder::createSmallerButton(
+                    WidgetBuilder::createRowButton(
                         std::visit(hwInputMapper, kmbBinding),
                         [&]()
                         {
@@ -286,7 +286,7 @@ void AppStateOptions::buildBindingsOptionsLayout()
                                         .enabled = !isEscapeKey }),
                     noKmb),
                 buttonOrNothing(
-                    WidgetBuilder::createSmallerButton(
+                    WidgetBuilder::createRowButton(
                         std::visit(hwInputMapper, gamepadBinding),
                         [&]()
                         {
