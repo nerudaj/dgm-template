@@ -1,6 +1,6 @@
-#include "loaders/ResourceLoader.hpp"
-#include "loaders/TiledLoader.hpp"
-#include "misc/AppStorage.hpp"
+#include "filesystem/ResourceLoader.hpp"
+#include "filesystem/AppStorage.hpp"
+#include "filesystem/TiledLoader.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>

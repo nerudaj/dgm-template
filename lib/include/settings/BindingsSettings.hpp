@@ -1,6 +1,6 @@
 #pragma once
 
-#include "enums/InputKind.hpp"
+#include "input/InputKind.hpp"
 #include "types/Binding.hpp"
 #include <map>
 #include <nlohmann/json.hpp>

@@ -1,11 +1,11 @@
 #pragma once
 
+#include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
 #include "input/Input.hpp"
 #include "input/VirtualCursor.hpp"
-#include "loaders/ResourceLoader.hpp"
-#include "misc/StringProvider.hpp"
 #include "settings/AppSettings.hpp"
+#include "strings/StringProvider.hpp"
 #include <DGM/dgm.hpp>
 
 struct [[nodiscard]] DependencyContainer final
