@@ -23,7 +23,8 @@ It is not good idea to keep secrets checked-in into the version control. Therefo
 In powershell, input the following command:
 
 ```pwsh
-$bytes = [System.IO.File]::ReadAllBytes('path/to/android-release-key.jks') [Convert]::ToBase64String($bytes)
+$bytes = [System.IO.File]::ReadAllBytes('path/to/android-release-key.jks')
+[Convert]::ToBase64String($bytes)
 ```
 
 This will print base64-encoded string, copy it somewhere.
