@@ -204,7 +204,7 @@ tgui::EditBox::Ptr WidgetBuilder::createTextInput(
     return box;
 }
 
-tgui::Tabs::Ptr WidgetBuilder::createTabbedContent(
+tgui::Tabs::Ptr WidgetBuilder::createTabs(
     const std::vector<Label>& tabLabels,
     std::function<void(const tgui::String&)> onTabChange,
     WidgetOptions options)
@@ -218,7 +218,6 @@ tgui::Tabs::Ptr WidgetBuilder::createTabbedContent(
         tabs->add(label);
     }
 
-    tabs->select(tabLabels.front());
     tabs->onTabSelect(onTabChange);
 
     applyOptionsToWidget(options, tabs);

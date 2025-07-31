@@ -10,25 +10,25 @@ namespace priv
     class [[nodiscard]] FinalizedLayoutBuilder final
     {
     public:
-        FinalizedLayoutBuilder(tgui::Panel::Ptr container)
+        FinalizedLayoutBuilder(tgui::Container::Ptr container)
             : container(container)
         {
         }
 
     public:
-        NODISCARD_RESULT inline tgui::Panel::Ptr build() const
+        NODISCARD_RESULT inline tgui::Container::Ptr build() const
         {
             return container;
         }
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
     };
 
     class [[nodiscard]] LayoutBuilderWithContentAndBackButton final
     {
     public:
-        LayoutBuilderWithContentAndBackButton(tgui::Panel::Ptr container)
+        LayoutBuilderWithContentAndBackButton(tgui::Container::Ptr container)
             : container(container)
         {
         }
@@ -42,13 +42,13 @@ namespace priv
         FinalizedLayoutBuilder withSubmitButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
     };
 
     class [[nodiscard]] LayoutBuilderWithContent final
     {
     public:
-        LayoutBuilderWithContent(tgui::Panel::Ptr container)
+        LayoutBuilderWithContent(tgui::Container::Ptr container)
             : container(container)
         {
         }
@@ -63,13 +63,13 @@ namespace priv
         withBackButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
     };
 
     class [[nodiscard]] LayoutBuilderWithBackgroundAndTitle final
     {
     public:
-        LayoutBuilderWithBackgroundAndTitle(tgui::Panel::Ptr container)
+        LayoutBuilderWithBackgroundAndTitle(tgui::Container::Ptr container)
             : container(container)
         {
         }
@@ -78,13 +78,13 @@ namespace priv
         LayoutBuilderWithContent withContent(tgui::Container::Ptr content);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
     };
 
     class [[nodiscard]] LayoutBuilderWithBackground final
     {
     public:
-        LayoutBuilderWithBackground(tgui::Panel::Ptr container)
+        LayoutBuilderWithBackground(tgui::Container::Ptr container)
             : container(container)
         {
         }
@@ -94,7 +94,7 @@ namespace priv
         withTitle(const std::string& title, HeadingLevel level);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
     };
 } // namespace priv
 

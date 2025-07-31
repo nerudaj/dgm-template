@@ -26,15 +26,13 @@ private:
     // resolution change
     void refresh();
 
-    void buildVideoOptionsLayout();
+    void onVideoTabSelected(tgui::Container::Ptr content);
 
-    void buildAudioOptionsLayout();
+    void onAudioTabSelected(tgui::Container::Ptr content);
 
-    void buildInputOptionsLayout();
+    void onInputTabSelected(tgui::Container::Ptr content);
 
-    void buildBindingsOptionsLayout();
-
-    void onTabClicked(const tgui::String& tabName);
+    void onBindingsTabSelected(tgui::Container::Ptr content);
 
     void onBack();
 
@@ -80,6 +78,5 @@ private:
 private:
     DependencyContainer& dic;
     AppSettings& settings;
-    tgui::Panel::Ptr content;
     InputDetector inputDetector;
 };
