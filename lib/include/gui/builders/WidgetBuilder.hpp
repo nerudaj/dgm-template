@@ -121,7 +121,7 @@ public:
             options);
     }
 
-    static NODISCARD_RESULT tgui::Tabs::Ptr createTabbedContent(
+    static NODISCARD_RESULT tgui::Tabs::Ptr createTabs(
         const std::vector<Label>& tabLabels,
         std::function<void(const tgui::String&)> onTabChange,
         WidgetOptions options = {});

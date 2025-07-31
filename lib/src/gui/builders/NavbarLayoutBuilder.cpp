@@ -1,27 +1,24 @@
 #include "gui/builders/NavbarLayoutBuilder.hpp"
-#include "gui/builders/WidgetBuilder.hpp"
+#include "gui/Sizers.hpp"
 
 namespace priv
 {
-    tgui::Panel::Ptr FinalNavbarLayoutBuilder::build()
+    tgui::Container::Ptr FinalNavbarLayoutBuilder::build()
     {
-        auto navbar = WidgetBuilder::createRow();
-        navbar->add(widget);
+        const auto containerHeight = Sizers::getBaseContainerHeight();
+        auto result = tgui::Group::create();
 
-        auto contentWrapper = WidgetBuilder::createPanel(tgui::Layout2d {
-            "100%",
-            ("100% - " + std::to_string(navbar->getSize().y)).c_str() });
+        auto navbarSection = tgui::Group::create({ "100%", containerHeight });
+        navbarSection->add(widget);
 
-        contentWrapper->setPosition(
-            tgui::Layout2d { "0%", navbar->getSize().y });
+        auto contentSection = tgui::Group::create(
+            { "100%", uni::format("100% - {}", containerHeight).c_str() });
+        contentSection->setPosition({ "0%", containerHeight });
+        contentSection->add(content, contentPanelId.value_or(""));
 
-        if (contentPanelId) content->setWidgetName(contentPanelId.value());
-        contentWrapper->add(content);
+        result->add(navbarSection);
+        result->add(contentSection);
 
-        auto panel = WidgetBuilder::createPanel();
-        panel->add(navbar);
-        panel->add(contentWrapper);
-
-        return panel;
+        return result;
     }
 } // namespace priv

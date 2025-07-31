@@ -31,10 +31,7 @@ static std::string intValueFormatter(float val)
 
 AppStateOptions::AppStateOptions(
     dgm::App& app, DependencyContainer& dic, AppSettings& settings) noexcept
-    : dgm::AppState(app)
-    , dic(dic)
-    , settings(settings)
-    , content(WidgetBuilder::createScrollablePanel())
+    : dgm::AppState(app), dic(dic), settings(settings)
 {
     buildLayout();
 }
@@ -79,38 +76,40 @@ void AppStateOptions::buildLayout()
             .withTitle(
                 dic.strings.getString(StringId::Options), HeadingLevel::H1)
             .withContent(
-                NavbarLayoutBuilder()
-                    .withNavbarWidget(WidgetBuilder::createTabbedContent(
-                        {
-                            dic.strings.getString(StringId::VideoOptionsTab),
-                            dic.strings.getString(StringId::AudioOptionsTab),
-                            dic.strings.getString(StringId::InputOptionsTab),
-                            dic.strings.getString(StringId::BindingsOptionsTab),
-                        },
-                        [&](const tgui::String& tabName)
-                        { onTabClicked(tabName); },
-                        WidgetOptions {
-                            .id = TABS_ID,
-                        }))
-                    .withContent(content)
-                    .build())
+                TabbedLayoutBuilder()
+                    .addTab(
+                        dic.strings.getString(StringId::VideoOptionsTab),
+                        [&](tgui::Container::Ptr content)
+                        { onVideoTabSelected(content); })
+                    .addTab(
+                        dic.strings.getString(StringId::AudioOptionsTab),
+                        [&](tgui::Container::Ptr content)
+                        { onAudioTabSelected(content); })
+                    .addTab(
+                        dic.strings.getString(StringId::InputOptionsTab),
+                        [&](tgui::Container::Ptr content)
+                        { onInputTabSelected(content); })
+                    .addTab(
+                        dic.strings.getString(StringId::BindingsOptionsTab),
+                        [&](tgui::Container::Ptr content)
+                        { onBindingsTabSelected(content); })
+                    .setTabSelected(
+                        dic.strings.getString(StringId::VideoOptionsTab))
+                    .build(TabbedLayoutOptions {
+                        .contentIsScrollable = true,
+                    }))
             .withBackButton(WidgetBuilder::createButton(
                 dic.strings.getString(StringId::Back), [&] { onBack(); }))
             .withNoSubmitButton()
             .build());
-
-    buildVideoOptionsLayout();
 }
 
 void AppStateOptions::refresh()
 {
-    // must be recreated, otherwise it disappears for some reason
-    content = WidgetBuilder::createPanel();
-
     buildLayout();
 }
 
-void AppStateOptions::buildVideoOptionsLayout()
+void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
@@ -166,7 +165,7 @@ void AppStateOptions::buildVideoOptionsLayout()
             .build(CONTENT_BGCOLOR));
 }
 
-void AppStateOptions::buildAudioOptionsLayout()
+void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
@@ -194,7 +193,7 @@ void AppStateOptions::buildAudioOptionsLayout()
             .build(CONTENT_BGCOLOR));
 }
 
-void AppStateOptions::buildInputOptionsLayout()
+void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
@@ -229,7 +228,7 @@ bool doesVariantContain(const V& v, T t)
     return false;
 }
 
-void AppStateOptions::buildBindingsOptionsLayout()
+void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
 {
     auto&& inputKindMapper = InputKindToStringMapper(dic.strings);
     auto&& hwInputMapper = HwInputToStringMapper();
@@ -314,18 +313,6 @@ void AppStateOptions::buildBindingsOptionsLayout()
 
     content->removeAllWidgets();
     content->add(tableBuilder.build());
-}
-
-void AppStateOptions::onTabClicked(const tgui::String& tabName)
-{
-    if (tabName == dic.strings.getString(StringId::VideoOptionsTab))
-        buildVideoOptionsLayout();
-    else if (tabName == dic.strings.getString(StringId::AudioOptionsTab))
-        buildAudioOptionsLayout();
-    else if (tabName == dic.strings.getString(StringId::InputOptionsTab))
-        buildInputOptionsLayout();
-    else if (tabName == dic.strings.getString(StringId::BindingsOptionsTab))
-        buildBindingsOptionsLayout();
 }
 
 void AppStateOptions::onBack()

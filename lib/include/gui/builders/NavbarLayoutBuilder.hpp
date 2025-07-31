@@ -12,7 +12,7 @@ namespace priv
     public:
         FinalNavbarLayoutBuilder(
             tgui::Widget::Ptr widget,
-            tgui::Panel::Ptr content,
+            tgui::Container::Ptr content,
             const std::optional<std::string>& contentPanelId)
             : widget(widget)
             , content(content)
@@ -22,11 +22,11 @@ namespace priv
         ~FinalNavbarLayoutBuilder() = default;
 
     public:
-        NODISCARD_RESULT tgui::Panel::Ptr build();
+        NODISCARD_RESULT tgui::Container::Ptr build();
 
     private:
         tgui::Widget::Ptr widget;
-        tgui::Panel::Ptr content;
+        tgui::Container::Ptr content;
         const std::optional<std::string>& contentPanelId;
     };
 
@@ -43,7 +43,7 @@ namespace priv
 
     public:
         FinalNavbarLayoutBuilder withContent(
-            tgui::Panel::Ptr content,
+            tgui::Container::Ptr content,
             const std::optional<std::string>& contentPanelId = std::nullopt)
         {
             return FinalNavbarLayoutBuilder(widget, content, contentPanelId);

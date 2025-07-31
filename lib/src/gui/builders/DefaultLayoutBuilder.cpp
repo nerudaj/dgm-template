@@ -1,6 +1,6 @@
+#include "gui/builders/DefaultLayoutBuilder.hpp"
 #include "gui/Sizers.hpp"
 #include "gui/TguiHelper.hpp"
-#include "gui/builders/DefaultLayoutBuilder.hpp"
 #include "gui/builders/WidgetBuilder.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -16,8 +16,8 @@ namespace priv
     LayoutBuilderWithContentAndBackButton::withSubmitButton(
         tgui::Button::Ptr button)
     {
-        auto&& panel = WidgetBuilder::createPanel(
-            { "15%", Sizers::getBaseContainerHeight() });
+        auto&& panel =
+            tgui::Group::create({ "15%", Sizers::getBaseContainerHeight() });
         panel->setPosition(
             { "84%",
               ("99% - " + std::to_string(Sizers::getBaseContainerHeight()))
@@ -30,8 +30,8 @@ namespace priv
     LayoutBuilderWithContentAndBackButton
     LayoutBuilderWithContent::withBackButton(tgui::Button::Ptr button)
     {
-        auto&& panel = WidgetBuilder::createPanel(
-            { "15%", Sizers::getBaseContainerHeight() });
+        auto&& panel =
+            tgui::Group::create({ "15%", Sizers::getBaseContainerHeight() });
         panel->setPosition(
             { "1%",
               ("99% - " + std::to_string(Sizers::getBaseContainerHeight()))
@@ -44,7 +44,7 @@ namespace priv
     LayoutBuilderWithContent LayoutBuilderWithBackgroundAndTitle::withContent(
         tgui::Container::Ptr content)
     {
-        auto&& contentPanel = WidgetBuilder::createPanel(
+        auto&& contentPanel = tgui::Group::create(
             { "70%",
               ("98% - " + std::to_string(getTitleHeight()) + " - "
                + std::to_string(Sizers::getBaseContainerHeight()))
@@ -58,7 +58,7 @@ namespace priv
     LayoutBuilderWithBackgroundAndTitle LayoutBuilderWithBackground::withTitle(
         const std::string& title, HeadingLevel level)
     {
-        auto&& panel = WidgetBuilder::createPanel({ "100%", getTitleHeight() });
+        auto&& panel = tgui::Group::create({ "100%", getTitleHeight() });
         panel->add(WidgetBuilder::createHeading(title, level));
         container->add(panel);
         return LayoutBuilderWithBackgroundAndTitle(container);
@@ -76,5 +76,5 @@ DefaultLayoutBuilder::withBackgroundImage(const sf::Texture& texture)
 
 priv::LayoutBuilderWithBackground DefaultLayoutBuilder::withNoBackgroundImage()
 {
-    return priv::LayoutBuilderWithBackground(WidgetBuilder::createPanel());
+    return priv::LayoutBuilderWithBackground(tgui::Group::create());
 }
