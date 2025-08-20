@@ -44,18 +44,19 @@ public:
     build(tgui::Color backgroundColor = tgui::Color::Transparent);
 
 private:
-    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRow(
+    static NODISCARD_RESULT tgui::Container::Ptr createOptionRow(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         std::optional<std::string> widgetId);
 
-    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRowWithSubmitButton(
+    static NODISCARD_RESULT tgui::Container::Ptr
+    createOptionRowWithSubmitButton(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         tgui::Button::Ptr buttonPtr);
 
 private:
-    struct RowProps
+    struct [[nodiscard]] RowProps final
     {
         bool separator = false;
         std::string label;

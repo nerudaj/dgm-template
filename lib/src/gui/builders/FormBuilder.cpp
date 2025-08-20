@@ -69,7 +69,7 @@ tgui::Container::Ptr FormBuilder::build(tgui::Color backgroundColor)
     return verticalLayout;
 }
 
-tgui::Panel::Ptr FormBuilder::createOptionRow(
+tgui::Container::Ptr FormBuilder::createOptionRow(
     const std::string& labelText,
     tgui::Widget::Ptr widgetPtr,
     std::optional<std::string> widgetId)
@@ -99,7 +99,7 @@ tgui::Panel::Ptr FormBuilder::createOptionRow(
     return row;
 }
 
-tgui::Panel::Ptr FormBuilder::createOptionRowWithSubmitButton(
+tgui::Container::Ptr FormBuilder::createOptionRowWithSubmitButton(
     const std::string& labelText,
     tgui::Widget::Ptr widgetPtr,
     tgui::Button::Ptr buttonPtr)
@@ -107,17 +107,15 @@ tgui::Panel::Ptr FormBuilder::createOptionRowWithSubmitButton(
     auto&& row = WidgetBuilder::createRow();
     row->add(WidgetBuilder::createTextLabel(labelText));
 
-    auto&& widgetPanel = tgui::Panel::create({ "25%", "100%" });
-    widgetPanel->setPosition("60%", "0%");
-    widgetPanel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
-    widgetPanel->add(widgetPtr);
-    row->add(widgetPanel);
+    auto&& widgetContainer = tgui::Group::create({ "25%", "100%" });
+    widgetContainer->setPosition("60%", "0%");
+    widgetContainer->add(widgetPtr);
+    row->add(widgetContainer);
 
-    auto&& btnPanel = tgui::Panel::create({ "15%", "100%" });
-    btnPanel->setPosition("85%", "0%");
-    btnPanel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
-    btnPanel->add(buttonPtr);
-    row->add(btnPanel);
+    auto&& btnContainer = tgui::Group::create({ "15%", "100%" });
+    btnContainer->setPosition("85%", "0%");
+    btnContainer->add(buttonPtr);
+    row->add(btnContainer);
 
     return row;
 }
