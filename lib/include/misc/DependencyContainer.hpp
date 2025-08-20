@@ -2,6 +2,7 @@
 
 #include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
+#include "gui/Sizers.hpp"
 #include "input/Input.hpp"
 #include "input/VirtualCursor.hpp"
 #include "settings/AppSettings.hpp"
@@ -33,6 +34,7 @@ struct [[nodiscard]] DependencyContainer final
               input,
               resmgr.get<sf::Texture>("cursor.png"))
     {
+        Sizers::setUiScale(settings.video.uiScale);
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
         // NOTE: You can create your own theme file and use it here
         // gui.setTheme(resmgr.get<tgui::Theme::Ptr>("TransparentGrey.txt"));

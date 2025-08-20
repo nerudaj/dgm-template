@@ -135,19 +135,25 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                             sf::VideoMode::getFullscreenModes()[idx].size);
                     }))
 #endif
-            .addOption(
+            .addOptionWithSubmit(
                 dic.strings.getString(StringId::SetUiScale),
                 WidgetBuilder::createSlider(
                     settings.video.uiScale,
-                    [&](float val)
+                    [&, content](float val)
                     {
                         settings.video.uiScale = val;
                         Sizers::setUiScale(val);
-                        // TODO: should refresh view, but the user should not be
-                        // clicking anything
                     },
                     dic.gui,
-                    SliderProperties { .low = 1.f, .high = 2.f, .step = 0.1f }))
+                    SliderProperties {
+                        .valueFormatter = [](float val)
+                        { return uni::format("{:.1f}", val); },
+                        .low = 1.f,
+                        .high = 2.f,
+                        .step = 0.1f,
+                    }),
+                WidgetBuilder::createRowButton(
+                    dic.strings.getString(StringId::Apply), [&] { refresh(); }))
 #ifdef _DEBUG
             .addOption(
                 dic.strings.getString(StringId::SetTheme),
