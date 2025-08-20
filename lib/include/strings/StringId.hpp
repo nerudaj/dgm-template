@@ -11,6 +11,7 @@ enum class [[nodiscard]] StringId
     Back,
 
     // Options
+    Apply,
     VideoOptionsTab,
     AudioOptionsTab,
     InputOptionsTab,
