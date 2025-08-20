@@ -25,18 +25,27 @@ NODISCARD_RESULT static auto enumerate(Range&& range)
         std::forward<Range>(range));
 }
 
-NODISCARD_RESULT static tgui::Widget::Ptr
+NODISCARD_RESULT static tgui::Container::Ptr
 createCell(const tgui::Widget::Ptr& content, size_t column, size_t totalColumns)
 {
     size_t columnWidth = 100 / totalColumns;
 
-    auto cell = WidgetBuilder::createPanel(
+    auto cell = tgui::Group::create(
         { tgui::Layout(std::to_string(columnWidth) + "%"), "100%" });
     cell->setPosition(
         { tgui::Layout(std::to_string(column * columnWidth) + "%"), "0%" });
     cell->add(content);
 
     return cell;
+}
+
+static void
+addColoredBackground(tgui::Container::Ptr& container, const tgui::Color& color)
+{
+    auto panel = tgui::Panel::create();
+    panel->getRenderer()->setBorders(0);
+    panel->getRenderer()->setBackgroundColor(color);
+    container->add(panel);
 }
 
 tgui::Widget::Ptr priv::TableBuilder::build()
@@ -50,7 +59,7 @@ tgui::Widget::Ptr priv::TableBuilder::build()
 
     if (heading)
     {
-        auto&& row = WidgetBuilder::createRow(tgui::Color(128, 128, 128, 64));
+        auto&& row = WidgetBuilder::createRow();
 
         for (auto&& [columnIdx, cellText] : enumerate(heading.value()))
         {
@@ -67,9 +76,10 @@ tgui::Widget::Ptr priv::TableBuilder::build()
 
     for (auto&& row : rowsOfCells)
     {
-        auto&& color = rowIdx % 2 == 0 ? tgui::Color(128, 128, 128, 64)
+        auto&& color = rowIdx % 2 == 1 ? tgui::Color(128, 128, 128, 64)
                                        : tgui::Color::Transparent;
-        auto&& rowWidget = WidgetBuilder::createRow(color);
+        auto&& rowWidget = WidgetBuilder::createRow();
+        addColoredBackground(rowWidget, color);
         rowWidget->setPosition({ "0%", rowWidget->getSize().y * rowIdx++ });
 
         if (row.empty()) // separator

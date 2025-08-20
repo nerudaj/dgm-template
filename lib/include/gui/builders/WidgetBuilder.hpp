@@ -46,16 +46,13 @@ public:
             text, level == HeadingLevel::H1 ? 4.f : 2.f, true);
     }
 
-    static NODISCARD_RESULT tgui::Panel::Ptr createPanel(
-        const tgui::Layout2d& size = { "100%", "100%" },
-        const tgui::Color color = tgui::Color::Transparent);
-
-    static NODISCARD_RESULT tgui::ScrollablePanel::Ptr createScrollablePanel(
-        const tgui::Layout2d& size = { "100%", "100%" },
-        const tgui::Color color = tgui::Color::Transparent);
-
     static NODISCARD_RESULT tgui::Panel::Ptr
-    createRow(tgui::Color bgcolor = tgui::Color::Transparent);
+    createPanel(const tgui::Color color = tgui::Color::Transparent);
+
+    static NODISCARD_RESULT tgui::ScrollablePanel::Ptr
+    createScrollablePanel(const tgui::Color color = tgui::Color::Transparent);
+
+    static NODISCARD_RESULT tgui::Container::Ptr createRow();
 
     // Create button with 100% size of the parent (but default font size)
     static NODISCARD_RESULT tgui::Button::Ptr createButton(
@@ -81,7 +78,7 @@ public:
         std::function<void(bool)> onChange,
         WidgetOptions options = {});
 
-    static NODISCARD_RESULT tgui::Panel::Ptr createSlider(
+    static NODISCARD_RESULT tgui::Container::Ptr createSlider(
         float value,
         std::function<void(float)> onChange,
         Gui& gui,
