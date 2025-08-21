@@ -139,7 +139,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                 dic.strings.getString(StringId::SetUiScale),
                 WidgetBuilder::createSlider(
                     settings.video.uiScale,
-                    [&, content](float val)
+                    [&](float val)
                     {
                         settings.video.uiScale = val;
                         Sizers::setUiScale(val);
@@ -152,7 +152,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                         .high = 2.f,
                         .step = 0.1f,
                     }),
-                WidgetBuilder::createRowButton(
+                WidgetBuilder::createButton(
                     dic.strings.getString(StringId::Apply), [&] { refresh(); }))
 #ifdef _DEBUG
             .addOption(
