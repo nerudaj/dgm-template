@@ -13,6 +13,7 @@ const std::map<StringId, StringViewType> EN_LOCALIZATION = {
     { Back, "Back" },
 
     // Options
+    { Apply, "Apply" },
     { VideoOptionsTab, "Video" },
     { AudioOptionsTab, "Audio" },
     { InputOptionsTab, "Input" },

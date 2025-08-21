@@ -114,8 +114,8 @@ tgui::Container::Ptr FormBuilder::createOptionRowWithSubmitButton(
     widgetContainer->add(widgetPtr);
     row->add(widgetContainer);
 
-    auto&& btnContainer = tgui::Group::create({ "15%", "100%" });
-    btnContainer->setPosition("85%", "0%");
+    auto&& btnContainer = tgui::Group::create({ "11%", "90%" });
+    btnContainer->setPosition("87%", "5%");
     btnContainer->add(buttonPtr);
     row->add(btnContainer);
 
