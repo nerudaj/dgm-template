@@ -6,11 +6,11 @@
 #include <ranges>
 
 ButtonListBuilder& ButtonListBuilder::addButton(
-    const std::string& label,
+    const StringId labelId,
     std::function<void(void)> onClick,
     const std::string& buttonId)
 {
-    buttonProps.emplace_back(label, onClick, buttonId);
+    buttonProps.emplace_back(strings.getString(labelId), onClick, buttonId);
     return *this;
 }
 

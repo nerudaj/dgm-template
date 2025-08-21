@@ -75,29 +75,27 @@ void AppStateOptions::buildLayout()
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::Options), HeadingLevel::H1)
-            .withContent(
-                TabbedLayoutBuilder()
-                    .addTab(
-                        dic.strings.getString(StringId::VideoOptionsTab),
-                        [&](tgui::Container::Ptr content)
-                        { onVideoTabSelected(content); })
-                    .addTab(
-                        dic.strings.getString(StringId::AudioOptionsTab),
-                        [&](tgui::Container::Ptr content)
-                        { onAudioTabSelected(content); })
-                    .addTab(
-                        dic.strings.getString(StringId::InputOptionsTab),
-                        [&](tgui::Container::Ptr content)
-                        { onInputTabSelected(content); })
-                    .addTab(
-                        dic.strings.getString(StringId::BindingsOptionsTab),
-                        [&](tgui::Container::Ptr content)
-                        { onBindingsTabSelected(content); })
-                    .setTabSelected(
-                        dic.strings.getString(StringId::VideoOptionsTab))
-                    .build(TabbedLayoutOptions {
-                        .contentIsScrollable = true,
-                    }))
+            .withContent(TabbedLayoutBuilder(dic.strings)
+                             .addTab(
+                                 StringId::VideoOptionsTab,
+                                 [&](tgui::Container::Ptr content)
+                                 { onVideoTabSelected(content); })
+                             .addTab(
+                                 StringId::AudioOptionsTab,
+                                 [&](tgui::Container::Ptr content)
+                                 { onAudioTabSelected(content); })
+                             .addTab(
+                                 StringId::InputOptionsTab,
+                                 [&](tgui::Container::Ptr content)
+                                 { onInputTabSelected(content); })
+                             .addTab(
+                                 StringId::BindingsOptionsTab,
+                                 [&](tgui::Container::Ptr content)
+                                 { onBindingsTabSelected(content); })
+                             .setTabSelected(StringId::VideoOptionsTab)
+                             .build(TabbedLayoutOptions {
+                                 .contentIsScrollable = true,
+                             }))
             .withBackButton(WidgetBuilder::createButton(
                 dic.strings.getString(StringId::Back), [&] { onBack(); }))
             .withNoSubmitButton()
@@ -113,10 +111,10 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder()
+        FormBuilder(dic.strings)
 #ifndef ANDROID
             .addOption(
-                dic.strings.getString(StringId::EnableFullscreen),
+                StringId::EnableFullscreen,
                 WidgetBuilder::createCheckbox(
                     settings.video.fullscreen,
                     [&](bool val)
@@ -125,7 +123,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                         app.window.toggleFullscreen();
                     }))
             .addOption(
-                dic.strings.getString(StringId::SetResolution),
+                StringId::SetResolution,
                 WidgetBuilder::createDropdown(
                     getResolutionStrings(),
                     resolutionToString(settings.video.resolution),
@@ -136,7 +134,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                     }))
 #endif
             .addOption(
-                dic.strings.getString(StringId::SetUiScale),
+                StringId::SetUiScale,
                 WidgetBuilder::createSlider(
                     settings.video.uiScale,
                     [&](float val)
@@ -150,7 +148,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                     SliderProperties { .low = 1.f, .high = 2.f, .step = 0.1f }))
 #ifdef _DEBUG
             .addOption(
-                dic.strings.getString(StringId::SetTheme),
+                StringId::SetTheme,
                 WidgetBuilder::createDropdown(
                     dic.resmgr.getLoadedResourceIds<tgui::Theme::Ptr>().value(),
                     "",
@@ -162,16 +160,16 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                         refresh();
                     }))
 #endif
-            .build(CONTENT_BGCOLOR));
+            .build());
 }
 
 void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder()
+        FormBuilder(dic.strings)
             .addOption(
-                dic.strings.getString(StringId::MusicVolume),
+                StringId::MusicVolume,
                 WidgetBuilder::createSlider(
                     settings.audio.musicVolume,
                     [&](float val) { settings.audio.musicVolume = val; },
@@ -181,7 +179,7 @@ void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
                                        .high = 100.f,
                                        .step = 1.f }))
             .addOption(
-                dic.strings.getString(StringId::SoundVolume),
+                StringId::SoundVolume,
                 WidgetBuilder::createSlider(
                     settings.audio.soundVolume,
                     [&](float val) { settings.audio.soundVolume = val; },
@@ -190,16 +188,16 @@ void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
                                        .low = 0.f,
                                        .high = 100.f,
                                        .step = 1.f }))
-            .build(CONTENT_BGCOLOR));
+            .build());
 }
 
 void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder()
+        FormBuilder(dic.strings)
             .addOption(
-                dic.strings.getString(StringId::GamepadDeadzone),
+                StringId::GamepadDeadzone,
                 WidgetBuilder::createSlider(
                     settings.input.gamepadDeadzone,
                     [&](float val) { settings.input.gamepadDeadzone = val; },
@@ -209,7 +207,7 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
                                        .high = 100.f,
                                        .step = 1.f }))
             .addOption(
-                dic.strings.getString(StringId::CursorSpeed),
+                StringId::CursorSpeed,
                 WidgetBuilder::createSlider(
                     settings.input.cursorSpeed,
                     [&](float val) { settings.input.cursorSpeed = val; },
@@ -218,7 +216,7 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
                                        .low = 100.f,
                                        .high = 1000.f,
                                        .step = 10.f }))
-            .build(CONTENT_BGCOLOR));
+            .build());
 }
 
 template<class V, class T>

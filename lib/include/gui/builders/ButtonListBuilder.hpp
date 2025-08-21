@@ -1,6 +1,7 @@
 #pragma once
 
 #include "misc/Compatibility.hpp"
+#include "strings/StringProvider.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <functional>
@@ -10,14 +11,17 @@
 class [[nodiscard]] ButtonListBuilder final
 {
 public:
-    ButtonListBuilder() = default;
+    ButtonListBuilder(const StringProvider& strings) noexcept : strings(strings)
+    {
+    }
+
     ButtonListBuilder(const ButtonListBuilder&) = delete;
     ButtonListBuilder(ButtonListBuilder&&) = delete;
     ~ButtonListBuilder() = default;
 
 public:
     ButtonListBuilder& addButton(
-        const std::string& label,
+        const StringId labelId,
         std::function<void(void)> onClick,
         const std::string& buttonId = "");
 
@@ -33,5 +37,6 @@ private:
         std::string buttonId;
     };
 
+    const StringProvider& strings;
     std::vector<ButtonProps> buttonProps;
 };

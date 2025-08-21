@@ -1,6 +1,7 @@
 #pragma once
 
 #include "misc/Compatibility.hpp"
+#include "strings/StringProvider.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <functional>
@@ -23,11 +24,21 @@ struct [[nodiscard]] TabbedLayoutOptions final
 class [[nodiscard]] TabbedLayoutBuilder final
 {
 public:
+    TabbedLayoutBuilder(const StringProvider& strings) noexcept
+        : strings(strings)
+    {
+    }
+
+    TabbedLayoutBuilder(const TabbedLayoutBuilder&) = delete;
+    TabbedLayoutBuilder(TabbedLayoutBuilder&&) = default;
+    ~TabbedLayoutBuilder() = default;
+
+public:
     TabbedLayoutBuilder& addTab(
-        const std::string& tabName,
+        const StringId stringId,
         const std::function<void(tgui::Container::Ptr)> onTabSelected);
 
-    TabbedLayoutBuilder& setTabSelected(const std::string& tabName);
+    TabbedLayoutBuilder& setTabSelected(const StringId stringId);
 
     NODISCARD_RESULT tgui::Container::Ptr
     build(const TabbedLayoutOptions& options = {});
@@ -37,6 +48,7 @@ private:
     createContentPanel(bool isScrollable) const;
 
 private:
+    const StringProvider& strings;
     std::vector<std::string> tabNames;
     std::map<std::string, std::function<void(tgui::Container::Ptr)>>
         tabCallbacks;

@@ -4,32 +4,34 @@
 #include <ranges>
 
 FormBuilder& FormBuilder::addOption(
-    const std::string& labelText, tgui::Widget::Ptr widget, OptionConfig config)
+    const StringId labelId, tgui::Widget::Ptr widget, OptionConfig config)
 {
     widget->setEnabled(!config.disabled);
-    rowsToBuild.push_back({ .label = labelText,
+    rowsToBuild.push_back({ .label = strings.getString(labelId),
                             .widget = widget,
                             .tooltipText = config.tooltipText });
     return *this;
 }
 
 FormBuilder& FormBuilder::addOptionWithWidgetId(
-    const std::string& labelText,
+    const StringId labelId,
     tgui::Widget::Ptr widget,
     const std::string widgetId)
 {
-    rowsToBuild.push_back(
-        { .label = labelText, .widget = widget, .widgetId = widgetId });
+    rowsToBuild.push_back({ .label = strings.getString(labelId),
+                            .widget = widget,
+                            .widgetId = widgetId });
     return *this;
 }
 
 FormBuilder& FormBuilder::addOptionWithSubmit(
-    const std::string& labelText,
+    const StringId labelId,
     tgui::Widget::Ptr widget,
     tgui::Button::Ptr submitBtn)
 {
-    rowsToBuild.push_back(
-        { .label = labelText, .widget = widget, .submitBtn = submitBtn });
+    rowsToBuild.push_back({ .label = strings.getString(labelId),
+                            .widget = widget,
+                            .submitBtn = submitBtn });
     return *this;
 }
 
@@ -39,7 +41,7 @@ FormBuilder& FormBuilder::addSeparator()
     return *this;
 }
 
-tgui::Container::Ptr FormBuilder::build(tgui::Color backgroundColor)
+tgui::Container::Ptr FormBuilder::build()
 {
     auto&& verticalLayout = tgui::GrowVerticalLayout::create();
     verticalLayout->getRenderer()->setPadding({ 10.f, 10.f });
