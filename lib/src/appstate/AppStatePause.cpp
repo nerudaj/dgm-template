@@ -24,22 +24,14 @@ void AppStatePause::buildLayout()
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::PauseTitle), HeadingLevel::H1)
-            .withContent(ButtonListBuilder()
-                             .addButton(
-                                 dic.strings.getString(StringId::Resume),
-                                 [&] { onResume(); })
-                             .addButton(
-                                 dic.strings.getString(StringId::Options),
-                                 [&] { onOptions(); })
-                             .addButton(
-                                 dic.strings.getString(StringId::BackToMenu),
-                                 [&] { onBackToMenu(); })
-                             .addButton(
-                                 dic.strings.getString(StringId::ExitButton),
-                                 [&] { onExit(); })
-                             .build())
-            .withNoBackButton()
-            .withNoSubmitButton()
+            .withContent(
+                ButtonListBuilder(dic.strings)
+                    .addButton(StringId::Resume, [&] { onResume(); })
+                    .addButton(StringId::Options, [&] { onOptions(); })
+                    .addButton(StringId::BackToMenu, [&] { onBackToMenu(); })
+                    .addButton(StringId::ExitButton, [&] { onExit(); })
+                    .build())
+            .withNoCornerButtons()
             .build());
 }
 

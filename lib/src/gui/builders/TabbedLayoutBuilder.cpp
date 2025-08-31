@@ -4,18 +4,19 @@
 #include "gui/builders/WidgetBuilder.hpp"
 
 TabbedLayoutBuilder& TabbedLayoutBuilder::addTab(
-    const std::string& tabName,
+    const StringId stringId,
     const std::function<void(tgui::Container::Ptr)> onTabSelected)
 {
+    std::string tabName = strings.getString(stringId);
     tabNames.push_back(tabName);
     tabCallbacks[tabName] = onTabSelected;
     return *this;
 }
 
 TabbedLayoutBuilder&
-TabbedLayoutBuilder::setTabSelected(const std::string& tabName)
+TabbedLayoutBuilder::setTabSelected(const StringId stringId)
 {
-    selectedTab = tabName;
+    selectedTab = strings.getString(stringId);
     return *this;
 }
 

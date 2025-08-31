@@ -1,5 +1,6 @@
 #pragma once
 
+#include "strings/StringProvider.hpp"
 #include <DGM/classes/Compatibility.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -17,45 +18,46 @@ struct [[nodiscard]] OptionConfig final
 class [[nodiscard]] FormBuilder final
 {
 public:
-    FormBuilder() = default;
+    FormBuilder(const StringProvider& strings) noexcept : strings(strings) {}
+
     FormBuilder(const FormBuilder&) = delete;
     FormBuilder(FormBuilder&&) = delete;
     ~FormBuilder() = default;
 
 public:
     FormBuilder& addOption(
-        const std::string& labelText,
+        const StringId labelId,
         tgui::Widget::Ptr widget,
         OptionConfig config = {});
 
     FormBuilder& addOptionWithWidgetId(
-        const std::string& labelText,
+        const StringId labelId,
         tgui::Widget::Ptr widget,
         const std::string widgetId);
 
     FormBuilder& addOptionWithSubmit(
-        const std::string& labelText,
+        const StringId labelId,
         tgui::Widget::Ptr widget,
         tgui::Button::Ptr submitBtn);
 
     FormBuilder& addSeparator();
 
-    NODISCARD_RESULT tgui::Container::Ptr
-    build(tgui::Color backgroundColor = tgui::Color::Transparent);
+    NODISCARD_RESULT tgui::Container::Ptr build();
 
 private:
-    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRow(
+    static NODISCARD_RESULT tgui::Container::Ptr createOptionRow(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         std::optional<std::string> widgetId);
 
-    static NODISCARD_RESULT tgui::Panel::Ptr createOptionRowWithSubmitButton(
+    static NODISCARD_RESULT tgui::Container::Ptr
+    createOptionRowWithSubmitButton(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         tgui::Button::Ptr buttonPtr);
 
 private:
-    struct RowProps
+    struct [[nodiscard]] RowProps final
     {
         bool separator = false;
         std::string label;
@@ -65,5 +67,6 @@ private:
         std::optional<std::string> tooltipText = {};
     };
 
+    const StringProvider& strings;
     std::vector<RowProps> rowsToBuild;
 };

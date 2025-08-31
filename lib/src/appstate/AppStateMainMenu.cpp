@@ -43,20 +43,15 @@ void AppStateMainMenu::buildLayout()
         DefaultLayoutBuilder::withBackgroundImage(
             dic.resmgr.get<sf::Texture>("placeholder-background.png"))
             .withTitle(CMakeVars::TITLE, HeadingLevel::H1)
-            .withContent(ButtonListBuilder()
+            .withContent(ButtonListBuilder(dic.strings)
+                             .addButton(StringId::PlayButton, [&] { onPlay(); })
+                             .addButton(StringId::Options, [&] { onOptions(); })
                              .addButton(
-                                 dic.strings.getString(StringId::PlayButton),
-                                 [&] { onPlay(); })
-                             .addButton(
-                                 dic.strings.getString(StringId::Options),
-                                 [&] { onOptions(); })
-                             .addButton(
-                                 dic.strings.getString(StringId::ExitButton),
+                                 StringId::ExitButton,
                                  [&] { onExit(); },
                                  "MainMenu_Button_Exit")
                              .build())
-            .withNoBackButton()
-            .withNoSubmitButton()
+            .withNoCornerButtons()
             .build());
 }
 

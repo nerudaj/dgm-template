@@ -21,9 +21,6 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     const std::string& text, const float sizeMultiplier, const bool justify)
 {
     auto&& label = tgui::Label::create(text);
-    label->getRenderer()->setTextColor(sf::Color::White);
-    label->getRenderer()->setTextOutlineColor(tgui::Color::Black);
-    label->getRenderer()->setTextOutlineThickness(1.f);
     label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     label->setHorizontalAlignment(
         justify ? tgui::HorizontalAlignment::Center
@@ -34,20 +31,17 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     return label;
 }
 
-tgui::Panel::Ptr
-WidgetBuilder::createPanel(const tgui::Layout2d& size, const tgui::Color color)
+tgui::Panel::Ptr WidgetBuilder::createPanel(const tgui::Color color)
 {
-    auto&& panel = tgui::Panel::create(size);
-    panel->setPosition({ "0%", "0%" });
+    auto&& panel = tgui::Panel::create();
     panel->getRenderer()->setBackgroundColor(color);
     return panel;
 }
 
-tgui::ScrollablePanel::Ptr WidgetBuilder::createScrollablePanel(
-    const tgui::Layout2d& size, const tgui::Color color)
+tgui::ScrollablePanel::Ptr
+WidgetBuilder::createScrollablePanel(const tgui::Color color)
 {
-    auto&& panel = tgui::ScrollablePanel::create(size);
-    panel->setPosition({ "0%", "0%" });
+    auto&& panel = tgui::ScrollablePanel::create();
     panel->getRenderer()->setBackgroundColor(color);
 
 #ifdef ANDROID
@@ -57,12 +51,11 @@ tgui::ScrollablePanel::Ptr WidgetBuilder::createScrollablePanel(
     return panel;
 }
 
-tgui::Panel::Ptr WidgetBuilder::createRow(tgui::Color bgcolor)
+tgui::Container::Ptr WidgetBuilder::createRow()
 {
-    auto&& row = tgui::Panel::create();
+    auto&& row = tgui::Group::create();
     row->setSize(
         "100%", std::to_string(Sizers::getBaseContainerHeight()).c_str());
-    row->getRenderer()->setBackgroundColor(bgcolor);
     return row;
 }
 
@@ -120,15 +113,14 @@ tgui::CheckBox::Ptr WidgetBuilder::createCheckbox(
     return checkbox;
 }
 
-tgui::Panel::Ptr WidgetBuilder::createSlider(
+tgui::Container::Ptr WidgetBuilder::createSlider(
     float value,
     std::function<void(float)> onChange,
     Gui& gui,
     const SliderProperties& properties,
     WidgetOptions options)
 {
-    auto&& result = tgui::Panel::create();
-    result->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
+    auto&& result = tgui::Group::create();
     const auto&& ID = randomString(16);
 
     auto&& dummyLabel =
@@ -177,6 +169,7 @@ tgui::ComboBox::Ptr WidgetBuilder::createDropdown(
     auto&& dropdown = tgui::ComboBox::create();
     dropdown->setSize("100%", "80%");
     dropdown->setPosition("0%", "10%");
+    dropdown->setTextSize(Sizers::getBaseFontSize());
     updateDropdownItems(dropdown, items);
     dropdown->setSelectedItem(selected);
     dropdown->onItemSelect(onSelect);
