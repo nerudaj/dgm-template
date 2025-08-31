@@ -34,7 +34,7 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
 tgui::Panel::Ptr WidgetBuilder::createPanel(const tgui::Color color)
 {
     auto&& panel = tgui::Panel::create();
-    panel->getRenderer()->setBackgroundColor(color);
+    // panel->getRenderer()->setBackgroundColor(color);
     return panel;
 }
 
