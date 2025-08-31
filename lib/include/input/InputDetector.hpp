@@ -18,11 +18,6 @@ public:
     }
 
 public:
-    using ReportKmbCallbackType = std::function<void(KmbBinding)>;
-    using ReportGamepadCallbackType = std::function<void(GamepadBinding)>;
-    using CancelCallbackType = std::function<void()>;
-    using ReadyForInputsCallbackType = std::function<void()>;
-
     void startCheckingInputs(
         ReportKmbCallbackType reportCallback, CancelCallbackType cancelCallback)
     {
