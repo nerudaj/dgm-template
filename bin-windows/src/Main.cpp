@@ -26,8 +26,7 @@ int main(int, char*[])
         app.pushState<AppStateMainMenu>(dependencies, settings);
         app.run();
 
-        AppStorage::saveFile(
-            SETTINGS_FILE_NAME, nlohmann::json(settings).dump(4));
+        AppStorage::saveFile(SETTINGS_FILE_NAME, settings);
     }
     catch (const std::exception& ex)
     {

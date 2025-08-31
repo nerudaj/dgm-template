@@ -3,6 +3,20 @@
 #include "types/Binding.hpp"
 #include <functional>
 
+/**
+ * \brief Class used for detecting inputs when rebinding controls
+ *
+ * It can be configured to start checking inputs either for gamepad
+ * or for keyboard+mouse combo. This checking can either be cancelled by
+ * pressing the Escape key or it is finished by pressing any appropriate
+ * input.
+ *
+ * This pressed input is returned via reportCallback.
+ *
+ * Since inputs can be pressed when this class is asked to look for any,
+ * it first waits until all inputs are released (and fires appropriate callback
+ * when that happens).
+ */
 class [[nodiscard]] InputDetector final
 {
 public:
