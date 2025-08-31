@@ -9,6 +9,19 @@ public:
     using ReportKmbCallbackType = std::function<void(KmbBinding)>;
     using ReportGamepadCallbackType = std::function<void(GamepadBinding)>;
     using CancelCallbackType = std::function<void()>;
+    using ReadyForInputsCallbackType = std::function<void()>;
+
+public:
+    InputDetector(ReadyForInputsCallbackType markReadyForInputs)
+        : markReadyForInputs(markReadyForInputs)
+    {
+    }
+
+public:
+    using ReportKmbCallbackType = std::function<void(KmbBinding)>;
+    using ReportGamepadCallbackType = std::function<void(GamepadBinding)>;
+    using CancelCallbackType = std::function<void()>;
+    using ReadyForInputsCallbackType = std::function<void()>;
 
     void startCheckingInputs(
         ReportKmbCallbackType reportCallback, CancelCallbackType cancelCallback)
@@ -16,7 +29,7 @@ public:
         reportKmb = reportCallback;
         cancel = cancelCallback;
         runMode = RunMode::DetectingKmb;
-        initialDelay = sf::seconds(1.f).asSeconds();
+        isWaitingForInputsToClear = true;
     }
 
     void startCheckingInputs(
@@ -26,10 +39,10 @@ public:
         reportGamepad = reportCallback;
         cancel = cancelCallback;
         runMode = RunMode::DetectingGamepad;
-        initialDelay = sf::seconds(1.f).asSeconds();
+        isWaitingForInputsToClear = true;
     }
 
-    void update(const dgm::Time& time);
+    void update();
 
     NODISCARD_RESULT bool isDetectionInProgress() const noexcept
     {
@@ -58,10 +71,13 @@ private:
 
     DetectionStatus tryMouse();
 
+    NODISCARD_RESULT bool isAnyInputPressed() const;
+
 private:
     RunMode runMode = RunMode::Idle;
+    ReadyForInputsCallbackType markReadyForInputs;
     ReportKmbCallbackType reportKmb;
     ReportGamepadCallbackType reportGamepad;
     CancelCallbackType cancel;
-    float initialDelay = 0;
+    bool isWaitingForInputsToClear = true;
 };

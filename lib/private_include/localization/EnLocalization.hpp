@@ -26,6 +26,13 @@ const std::map<StringId, StringViewType> EN_LOCALIZATION = {
     { MusicVolume, "Music volume" },
     { GamepadDeadzone, "Gamepad deadzone" },
     { CursorSpeed, "Cursor speed" },
+    { ReleaseAllInputs, "Release all inputs" },
+#ifdef ANDROID
+    { PressAKeyOrEscape,
+      "Press a key\nor click outside of\nthis message to cancel" },
+#else
+    { PressAKeyOrEscape, "Press a key\nor Escape to cancel" },
+#endif
     { BindingHeadingAction, "Action" },
     { BindingHeadingKMB, "Keyboard/Mouse" },
     { BindingsHeadingGamepad, "Gamepad" },

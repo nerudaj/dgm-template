@@ -68,15 +68,7 @@ private:
             return uni::format("BindButton_{}_GMP", std::to_underlying(action));
     }
 
-    template<class BindType>
-    void markButtonRebinding(InputKind action)
-    {
-        dic.gui.get<tgui::Button>(getBindButtonId<BindType>(action))
-            ->setText("...");
-    }
-
 private:
     DependencyContainer& dic;
     AppSettings& settings;
-    InputDetector inputDetector;
 };

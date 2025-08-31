@@ -1,4 +1,5 @@
 #include "appstate/AppStateOptions.hpp"
+#include "appstate/AppStateInputDetector.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "gui/Builders.hpp"
 #include "gui/Sizers.hpp"
@@ -38,13 +39,6 @@ AppStateOptions::AppStateOptions(
 
 void AppStateOptions::input()
 {
-    if (inputDetector.isDetectionInProgress())
-    {
-        inputDetector.update(app.time);
-        CommonHandler::swallowAllEvents(app);
-        return;
-    }
-
     CommonHandler::handleInput(app, dic, settings.input);
 
     auto tabs = dic.gui.get<tgui::Tabs>(TABS_ID);
@@ -274,17 +268,13 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                 buttonOrNothing(
                     WidgetBuilder::createRowButton(
                         std::visit(hwInputMapper, kmbBinding),
-                        [&]()
+                        [&]
                         {
-                            markButtonRebinding<KmbBinding>(action);
-                            inputDetector.startCheckingInputs(
+                            std::function<void(KmbBinding)> callback =
                                 [&](KmbBinding b)
-                                { onInputDetected(action, b, bindings); },
-                                [&]()
-                                {
-                                    onInputDetected(
-                                        action, kmbBinding, bindings);
-                                });
+                            { onInputDetected(action, b, bindings); };
+                            app.pushState<AppStateInputDetector>(
+                                dic, settings.input, std::move(callback));
                         },
                         WidgetOptions { .id =
                                             getBindButtonId<KmbBinding>(action),
@@ -293,17 +283,13 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                 buttonOrNothing(
                     WidgetBuilder::createRowButton(
                         std::visit(hwInputMapper, gamepadBinding),
-                        [&]()
+                        [&]
                         {
-                            markButtonRebinding<GamepadBinding>(action);
-                            inputDetector.startCheckingInputs(
+                            std::function<void(GamepadBinding)> callback =
                                 [&](GamepadBinding b)
-                                { onInputDetected(action, b, bindings); },
-                                [&]()
-                                {
-                                    onInputDetected(
-                                        action, gamepadBinding, bindings);
-                                });
+                            { onInputDetected(action, b, bindings); };
+                            app.pushState<AppStateInputDetector>(
+                                dic, settings.input, std::move(callback));
                         },
                         WidgetOptions {
                             .id = getBindButtonId<GamepadBinding>(action),
