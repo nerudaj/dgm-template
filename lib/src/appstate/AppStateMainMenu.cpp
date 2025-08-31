@@ -51,8 +51,7 @@ void AppStateMainMenu::buildLayout()
                                  [&] { onExit(); },
                                  "MainMenu_Button_Exit")
                              .build())
-            .withNoBackButton()
-            .withNoSubmitButton()
+            .withNoCornerButtons()
             .build());
 }
 

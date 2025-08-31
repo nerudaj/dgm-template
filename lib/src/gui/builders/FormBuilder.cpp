@@ -79,9 +79,8 @@ tgui::Container::Ptr FormBuilder::createOptionRow(
     auto&& row = WidgetBuilder::createRow();
     row->add(WidgetBuilder::createTextLabel(labelText));
 
-    auto&& widgetPanel = tgui::Panel::create({ "40%", "100%" });
+    auto&& widgetPanel = tgui::Group::create({ "40%", "100%" });
     widgetPanel->setPosition("60%", "0%");
-    widgetPanel->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
     row->add(widgetPanel);
 
     widgetId

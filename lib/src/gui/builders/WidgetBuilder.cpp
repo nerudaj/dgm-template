@@ -21,9 +21,6 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     const std::string& text, const float sizeMultiplier, const bool justify)
 {
     auto&& label = tgui::Label::create(text);
-    label->getRenderer()->setTextColor(sf::Color::White);
-    label->getRenderer()->setTextOutlineColor(tgui::Color::Black);
-    label->getRenderer()->setTextOutlineThickness(1.f);
     label->setVerticalAlignment(tgui::VerticalAlignment::Center);
     label->setHorizontalAlignment(
         justify ? tgui::HorizontalAlignment::Center

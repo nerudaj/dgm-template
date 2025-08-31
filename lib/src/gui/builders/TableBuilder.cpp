@@ -50,7 +50,7 @@ addColoredBackground(tgui::Container::Ptr& container, const tgui::Color& color)
 
 tgui::Widget::Ptr priv::TableBuilder::build()
 {
-    auto&& panel = WidgetBuilder::createScrollablePanel();
+    auto&& panel = tgui::GrowVerticalLayout::create();
 
     assert(heading || !rowsOfCells.empty());
 

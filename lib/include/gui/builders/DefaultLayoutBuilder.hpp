@@ -7,70 +7,136 @@
 
 namespace priv
 {
+    struct [[nodiscard]] BuilderProperties
+    {
+        unsigned baseHeight;
+        unsigned cornerButtonDimension;
+        unsigned cornerButtonPadding;
+        unsigned titleHeight;
+    };
+
     class [[nodiscard]] FinalizedLayoutBuilder final
     {
     public:
-        FinalizedLayoutBuilder(tgui::Container::Ptr container)
-            : container(container)
+        FinalizedLayoutBuilder(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
         {
         }
 
     public:
-        NODISCARD_RESULT inline tgui::Container::Ptr build() const
+        NODISCARD_RESULT inline tgui::Panel::Ptr build() const
         {
             return container;
         }
 
     private:
-        tgui::Container::Ptr container;
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
     };
 
-    class [[nodiscard]] LayoutBuilderWithContentAndBackButton final
+    class [[nodiscard]] LayoutBuilderWithContentAndThreeButtons final
     {
     public:
-        LayoutBuilderWithContentAndBackButton(tgui::Container::Ptr container)
-            : container(container)
+        LayoutBuilderWithContentAndThreeButtons(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
         {
         }
 
     public:
-        FinalizedLayoutBuilder withNoSubmitButton() const
+        FinalizedLayoutBuilder withNoBottomRightButton() const
         {
-            return FinalizedLayoutBuilder(container);
+            return FinalizedLayoutBuilder(container, props);
         }
 
-        FinalizedLayoutBuilder withSubmitButton(tgui::Button::Ptr button);
+        FinalizedLayoutBuilder withBottomRightButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Container::Ptr container;
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
+    };
+
+    class [[nodiscard]] LayoutBuilderWithContentAndTwoButtons final
+    {
+    public:
+        LayoutBuilderWithContentAndTwoButtons(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
+        {
+        }
+
+    public:
+        LayoutBuilderWithContentAndThreeButtons withNoBottomLeftButton() const
+        {
+            return LayoutBuilderWithContentAndThreeButtons(container, props);
+        }
+
+        LayoutBuilderWithContentAndThreeButtons
+        withBottomLeftButton(tgui::Button::Ptr button);
+
+    private:
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
+    };
+
+    class [[nodiscard]] LayoutBuilderWithContentAndOneButton final
+    {
+    public:
+        LayoutBuilderWithContentAndOneButton(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
+        {
+        }
+
+    public:
+        LayoutBuilderWithContentAndTwoButtons withNoTopRightButton() const
+        {
+            return LayoutBuilderWithContentAndTwoButtons(container, props);
+        }
+
+        LayoutBuilderWithContentAndTwoButtons
+        withTopRightButton(tgui::Button::Ptr button);
+
+    private:
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
     };
 
     class [[nodiscard]] LayoutBuilderWithContent final
     {
     public:
-        LayoutBuilderWithContent(tgui::Container::Ptr container)
-            : container(container)
+        LayoutBuilderWithContent(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
         {
         }
 
     public:
-        LayoutBuilderWithContentAndBackButton withNoBackButton() const
+        LayoutBuilderWithContentAndOneButton withNoTopLeftButton() const
         {
-            return LayoutBuilderWithContentAndBackButton(container);
+            return LayoutBuilderWithContentAndOneButton(container, props);
         }
 
-        LayoutBuilderWithContentAndBackButton
-        withBackButton(tgui::Button::Ptr button);
+        LayoutBuilderWithContentAndOneButton
+        withTopLeftButton(tgui::Button::Ptr button);
+
+        FinalizedLayoutBuilder withNoCornerButtons()
+        {
+            return FinalizedLayoutBuilder(container, props);
+        }
 
     private:
-        tgui::Container::Ptr container;
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
     };
 
     class [[nodiscard]] LayoutBuilderWithBackgroundAndTitle final
     {
     public:
-        LayoutBuilderWithBackgroundAndTitle(tgui::Container::Ptr container)
-            : container(container)
+        LayoutBuilderWithBackgroundAndTitle(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
         {
         }
 
@@ -78,14 +144,16 @@ namespace priv
         LayoutBuilderWithContent withContent(tgui::Container::Ptr content);
 
     private:
-        tgui::Container::Ptr container;
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
     };
 
     class [[nodiscard]] LayoutBuilderWithBackground final
     {
     public:
-        LayoutBuilderWithBackground(tgui::Container::Ptr container)
-            : container(container)
+        LayoutBuilderWithBackground(
+            tgui::Panel::Ptr container, const BuilderProperties& props)
+            : container(container), props(props)
         {
         }
 
@@ -93,8 +161,12 @@ namespace priv
         LayoutBuilderWithBackgroundAndTitle
         withTitle(const std::string& title, HeadingLevel level);
 
+        LayoutBuilderWithBackgroundAndTitle
+        withTexturedTitle(const sf::Texture& texture);
+
     private:
-        tgui::Container::Ptr container;
+        tgui::Panel::Ptr container;
+        BuilderProperties props;
     };
 } // namespace priv
 
@@ -105,4 +177,7 @@ public:
     withBackgroundImage(const sf::Texture& texture);
 
     static priv::LayoutBuilderWithBackground withNoBackgroundImage();
+
+private:
+    static priv::BuilderProperties buildProperties();
 };

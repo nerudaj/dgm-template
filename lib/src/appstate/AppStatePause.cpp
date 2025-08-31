@@ -31,8 +31,7 @@ void AppStatePause::buildLayout()
                     .addButton(StringId::BackToMenu, [&] { onBackToMenu(); })
                     .addButton(StringId::ExitButton, [&] { onExit(); })
                     .build())
-            .withNoBackButton()
-            .withNoSubmitButton()
+            .withNoCornerButtons()
             .build());
 }
 

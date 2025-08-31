@@ -96,9 +96,11 @@ void AppStateOptions::buildLayout()
                              .build(TabbedLayoutOptions {
                                  .contentIsScrollable = true,
                              }))
-            .withBackButton(WidgetBuilder::createButton(
+            .withNoTopLeftButton()
+            .withNoTopRightButton()
+            .withBottomLeftButton(WidgetBuilder::createButton(
                 dic.strings.getString(StringId::Back), [&] { onBack(); }))
-            .withNoSubmitButton()
+            .withNoBottomRightButton()
             .build());
 }
 
