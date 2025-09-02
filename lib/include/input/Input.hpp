@@ -1,6 +1,7 @@
 #pragma once
 
 #include "input/InputKind.hpp"
+#include "input/TouchController.hpp"
 #include "misc/Compatibility.hpp"
 #include "settings/BindingsSettings.hpp"
 #include <DGM/dgm.hpp>
@@ -8,8 +9,9 @@
 class [[nodiscard]] Input final
 {
 public:
-    Input(const BindingsSettings& settings)
+    Input(const BindingsSettings& settings, TouchController& touchController)
         : controller(configureController(settings))
+        , touchController(touchController)
     {
     }
 
@@ -50,4 +52,5 @@ private:
 
 private:
     mutable dgm::Controller<InputKind> controller;
+    TouchController& touchController;
 };

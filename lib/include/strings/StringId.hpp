@@ -24,6 +24,7 @@ enum class [[nodiscard]] StringId
     MusicVolume,
     GamepadDeadzone,
     CursorSpeed,
+    ShowTouchControls,
     ReleaseAllInputs,
     PressAKeyOrEscape,
     BindingHeadingAction,

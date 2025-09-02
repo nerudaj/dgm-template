@@ -1,7 +1,9 @@
 #pragma once
 
 #include "game/Scene.hpp"
+#include "input/TouchController.hpp"
 #include "misc/FpsCounter.hpp"
+#include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
 
 class [[nodiscard]] RenderingEngine final
@@ -10,21 +12,8 @@ public:
     RenderingEngine(
         dgm::ResourceManager& resmgr,
         Scene& scene,
-        const sf::Vector2f& resolution) noexcept
-        : scene(scene)
-        , worldCamera(
-              createFullscreenCamera(resolution, INTERNAL_GAME_RESOLUTION))
-        , hudCamera(sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } }, resolution)
-        , text(resmgr.get<sf::Font>("ChunkFive-Regular.ttf"))
-        , sprite(resmgr.get<sf::Texture>("mrman.png"))
-    {
-        sprite.setOrigin(
-            sf::Vector2f(scene.dummy.animation.getCurrentFrame().size) / 2.f);
-        ground.setPosition(scene.groundPosition);
-        ground.setFillColor(sf::Color(128, 192, 0));
-        ground.setSize({ INTERNAL_GAME_RESOLUTION.x,
-                         INTERNAL_GAME_RESOLUTION.y - scene.groundPosition.y });
-    }
+        const AppSettings& settings,
+        const TouchController& touchController) noexcept;
 
     RenderingEngine(RenderingEngine&&) = delete;
     RenderingEngine(const RenderingEngine&) = delete;
@@ -48,11 +37,19 @@ private:
         const sf::Vector2f& currentResolution,
         const sf::Vector2f& desiredResolution);
 
+    void renderWorld(dgm::Window& window);
+
+    void renderHud(dgm::Window& window);
+
+    void renderTouchControls(dgm::Window& window);
+
 private:
     const static inline auto INTERNAL_GAME_RESOLUTION =
         sf::Vector2f { 1280.f, 720.f };
 
     Scene& scene;
+    const AppSettings& settings;
+    const TouchController& touchController;
     dgm::Camera worldCamera;
     dgm::Camera hudCamera;
 

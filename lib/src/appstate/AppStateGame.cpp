@@ -15,6 +15,10 @@ void AppStateGame::input()
         {
             app.exit();
         }
+        else
+        {
+            dic.touchController.processEvent(event);
+        }
     }
 }
 
