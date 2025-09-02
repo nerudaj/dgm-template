@@ -1,5 +1,6 @@
 #pragma once
 
+#include <DGM/classes/Collision.hpp>
 #include <DGM/classes/Controller.hpp>
 #include <DGM/classes/Objects.hpp>
 #include <SFML/Window/Event.hpp>
@@ -7,30 +8,70 @@
 #include <misc/Compatibility.hpp>
 #include <optional>
 
-enum class TouchObjectKind
+enum class [[nodiscard]] TouchObjectKind
 {
     Button,
     Joystick
 };
 
-struct TouchObject
+/**
+ *  Class representing either touch button or virtual joystick.
+ *
+ *  This is kind of discriminated union. Both inputs have some area in which
+ *  the touch is supposed to be registered.
+ *
+ *  Joystick "hat" position equals to the touchPosition. Button's touchPosition
+ *  is either outside of the touchArea (idle, not pressed) or inside (when the
+ * user is actively touching the button, pressing it).
+ */
+class [[nodiscard]] TouchInput final
 {
+public:
+    TouchInput(
+        TouchObjectKind kind, const sf::Vector2f& position, const float radius)
+        : touchArea(position, radius), touchPosition(position), kind(kind)
+    {
+        reset();
+    }
+
+    NODISCARD_RESULT bool readButton() const
+    {
+        return dgm::Collision::basic(touchArea, sf::Vector2i(touchPosition));
+    }
+
+    NODISCARD_RESULT sf::Vector2f readJoystick() const
+    {
+        return touchPosition - touchArea.getPosition();
+    }
+
+    void reset();
+
+public:
     dgm::Circle touchArea;
     sf::Vector2f touchPosition;
     TouchObjectKind kind;
 };
 
-struct TouchModel
+/**
+ * Structure representing a particular layout of touch inputs
+ * for your given game. It has a list of touch input objects and
+ * some convenience aliases for each of them.
+ */
+struct [[nodiscard]] TouchModel final
 {
 public:
     TouchModel(const sf::Vector2u& windowSize);
 
 public:
-    std::array<TouchObject, 2u> objects;
-    std::map<unsigned, size_t> fingerToTouchObject = {};
+    std::array<TouchInput, 2u> objects;
+    std::map<unsigned, size_t>
+        fingerToTouchObject = {}; ///< Each event has finger index associated
+                                  ///< with it so we can pair touch begin, touch
+                                  ///< moved and touch ended with a single touch
+                                  ///< input
 
-    TouchObject& leftJoystick = objects[0];
-    TouchObject& jumpButton = objects[1];
+    TouchInput& leftJoystick = objects[0];
+    TouchInput& jumpButton = objects[1];
 };
 
 class [[nodiscard]] TouchController final

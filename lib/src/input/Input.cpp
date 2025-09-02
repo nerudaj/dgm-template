@@ -14,12 +14,14 @@ void Input::forceRelease(InputKind action)
 float Input::getHorizontalVelocity() const
 {
     return -controller.readAnalog(InputKind::Left)
-           + controller.readAnalog(InputKind::Right);
+           + controller.readAnalog(InputKind::Right)
+           + touchController.getHorizontalVelocity();
 }
 
 bool Input::isJumpPressed() const
 {
-    return controller.readDigital(InputKind::Jump);
+    return controller.readDigital(InputKind::Jump)
+           || touchController.isJumpPressed();
 }
 
 NODISCARD_RESULT bool Input::isMenuCycleLeftPressed() const

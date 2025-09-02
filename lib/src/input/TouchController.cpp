@@ -1,45 +1,51 @@
 #include "input/TouchController.hpp"
-#include <DGM/classes/Collision.hpp>
 #include <DGM/classes/Math.hpp>
+
+void TouchInput::reset()
+{
+    if (kind == TouchObjectKind::Button)
+        // place touch position out of touchArea - button is not pressed
+        touchPosition = touchArea.getPosition()
+                        - sf::Vector2f {
+                              touchArea.getRadius(),
+                              touchArea.getRadius(),
+                          };
+    else
+        touchPosition = touchArea.getPosition();
+}
 
 TouchModel::TouchModel(const sf::Vector2u& windowSize)
     : objects(std::array {
-          TouchObject {
-              .touchArea = dgm::Circle({ 100.f, windowSize.y - 100.f }, 100.f),
-              .touchPosition = { 100.f, 100.f },
-              .kind = TouchObjectKind::Joystick,
-          },
-          TouchObject {
-              .touchArea = dgm::Circle(
-                  { windowSize.x - 100.f, windowSize.y - 100.f }, 100.f),
-              .touchPosition = sf::Vector2f {},
-              .kind = TouchObjectKind::Joystick,
-          } })
+          TouchInput(
+              TouchObjectKind::Joystick,
+              { 100.f, windowSize.y - 100.f },
+              100.f),
+          TouchInput(
+              TouchObjectKind::Button,
+              { windowSize.x - 100.f, windowSize.y - 100.f },
+              50.f),
+      })
 {
 }
 
 void TouchController::processEvent(const std::optional<sf::Event>& e)
 {
     if (e->is<sf::Event::TouchBegan>())
-        processEvent(e->getIf<sf::Event::TouchBegan>());
+        processEvent(*e->getIf<sf::Event::TouchBegan>());
     else if (e->is<sf::Event::TouchEnded>())
-        processEvent(e->getIf<sf::Event::TouchEnded>());
+        processEvent(*e->getIf<sf::Event::TouchEnded>());
     else if (e->is<sf::Event::TouchMoved>())
-        processEvent(e->getIf<sf::Event::TouchMoved>());
+        processEvent(*e->getIf<sf::Event::TouchMoved>());
 }
 
 NODISCARD_RESULT float TouchController::getHorizontalVelocity() const
 {
-    return (model.leftJoystick.touchPosition
-            - model.leftJoystick.touchArea.getPosition())
-        .x;
+    return model.leftJoystick.readJoystick().x;
 }
 
 NODISCARD_RESULT bool TouchController::isJumpPressed() const
 {
-    return dgm::Collision::basic(
-        model.jumpButton.touchArea,
-        sf::Vector2i(model.jumpButton.touchPosition));
+    return model.jumpButton.readButton();
 }
 
 void TouchController::processEvent(const sf::Event::TouchBegan& e)
@@ -58,21 +64,7 @@ void TouchController::processEvent(const sf::Event::TouchEnded& e)
 {
     auto idx = model.fingerToTouchObject[e.finger];
     model.fingerToTouchObject.erase(e.finger);
-
-    if (model.objects[idx].kind == TouchObjectKind::Button)
-    {
-        // place touch position outside of button
-        model.objects[idx].touchPosition =
-            model.objects[idx].touchArea.getPosition()
-            + sf::Vector2f(1.f, 0) * model.objects[idx].touchArea.getRadius()
-                  * 2.f;
-    }
-    else
-    {
-        // Center joystick hat
-        model.objects[idx].touchPosition =
-            model.objects[idx].touchArea.getPosition();
-    }
+    model.objects[idx].reset();
 }
 
 void TouchController::processEvent(const sf::Event::TouchMoved& e)

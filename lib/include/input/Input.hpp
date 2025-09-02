@@ -52,5 +52,5 @@ private:
 
 private:
     mutable dgm::Controller<InputKind> controller;
-    mutable TouchController& touchController;
+    TouchController& touchController;
 };
