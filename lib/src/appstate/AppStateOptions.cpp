@@ -88,6 +88,7 @@ void AppStateOptions::buildLayout()
                                  { onBindingsTabSelected(content); })
                              .setTabSelected(StringId::VideoOptionsTab)
                              .build(TabbedLayoutOptions {
+                                 .tabsWidgetId = TABS_ID,
                                  .contentIsScrollable = true,
                              }))
             .withNoTopLeftButton()
