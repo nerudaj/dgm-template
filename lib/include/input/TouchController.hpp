@@ -2,6 +2,7 @@
 
 #include <DGM/classes/Collision.hpp>
 #include <DGM/classes/Controller.hpp>
+#include <DGM/classes/Math.hpp>
 #include <DGM/classes/Objects.hpp>
 #include <SFML/Window/Event.hpp>
 #include <input/InputKind.hpp>
@@ -41,7 +42,7 @@ public:
 
     NODISCARD_RESULT sf::Vector2f readJoystick() const
     {
-        return touchPosition - touchArea.getPosition();
+        return dgm::Math::toUnit(touchPosition - touchArea.getPosition());
     }
 
     void reset();

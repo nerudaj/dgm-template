@@ -1,5 +1,4 @@
 #include "input/TouchController.hpp"
-#include <DGM/classes/Math.hpp>
 
 void TouchInput::reset()
 {
@@ -22,7 +21,7 @@ TouchModel::TouchModel(const sf::Vector2u& windowSize)
               100.f),
           TouchInput(
               TouchObjectKind::Button,
-              { windowSize.x - 100.f, windowSize.y - 100.f },
+              { windowSize.x - 200.f, windowSize.y - 100.f },
               50.f),
       })
 {
@@ -76,6 +75,8 @@ void TouchController::processEvent(const sf::Event::TouchMoved& e)
     auto& obj = model.objects[idx];
     auto direction = sf::Vector2f(e.position) - obj.touchArea.getPosition();
     auto length = direction.length();
-    obj.touchPosition = dgm::Math::toUnit(direction)
-                        * std::clamp(length, 0.f, obj.touchArea.getRadius());
+    obj.touchPosition =
+        obj.touchArea.getPosition()
+        + dgm::Math::toUnit(direction)
+              * std::clamp(length, 0.f, obj.touchArea.getRadius());
 }
