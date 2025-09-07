@@ -19,7 +19,7 @@ public:
         , settings(settings)
         , scene(buildScene(dic.resmgr))
         , gameRulesEngine(gameEvents, scene, dic.input)
-        , renderingEngine(dic.resmgr, scene, sf::Vector2f(app.window.getSize()))
+        , renderingEngine(dic.resmgr, scene, settings, dic.touchController)
         , sound(dic.resmgr.get<sf::SoundBuffer>("land.wav"))
     {
         sound.setVolume(100.f);

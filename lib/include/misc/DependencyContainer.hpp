@@ -4,6 +4,7 @@
 #include "gui/Gui.hpp"
 #include "gui/Sizers.hpp"
 #include "input/Input.hpp"
+#include "input/TouchController.hpp"
 #include "input/VirtualCursor.hpp"
 #include "settings/AppSettings.hpp"
 #include "strings/StringProvider.hpp"
@@ -14,6 +15,7 @@ struct [[nodiscard]] DependencyContainer final
     Gui gui;
     dgm::ResourceManager resmgr;
     const StringProvider strings;
+    TouchController touchController;
     Input input;
     VirtualCursor virtualCursor;
 
@@ -28,7 +30,8 @@ struct [[nodiscard]] DependencyContainer final
         : gui(window)
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
-        , input(settings.bindings)
+        , touchController(settings.video.resolution)
+        , input(settings.bindings, touchController)
         , virtualCursor(
               window.getSfmlWindowContext(),
               input,

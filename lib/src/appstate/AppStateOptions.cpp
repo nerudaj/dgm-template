@@ -88,6 +88,7 @@ void AppStateOptions::buildLayout()
                                  { onBindingsTabSelected(content); })
                              .setTabSelected(StringId::VideoOptionsTab)
                              .build(TabbedLayoutOptions {
+                                 .tabsWidgetId = TABS_ID,
                                  .contentIsScrollable = true,
                              }))
             .withNoTopLeftButton()
@@ -218,6 +219,13 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
                                        .low = 100.f,
                                        .high = 1000.f,
                                        .step = 10.f }))
+#if defined(_DEBUG) or defined(ANDROID)
+            .addOption(
+                StringId::ShowTouchControls,
+                WidgetBuilder::createCheckbox(
+                    settings.input.showTouchControls,
+                    [&](bool val) { settings.input.showTouchControls = val; }))
+#endif
             .build());
 }
 
