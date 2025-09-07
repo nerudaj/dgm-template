@@ -1,4 +1,5 @@
 #include "input/TouchController.hpp"
+#include <SFML/System/Err.hpp>
 
 void TouchInput::reset()
 {
@@ -17,12 +18,16 @@ TouchModel::TouchModel(const sf::Vector2u& windowSize)
     : objects(std::array {
           TouchInput(
               TouchObjectKind::Joystick,
-              { 100.f, windowSize.y - 100.f },
-              100.f),
+              { 150.f, windowSize.y - 150.f },
+              150.f),
           TouchInput(
               TouchObjectKind::Button,
-              { windowSize.x - 200.f, windowSize.y - 100.f },
-              50.f),
+              { windowSize.x - 150.f, windowSize.y - 150.f },
+              150.f),
+          TouchInput(
+              TouchObjectKind::Button,
+              { 100.f, 100.f },
+              100.f),
       })
 {
 }
@@ -47,6 +52,11 @@ NODISCARD_RESULT bool TouchController::isJumpPressed() const
     return model.jumpButton.readButton();
 }
 
+NODISCARD_RESULT bool TouchController::isBackPressed() const
+{
+    return model.pauseButton.readButton();
+}
+
 void TouchController::processEvent(const sf::Event::TouchBegan& e)
 {
     for (auto&& [idx, object] : std::ranges::views::enumerate(model.objects))
@@ -61,7 +71,9 @@ void TouchController::processEvent(const sf::Event::TouchBegan& e)
 
 void TouchController::processEvent(const sf::Event::TouchEnded& e)
 {
-    auto idx = model.fingerToTouchObject[e.finger];
+    if (!model.fingerToTouchObject.contains(e.finger)) return;
+
+    auto idx = model.fingerToTouchObject.at(e.finger);
     model.fingerToTouchObject.erase(e.finger);
     model.objects[idx].reset();
 }
@@ -70,8 +82,9 @@ void TouchController::processEvent(const sf::Event::TouchMoved& e)
 {
     // Update touchPosition, but normalize it so it stays inside the touchArea
     // even when the finger moves out of it
+    if (!model.fingerToTouchObject.contains(e.finger)) return;
 
-    auto idx = model.fingerToTouchObject[e.finger];
+    auto idx = model.fingerToTouchObject.at(e.finger);
     auto& obj = model.objects[idx];
     auto direction = sf::Vector2f(e.position) - obj.touchArea.getPosition();
     auto length = direction.length();

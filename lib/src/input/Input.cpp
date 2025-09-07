@@ -36,7 +36,7 @@ NODISCARD_RESULT bool Input::isMenuCycleRightPressed() const
 
 bool Input::isBackButtonPressed() const
 {
-    return readAndRelease(InputKind::BackButton);
+    return readAndRelease(InputKind::BackButton) || touchController.isBackPressed();
 }
 
 bool Input::isConfirmPressed() const

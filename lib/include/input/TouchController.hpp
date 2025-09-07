@@ -64,7 +64,7 @@ public:
     TouchModel(const sf::Vector2u& windowSize);
 
 public:
-    std::array<TouchInput, 2u> objects;
+    std::array<TouchInput, 3u> objects;
     std::map<unsigned, size_t>
         fingerToTouchObject = {}; ///< Each event has finger index associated
                                   ///< with it so we can pair touch begin, touch
@@ -73,6 +73,7 @@ public:
 
     TouchInput& leftJoystick = objects[0];
     TouchInput& jumpButton = objects[1];
+    TouchInput& pauseButton = objects[2];
 };
 
 class [[nodiscard]] TouchController final
@@ -95,6 +96,8 @@ public:
     NODISCARD_RESULT bool isJumpPressed() const;
 
 #pragma endregion
+
+    NODISCARD_RESULT bool isBackPressed() const;
 
 private:
     void processEvent(const sf::Event::TouchBegan& e);

@@ -30,7 +30,7 @@ struct [[nodiscard]] DependencyContainer final
         : gui(window)
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
-        , touchController(window.getSize())
+        , touchController(settings.video.resolution)
         , input(settings.bindings, touchController)
         , virtualCursor(
               window.getSfmlWindowContext(),

@@ -14,6 +14,12 @@ int main(int, char*[])
     {
         auto&& settings = ResourceLoader::loadSettings(SETTINGS_FILE_NAME);
 
+        // sf::VideoMode::getDesktopMode() is broken, returning 2174x1080 on my device
+        // which has resolution of 2400x1080 (as reported by getFullscreenModes)
+        auto&& modes = sf::VideoMode::getFullscreenModes();
+        if (!modes.empty())
+          settings.video.resolution = modes[0].size;
+
         auto&& window = dgm::Window(dgm::WindowSettings {
             .resolution = settings.video.resolution,
             .title = CMakeVars::TITLE,
