@@ -7,7 +7,7 @@
 #include <TGUI/TGUI.hpp>
 #include <ranges>
 
-NODISCARD_RESULT std::string randomString(std::size_t len)
+[[nodiscard]] static std::string randomString(std::size_t len)
 {
     constexpr auto CHARS = std::string_view(
         "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
@@ -18,7 +18,10 @@ NODISCARD_RESULT std::string randomString(std::size_t len)
 }
 
 tgui::Label::Ptr WidgetBuilder::createLabelInternal(
-    const std::string& text, const float sizeMultiplier, const bool justify)
+    const std::string& text,
+    const float sizeMultiplier,
+    const Sizers& sizer,
+    const bool justify)
 {
     auto&& label = tgui::Label::create(text);
     label->setVerticalAlignment(tgui::VerticalAlignment::Center);
@@ -26,47 +29,25 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
         justify ? tgui::HorizontalAlignment::Center
                 : tgui::HorizontalAlignment::Left);
     label->setTextSize(
-        static_cast<unsigned>(Sizers::getBaseFontSize() * sizeMultiplier));
+        static_cast<unsigned>(sizer.getBaseFontSize() * sizeMultiplier));
     label->setSize({ "100%", "100%" });
     return label;
 }
 
-tgui::Panel::Ptr WidgetBuilder::createPanel(const tgui::Color color)
+tgui::Container::Ptr WidgetBuilder::createRow(const Sizers& sizer)
 {
-    auto&& panel = tgui::Panel::create();
-    // panel->getRenderer()->setBackgroundColor(color);
-    return panel;
-}
-
-tgui::ScrollablePanel::Ptr
-WidgetBuilder::createScrollablePanel(const tgui::Color color)
-{
-    auto&& panel = tgui::ScrollablePanel::create();
-    panel->getRenderer()->setBackgroundColor(color);
-
-#ifdef ANDROID
-    panel->getRenderer()->setScrollbarWidth(Sizers::getBaseFontSize());
-#endif
-
-    return panel;
-}
-
-tgui::Container::Ptr WidgetBuilder::createRow()
-{
-    auto&& row = tgui::Group::create();
-    row->setSize(
-        "100%", std::to_string(Sizers::getBaseContainerHeight()).c_str());
-    return row;
+    return tgui::Group::create({ "100%", sizer.getBaseContainerHeight() });
 }
 
 tgui::Button::Ptr WidgetBuilder::createButton(
     const Label& label,
     std::function<void(void)> onClick,
+    const Sizers& sizer,
     WidgetOptions options)
 {
     auto&& button = tgui::Button::create(label);
     button->onClick(onClick);
-    button->setTextSize(Sizers::getBaseFontSize());
+    button->setTextSize(sizer.getBaseFontSize());
     button->setSize({ "100%", "100%" });
 
     applyOptionsToWidget(options, button);
@@ -74,24 +55,13 @@ tgui::Button::Ptr WidgetBuilder::createButton(
     return button;
 }
 
-NODISCARD_RESULT tgui::Button::Ptr WidgetBuilder::createMenuButton(
+[[nodiscard]] tgui::Button::Ptr WidgetBuilder::createRowButton(
     const Label& label,
     std::function<void(void)> onClick,
+    const Sizers& sizer,
     WidgetOptions options)
 {
-    const auto scaleFactor = 1.5f;
-    auto button = createButton(label, onClick, options);
-    button->setSize({ "100%", Sizers::getBaseContainerHeight() * scaleFactor });
-    button->setTextSize(Sizers::getBaseFontSize() * scaleFactor);
-    return button;
-}
-
-NODISCARD_RESULT tgui::Button::Ptr WidgetBuilder::createRowButton(
-    const Label& label,
-    std::function<void(void)> onClick,
-    WidgetOptions options)
-{
-    auto&& button = createButton(label, onClick, options);
+    auto&& button = createButton(label, onClick, sizer, options);
     button->setSize({ "90%", "90%" });
     button->setPosition({ "5%", "5%" });
     button->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
@@ -117,6 +87,7 @@ tgui::Container::Ptr WidgetBuilder::createSlider(
     float value,
     std::function<void(float)> onChange,
     Gui& gui,
+    const Sizers& sizer,
     const SliderProperties& properties,
     WidgetOptions options)
 {
@@ -125,13 +96,13 @@ tgui::Container::Ptr WidgetBuilder::createSlider(
 
     auto&& dummyLabel =
         tgui::Label::create(properties.valueFormatter(properties.high));
-    dummyLabel->setTextSize(Sizers::getBaseFontSize());
+    dummyLabel->setTextSize(sizer.getBaseFontSize());
     dummyLabel->setAutoSize(true);
     gui.add(dummyLabel, "DummyLabel");
     auto size = dummyLabel->getSizeLayout();
 
-    auto&& valueLabel =
-        createTextLabel(properties.valueFormatter(value), "justify"_true);
+    auto&& valueLabel = createTextLabel(
+        properties.valueFormatter(value), sizer, "justify"_true);
     valueLabel->setSize(size.x, "100%");
     valueLabel->setPosition("parent.width" - size.x, "0%");
     result->add(valueLabel, ID);
@@ -164,12 +135,13 @@ tgui::ComboBox::Ptr WidgetBuilder::createDropdown(
     const std::vector<std::string>& items,
     const std::string& selected,
     std::function<void(std::size_t)> onSelect,
+    const Sizers& sizer,
     WidgetOptions options)
 {
     auto&& dropdown = tgui::ComboBox::create();
     dropdown->setSize("100%", "80%");
     dropdown->setPosition("0%", "10%");
-    dropdown->setTextSize(Sizers::getBaseFontSize());
+    dropdown->setTextSize(sizer.getBaseFontSize());
     updateDropdownItems(dropdown, items);
     dropdown->setSelectedItem(selected);
     dropdown->onItemSelect(onSelect);
@@ -182,6 +154,7 @@ tgui::ComboBox::Ptr WidgetBuilder::createDropdown(
 tgui::EditBox::Ptr WidgetBuilder::createTextInput(
     const std::string& initialValue,
     std::function<void(tgui::String)> onChange,
+    const Sizers& sizer,
     const std::string& regexValidator,
     WidgetOptions options)
 {
@@ -190,6 +163,7 @@ tgui::EditBox::Ptr WidgetBuilder::createTextInput(
     box->setPosition("0%", "10%");
     if (!regexValidator.empty()) box->setInputValidator(regexValidator);
     box->setText(initialValue);
+    box->setTextSize(sizer.getBaseFontSize());
     box->onTextChange(onChange);
 
     applyOptionsToWidget(options, box);
@@ -200,11 +174,12 @@ tgui::EditBox::Ptr WidgetBuilder::createTextInput(
 tgui::Tabs::Ptr WidgetBuilder::createTabs(
     const std::vector<Label>& tabLabels,
     std::function<void(const tgui::String&)> onTabChange,
+    const Sizers& sizer,
     WidgetOptions options)
 {
     auto&& tabs = tgui::Tabs::create();
     tabs->setSize({ "100%", "100%" });
-    tabs->setTextSize(Sizers::getBaseFontSize());
+    tabs->setTextSize(sizer.getBaseFontSize());
 
     for (auto&& label : tabLabels)
     {
@@ -223,16 +198,6 @@ tgui::SeparatorLine::Ptr WidgetBuilder::createSeparator()
     auto sep = tgui::SeparatorLine::create({ "100%", 1 });
     sep->setPosition({ "0%", "49%" });
     return sep;
-}
-
-tgui::Label::Ptr WidgetBuilder::createTooltip(const std::string& text)
-{
-    auto label = tgui::Label::create(text);
-    label->getRenderer()->setBackgroundColor(sf::Color::White);
-    label->getRenderer()->setBorders(tgui::Outline(1u));
-    label->getRenderer()->setBorderColor(sf::Color::Black);
-    label->setTextSize(Sizers::getBaseFontSize());
-    return label;
 }
 
 void WidgetBuilder::updateDropdownItems(

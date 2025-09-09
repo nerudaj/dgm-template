@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include "strings/StringProvider.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -24,8 +25,9 @@ struct [[nodiscard]] TabbedLayoutOptions final
 class [[nodiscard]] TabbedLayoutBuilder final
 {
 public:
-    TabbedLayoutBuilder(const StringProvider& strings) noexcept
-        : strings(strings)
+    TabbedLayoutBuilder(
+        const StringProvider& strings, const Sizers& sizer) noexcept
+        : strings(strings), sizer(sizer)
     {
     }
 
@@ -40,15 +42,16 @@ public:
 
     TabbedLayoutBuilder& setTabSelected(const StringId stringId);
 
-    NODISCARD_RESULT tgui::Container::Ptr
+    [[nodiscard]] tgui::Container::Ptr
     build(const TabbedLayoutOptions& options = {});
 
 private:
-    NODISCARD_RESULT tgui::Container::Ptr
+    [[nodiscard]] tgui::Container::Ptr
     createContentPanel(bool isScrollable) const;
 
 private:
     const StringProvider& strings;
+    const Sizers& sizer;
     std::vector<std::string> tabNames;
     std::map<std::string, std::function<void(tgui::Container::Ptr)>>
         tabCallbacks;

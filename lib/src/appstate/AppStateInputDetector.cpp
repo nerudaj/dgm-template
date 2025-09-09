@@ -41,14 +41,16 @@ void AppStateInputDetector::buildLayout()
     layout->setPosition({ "25%", "25%" });
     cancelPanel->add(layout);
 
-    auto panel = WidgetBuilder::createPanel();
+    auto panel = tgui::Panel::create();
     layout->add(panel);
 
     auto labelLayout = tgui::Group::create({ "100%", "70%" });
     panel->add(labelLayout);
 
     auto label = WidgetBuilder::createTextLabel(
-        dic.strings.getString(StringId::ReleaseAllInputs), "justify"_true);
+        dic.strings.getString(StringId::ReleaseAllInputs),
+        dic.sizer,
+        "justify"_true);
     panel->add(label, LABEL_ID);
 }
 

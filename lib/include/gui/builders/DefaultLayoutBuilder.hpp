@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gui/HeadingLevel.hpp"
+#include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -25,7 +26,7 @@ namespace priv
         }
 
     public:
-        NODISCARD_RESULT inline tgui::Panel::Ptr build() const
+        [[nodiscard]] inline tgui::Panel::Ptr build() const
         {
             return container;
         }
@@ -152,8 +153,10 @@ namespace priv
     {
     public:
         LayoutBuilderWithBackground(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
-            : container(container), props(props)
+            tgui::Panel::Ptr container,
+            const BuilderProperties& props,
+            const Sizers& sizer)
+            : sizer(sizer), container(container), props(props)
         {
         }
 
@@ -165,6 +168,7 @@ namespace priv
         withTexturedTitle(const sf::Texture& texture);
 
     private:
+        const Sizers& sizer;
         tgui::Panel::Ptr container;
         BuilderProperties props;
     };
@@ -173,11 +177,20 @@ namespace priv
 class [[nodiscard]] DefaultLayoutBuilder final
 {
 public:
-    static priv::LayoutBuilderWithBackground
+    constexpr explicit DefaultLayoutBuilder(const Sizers& sizer) noexcept
+        : sizer(sizer)
+    {
+    }
+
+public:
+    priv::LayoutBuilderWithBackground
     withBackgroundImage(const sf::Texture& texture);
 
-    static priv::LayoutBuilderWithBackground withNoBackgroundImage();
+    priv::LayoutBuilderWithBackground withNoBackgroundImage();
 
 private:
-    static priv::BuilderProperties buildProperties();
+    static priv::BuilderProperties buildProperties(const Sizers& sizer);
+
+private:
+    const Sizers& sizer;
 };

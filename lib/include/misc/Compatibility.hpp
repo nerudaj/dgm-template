@@ -16,9 +16,3 @@ namespace uniranges = ranges;
 namespace uni = std;
 namespace uniranges = std::ranges;
 #endif
-
-template<class Container>
-Container collect(auto&& range)
-{
-    return Container(range.begin(), range.end());
-}

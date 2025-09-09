@@ -24,10 +24,7 @@ TouchModel::TouchModel(const sf::Vector2u& windowSize)
               TouchObjectKind::Button,
               { windowSize.x - 150.f, windowSize.y - 150.f },
               150.f),
-          TouchInput(
-              TouchObjectKind::Button,
-              { 100.f, 100.f },
-              100.f),
+          TouchInput(TouchObjectKind::Button, { 100.f, 100.f }, 100.f),
       })
 {
 }
@@ -42,17 +39,17 @@ void TouchController::processEvent(const std::optional<sf::Event>& e)
         processEvent(*e->getIf<sf::Event::TouchMoved>());
 }
 
-NODISCARD_RESULT float TouchController::getHorizontalVelocity() const
+[[nodiscard]] float TouchController::getHorizontalVelocity() const
 {
     return model.leftJoystick.readJoystick().x;
 }
 
-NODISCARD_RESULT bool TouchController::isJumpPressed() const
+[[nodiscard]] bool TouchController::isJumpPressed() const
 {
     return model.jumpButton.readButton();
 }
 
-NODISCARD_RESULT bool TouchController::isBackPressed() const
+[[nodiscard]] bool TouchController::isBackPressed() const
 {
     return model.pauseButton.readButton();
 }

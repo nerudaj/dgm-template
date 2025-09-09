@@ -35,12 +35,12 @@ public:
         reset();
     }
 
-    NODISCARD_RESULT bool readButton() const
+    [[nodiscard]] bool readButton() const
     {
         return dgm::Collision::basic(touchArea, sf::Vector2i(touchPosition));
     }
 
-    NODISCARD_RESULT sf::Vector2f readJoystick() const
+    [[nodiscard]] sf::Vector2f readJoystick() const
     {
         return dgm::Math::toUnit(touchPosition - touchArea.getPosition());
     }
@@ -84,20 +84,20 @@ public:
 public:
     void processEvent(const std::optional<sf::Event>& e);
 
-    CONSTEXPR_NODISCARD const TouchModel& getTouchModel() const noexcept
+    [[nodiscard]] constexpr const TouchModel& getTouchModel() const noexcept
     {
         return model;
     }
 
 #pragma region For dummy entity, can be removed
 
-    NODISCARD_RESULT float getHorizontalVelocity() const;
+    [[nodiscard]] float getHorizontalVelocity() const;
 
-    NODISCARD_RESULT bool isJumpPressed() const;
+    [[nodiscard]] bool isJumpPressed() const;
 
 #pragma endregion
 
-    NODISCARD_RESULT bool isBackPressed() const;
+    [[nodiscard]] bool isBackPressed() const;
 
 private:
     void processEvent(const sf::Event::TouchBegan& e);

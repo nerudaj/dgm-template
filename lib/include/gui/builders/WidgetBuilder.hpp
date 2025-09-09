@@ -2,6 +2,7 @@
 
 #include "gui/Gui.hpp"
 #include "gui/HeadingLevel.hpp"
+#include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -33,72 +34,66 @@ public:
     using Label = std::string;
 
 public:
-    static NODISCARD_RESULT inline tgui::Label::Ptr
-    createTextLabel(const std::string& text, bool justify = false)
+    static [[nodiscard]] inline tgui::Label::Ptr createTextLabel(
+        const std::string& text, const Sizers& sizer, bool justify = false)
     {
-        return createLabelInternal(text, 1.f, justify);
+        return createLabelInternal(text, 1.f, sizer, justify);
     }
 
-    static NODISCARD_RESULT inline tgui::Label::Ptr createHeading(
-        const std::string& text, HeadingLevel level = HeadingLevel::H1)
+    static [[nodiscard]] inline tgui::Label::Ptr createHeading(
+        const std::string& text,
+        const Sizers& sizer,
+        HeadingLevel level = HeadingLevel::H1)
     {
         return createLabelInternal(
-            text, level == HeadingLevel::H1 ? 4.f : 2.f, true);
+            text, level == HeadingLevel::H1 ? 4.f : 2.f, sizer, true);
     }
 
-    static NODISCARD_RESULT tgui::Panel::Ptr
-    createPanel(const tgui::Color color = tgui::Color::Transparent);
-
-    static NODISCARD_RESULT tgui::ScrollablePanel::Ptr
-    createScrollablePanel(const tgui::Color color = tgui::Color::Transparent);
-
-    static NODISCARD_RESULT tgui::Container::Ptr createRow();
+    static [[nodiscard]] tgui::Container::Ptr createRow(const Sizers& sizer);
 
     // Create button with 100% size of the parent (but default font size)
-    static NODISCARD_RESULT tgui::Button::Ptr createButton(
+    static [[nodiscard]] tgui::Button::Ptr createButton(
         const Label& label,
         std::function<void(void)> onClick,
-        WidgetOptions options = WidgetOptions {});
-
-    // Create a button of fixed size that is good for menus (like back button,
-    // or button list in pause menu).
-    static NODISCARD_RESULT tgui::Button::Ptr createMenuButton(
-        const Label& label,
-        std::function<void(void)> onClick,
+        const Sizers& sizer,
         WidgetOptions options = WidgetOptions {});
 
     // Create a button that can fit inside an option row
-    static NODISCARD_RESULT tgui::Button::Ptr createRowButton(
+    static [[nodiscard]] tgui::Button::Ptr createRowButton(
         const Label& label,
         std::function<void(void)> onClick,
+        const Sizers& sizer,
         WidgetOptions options = WidgetOptions {});
 
-    static NODISCARD_RESULT tgui::CheckBox::Ptr createCheckbox(
+    static [[nodiscard]] tgui::CheckBox::Ptr createCheckbox(
         bool checked,
         std::function<void(bool)> onChange,
         WidgetOptions options = {});
 
-    static NODISCARD_RESULT tgui::Container::Ptr createSlider(
+    static [[nodiscard]] tgui::Container::Ptr createSlider(
         float value,
         std::function<void(float)> onChange,
         Gui& gui,
+        const Sizers& sizer,
         const SliderProperties& properties = {},
         WidgetOptions options = {});
 
-    static NODISCARD_RESULT tgui::ComboBox::Ptr createDropdown(
+    static [[nodiscard]] tgui::ComboBox::Ptr createDropdown(
         const std::vector<std::string>& items,
         const std::string& selected,
         std::function<void(std::size_t)> onSelect,
+        const Sizers& sizer,
         WidgetOptions options = {});
 
-    static NODISCARD_RESULT tgui::EditBox::Ptr createTextInput(
+    static [[nodiscard]] tgui::EditBox::Ptr createTextInput(
         const std::string& initialValue,
         std::function<void(tgui::String)> onChange,
+        const Sizers& sizer,
         const std::string& regexValidator = "",
         WidgetOptions options = {});
 
     template<std::integral Number>
-    static NODISCARD_RESULT tgui::EditBox::Ptr createNumericInput(
+    static [[nodiscard]] tgui::EditBox::Ptr createNumericInput(
         Number value,
         std::function<void(Number)> onChange,
         const std::string& validator = getUnsignedNumericValidator(),
@@ -118,32 +113,31 @@ public:
             options);
     }
 
-    static NODISCARD_RESULT tgui::Tabs::Ptr createTabs(
+    static [[nodiscard]] tgui::Tabs::Ptr createTabs(
         const std::vector<Label>& tabLabels,
         std::function<void(const tgui::String&)> onTabChange,
+        const Sizers& sizer,
         WidgetOptions options = {});
 
-    static NODISCARD_RESULT tgui::SeparatorLine::Ptr createSeparator();
+    static [[nodiscard]] tgui::SeparatorLine::Ptr createSeparator();
 
-    static NODISCARD_RESULT tgui::Label::Ptr
-    createTooltip(const std::string& text);
-
-    static CONSTEXPR_NODISCARD std::string
+    static [[nodiscard]] constexpr std::string
     getUnsignedNumericValidator() noexcept
     {
         return "(0|[1-9][0-9]*)";
     }
 
-    static CONSTEXPR_NODISCARD std::string
+    static [[nodiscard]] constexpr std::string
     getPositiveNumericValidator() noexcept
     {
         return "[1-9][0-9]*";
     }
 
 private:
-    static NODISCARD_RESULT tgui::Label::Ptr createLabelInternal(
+    static [[nodiscard]] tgui::Label::Ptr createLabelInternal(
         const std::string& text,
         const float sizeMultiplier,
+        const Sizers& sizer,
         const bool justify = false);
 
     static void

@@ -20,12 +20,12 @@ void AppStatePause::draw()
 void AppStatePause::buildLayout()
 {
     dic.gui.rebuildWith(
-        DefaultLayoutBuilder()
+        DefaultLayoutBuilder(dic.sizer)
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::PauseTitle), HeadingLevel::H1)
             .withContent(
-                ButtonListBuilder(dic.strings)
+                ButtonListBuilder(dic.strings, dic.sizer)
                     .addButton(StringId::Resume, [&] { onResume(); })
                     .addButton(StringId::Options, [&] { onOptions(); })
                     .addButton(StringId::BackToMenu, [&] { onBackToMenu(); })

@@ -31,18 +31,18 @@ public:
 #pragma region For dummy entity, can be removed
     float getHorizontalVelocity() const;
 
-    NODISCARD_RESULT bool isJumpPressed() const;
+    [[nodiscard]] bool isJumpPressed() const;
 #pragma endregion
 
-    NODISCARD_RESULT bool isMenuCycleLeftPressed() const;
+    [[nodiscard]] bool isMenuCycleLeftPressed() const;
 
-    NODISCARD_RESULT bool isMenuCycleRightPressed() const;
+    [[nodiscard]] bool isMenuCycleRightPressed() const;
 
-    NODISCARD_RESULT bool isBackButtonPressed() const;
+    [[nodiscard]] bool isBackButtonPressed() const;
 
-    NODISCARD_RESULT bool isConfirmPressed() const;
+    [[nodiscard]] bool isConfirmPressed() const;
 
-    NODISCARD_RESULT sf::Vector2f getCursorDelta() const;
+    [[nodiscard]] sf::Vector2f getCursorDelta() const;
 
 private:
     bool readAndRelease(InputKind i) const;

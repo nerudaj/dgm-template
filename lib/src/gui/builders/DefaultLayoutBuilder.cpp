@@ -1,5 +1,4 @@
 #include "gui/builders/DefaultLayoutBuilder.hpp"
-#include "gui/Sizers.hpp"
 #include "gui/TguiHelper.hpp"
 #include "gui/builders/WidgetBuilder.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -112,7 +111,7 @@ namespace priv
         const std::string& title, HeadingLevel level)
     {
         auto&& panel = tgui::Group::create({ "100%", props.titleHeight });
-        panel->add(WidgetBuilder::createHeading(title, level));
+        panel->add(WidgetBuilder::createHeading(title, sizer, level));
         container->add(panel);
         return LayoutBuilderWithBackgroundAndTitle(container, props);
     }
@@ -127,7 +126,7 @@ namespace priv
               props.titleHeight });
         panelContainer->setPosition({ "parent.width / 2 - width / 2", "0%" });
 
-        auto panel = WidgetBuilder::createPanel();
+        auto panel = tgui::Panel::create();
         panel->getRenderer()->setTextureBackground(ttexture);
 
         container->add(panel);
@@ -139,21 +138,23 @@ namespace priv
 priv::LayoutBuilderWithBackground
 DefaultLayoutBuilder::withBackgroundImage(const sf::Texture& texture)
 {
-    auto&& bgr = WidgetBuilder::createPanel();
+    auto&& bgr = tgui::Panel::create();
     bgr->getRenderer()->setTextureBackground(
         TguiHelper::convertTexture(texture));
-    return priv::LayoutBuilderWithBackground(bgr, buildProperties());
+    return priv::LayoutBuilderWithBackground(
+        bgr, buildProperties(sizer), sizer);
 }
 
 priv::LayoutBuilderWithBackground DefaultLayoutBuilder::withNoBackgroundImage()
 {
     return priv::LayoutBuilderWithBackground(
-        WidgetBuilder::createPanel(), buildProperties());
+        tgui::Panel::create(), buildProperties(sizer), sizer);
 }
 
-priv::BuilderProperties DefaultLayoutBuilder::buildProperties()
+priv::BuilderProperties
+DefaultLayoutBuilder::buildProperties(const Sizers& sizer)
 {
-    const auto baseHeight = Sizers::getBaseContainerHeight();
+    const auto baseHeight = sizer.getBaseContainerHeight();
 
     return priv::BuilderProperties {
         .baseHeight = baseHeight,

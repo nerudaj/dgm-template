@@ -1,7 +1,6 @@
 #include "gui/Sizers.hpp"
 
 constexpr float CONTAINER_PADDING_MULTIPLIER = 2.55f;
-static inline float UI_SCALE = 1.f;
 
 #ifdef ANDROID
 
@@ -56,36 +55,36 @@ private:
     float pixelDensity = 0.f;
 };
 
-unsigned Sizers::getBaseContainerHeight()
-{
-    return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight();
-}
+unsigned Sizers::getBaseContainerHeight() {}
 
-unsigned Sizers::getBaseFontSize()
-{
-    return BaseSizeProviderSingleton::getInstance().getBaseFontSize();
-}
+unsigned Sizers::getBaseFontSize() {}
 #else
 #include <Windows.h>
+#endif
 
-unsigned Sizers::getBaseContainerHeight()
+unsigned Sizers::getBaseContainerHeight() const
 {
+#ifdef ANDROID
+    return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight()
+           * settings.uiScale;
+#else
     const unsigned dpi = GetDpiForSystem();
     return static_cast<unsigned>(
         (GetSystemMetricsForDpi(SM_CYCAPTION, dpi)
          + GetSystemMetricsForDpi(SM_CYSIZEFRAME, dpi)
          + GetSystemMetricsForDpi(SM_CYEDGE, dpi) * 2)
-        * UI_SCALE);
-}
-
-unsigned Sizers::getBaseFontSize()
-{
-    return static_cast<unsigned>(
-        getBaseContainerHeight() / CONTAINER_PADDING_MULTIPLIER * UI_SCALE);
-}
+        * settings.uiScale);
 #endif
+}
 
-void Sizers::setUiScale(float scale)
+unsigned Sizers::getBaseFontSize() const
 {
-    UI_SCALE = scale;
+#ifdef ANDROID
+    return BaseSizeProviderSingleton::getInstance().getBaseFontSize()
+           * settings.uiScale;
+#else
+    return static_cast<unsigned>(
+        getBaseContainerHeight() / CONTAINER_PADDING_MULTIPLIER
+        * settings.uiScale);
+#endif
 }

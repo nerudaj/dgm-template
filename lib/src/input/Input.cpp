@@ -24,12 +24,12 @@ bool Input::isJumpPressed() const
            || touchController.isJumpPressed();
 }
 
-NODISCARD_RESULT bool Input::isMenuCycleLeftPressed() const
+[[nodiscard]] bool Input::isMenuCycleLeftPressed() const
 {
     return readAndRelease(InputKind::MenuCycleLeft);
 }
 
-NODISCARD_RESULT bool Input::isMenuCycleRightPressed() const
+[[nodiscard]] bool Input::isMenuCycleRightPressed() const
 {
     return readAndRelease(InputKind::MenuCycleRight);
 }
