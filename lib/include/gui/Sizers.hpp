@@ -2,16 +2,16 @@
 
 #include "settings/VideoSettings.hpp"
 
-class [[nodiscard]] Sizers final
+class [[nodiscard]] Sizer final
 {
 public:
-    constexpr explicit Sizers(const VideoSettings& settings) noexcept
+    constexpr explicit Sizer(const VideoSettings& settings) noexcept
         : settings(settings)
     {
     }
 
-    Sizers(Sizers&&) = default;
-    Sizers(const Sizers&) = delete;
+    Sizer(Sizer&&) = default;
+    Sizer(const Sizer&) = delete;
 
 public:
     [[nodiscard]] unsigned getBaseFontSize() const;

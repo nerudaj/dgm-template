@@ -26,7 +26,7 @@ class [[nodiscard]] TabbedLayoutBuilder final
 {
 public:
     TabbedLayoutBuilder(
-        const StringProvider& strings, const Sizers& sizer) noexcept
+        const StringProvider& strings, const Sizer& sizer) noexcept
         : strings(strings), sizer(sizer)
     {
     }
@@ -51,7 +51,7 @@ private:
 
 private:
     const StringProvider& strings;
-    const Sizers& sizer;
+    const Sizer& sizer;
     std::vector<std::string> tabNames;
     std::map<std::string, std::function<void(tgui::Container::Ptr)>>
         tabCallbacks;

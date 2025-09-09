@@ -20,7 +20,7 @@
 tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     const std::string& text,
     const float sizeMultiplier,
-    const Sizers& sizer,
+    const Sizer& sizer,
     const bool justify)
 {
     auto&& label = tgui::Label::create(text);
@@ -34,7 +34,7 @@ tgui::Label::Ptr WidgetBuilder::createLabelInternal(
     return label;
 }
 
-tgui::Container::Ptr WidgetBuilder::createRow(const Sizers& sizer)
+tgui::Container::Ptr WidgetBuilder::createRow(const Sizer& sizer)
 {
     return tgui::Group::create({ "100%", sizer.getBaseContainerHeight() });
 }
@@ -42,7 +42,7 @@ tgui::Container::Ptr WidgetBuilder::createRow(const Sizers& sizer)
 tgui::Button::Ptr WidgetBuilder::createButton(
     const Label& label,
     std::function<void(void)> onClick,
-    const Sizers& sizer,
+    const Sizer& sizer,
     WidgetOptions options)
 {
     auto&& button = tgui::Button::create(label);
@@ -58,7 +58,7 @@ tgui::Button::Ptr WidgetBuilder::createButton(
 [[nodiscard]] tgui::Button::Ptr WidgetBuilder::createRowButton(
     const Label& label,
     std::function<void(void)> onClick,
-    const Sizers& sizer,
+    const Sizer& sizer,
     WidgetOptions options)
 {
     auto&& button = createButton(label, onClick, sizer, options);
@@ -87,7 +87,7 @@ tgui::Container::Ptr WidgetBuilder::createSlider(
     float value,
     std::function<void(float)> onChange,
     Gui& gui,
-    const Sizers& sizer,
+    const Sizer& sizer,
     const SliderProperties& properties,
     WidgetOptions options)
 {
@@ -135,7 +135,7 @@ tgui::ComboBox::Ptr WidgetBuilder::createDropdown(
     const std::vector<std::string>& items,
     const std::string& selected,
     std::function<void(std::size_t)> onSelect,
-    const Sizers& sizer,
+    const Sizer& sizer,
     WidgetOptions options)
 {
     auto&& dropdown = tgui::ComboBox::create();
@@ -154,7 +154,7 @@ tgui::ComboBox::Ptr WidgetBuilder::createDropdown(
 tgui::EditBox::Ptr WidgetBuilder::createTextInput(
     const std::string& initialValue,
     std::function<void(tgui::String)> onChange,
-    const Sizers& sizer,
+    const Sizer& sizer,
     const std::string& regexValidator,
     WidgetOptions options)
 {
@@ -174,7 +174,7 @@ tgui::EditBox::Ptr WidgetBuilder::createTextInput(
 tgui::Tabs::Ptr WidgetBuilder::createTabs(
     const std::vector<Label>& tabLabels,
     std::function<void(const tgui::String&)> onTabChange,
-    const Sizers& sizer,
+    const Sizer& sizer,
     WidgetOptions options)
 {
     auto&& tabs = tgui::Tabs::create();

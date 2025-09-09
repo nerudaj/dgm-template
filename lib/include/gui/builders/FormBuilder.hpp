@@ -18,7 +18,7 @@ struct [[nodiscard]] OptionConfig final
 class [[nodiscard]] FormBuilder final
 {
 public:
-    FormBuilder(const StringProvider& strings, const Sizers& sizer) noexcept
+    FormBuilder(const StringProvider& strings, const Sizer& sizer) noexcept
         : strings(strings), sizer(sizer)
     {
     }
@@ -69,6 +69,6 @@ private:
     };
 
     const StringProvider& strings;
-    const Sizers& sizer;
+    const Sizer& sizer;
     std::vector<RowProps> rowsToBuild;
 };

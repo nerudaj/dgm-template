@@ -13,7 +13,7 @@ class [[nodiscard]] ButtonListBuilder final
 {
 public:
     ButtonListBuilder(
-        const StringProvider& strings, const Sizers& sizer) noexcept
+        const StringProvider& strings, const Sizer& sizer) noexcept
         : strings(strings), sizer(sizer)
     {
     }
@@ -41,6 +41,6 @@ private:
     };
 
     const StringProvider& strings;
-    const Sizers& sizer;
+    const Sizer& sizer;
     std::vector<ButtonProps> buttonProps;
 };

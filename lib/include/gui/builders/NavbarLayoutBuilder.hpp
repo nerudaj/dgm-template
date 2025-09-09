@@ -15,7 +15,7 @@ namespace priv
             tgui::Widget::Ptr widget,
             tgui::Container::Ptr content,
             const std::optional<std::string>& contentPanelId,
-            const Sizers& sizer)
+            const Sizer& sizer)
             : widget(widget)
             , content(content)
             , contentPanelId(contentPanelId)
@@ -31,14 +31,14 @@ namespace priv
         tgui::Widget::Ptr widget;
         tgui::Container::Ptr content;
         const std::optional<std::string>& contentPanelId;
-        const Sizers& sizer;
+        const Sizer& sizer;
     };
 
     class [[nodiscard]] NavbarLayoutWithNavbarWidgetBuilder final
     {
     public:
         NavbarLayoutWithNavbarWidgetBuilder(
-            tgui::Widget::Ptr widget, const Sizers& sizer)
+            tgui::Widget::Ptr widget, const Sizer& sizer)
             : widget(widget), sizer(sizer) {};
         NavbarLayoutWithNavbarWidgetBuilder(
             const NavbarLayoutWithNavbarWidgetBuilder&) = delete;
@@ -57,14 +57,14 @@ namespace priv
 
     private:
         tgui::Widget::Ptr widget;
-        const Sizers& sizer;
+        const Sizer& sizer;
     };
 } // namespace priv
 
 class [[nodiscard]] NavbarLayoutBuilder final
 {
 public:
-    constexpr explicit NavbarLayoutBuilder(const Sizers& sizer) noexcept
+    constexpr explicit NavbarLayoutBuilder(const Sizer& sizer) noexcept
         : sizer(sizer)
     {
     }
@@ -81,5 +81,5 @@ public:
     }
 
 private:
-    const Sizers& sizer;
+    const Sizer& sizer;
 };

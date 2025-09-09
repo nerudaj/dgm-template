@@ -152,7 +152,7 @@ priv::LayoutBuilderWithBackground DefaultLayoutBuilder::withNoBackgroundImage()
 }
 
 priv::BuilderProperties
-DefaultLayoutBuilder::buildProperties(const Sizers& sizer)
+DefaultLayoutBuilder::buildProperties(const Sizer& sizer)
 {
     const auto baseHeight = sizer.getBaseContainerHeight();
 

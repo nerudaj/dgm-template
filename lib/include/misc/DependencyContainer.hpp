@@ -18,7 +18,7 @@ struct [[nodiscard]] DependencyContainer final
     TouchController touchController;
     Input input;
     VirtualCursor virtualCursor;
-    Sizers sizer;
+    Sizer sizer;
 
     DependencyContainer(
         dgm::Window& window,

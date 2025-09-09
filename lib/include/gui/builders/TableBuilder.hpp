@@ -13,13 +13,13 @@ namespace priv
     class [[nodiscard]] TableBuilder final
     {
     public:
-        constexpr explicit TableBuilder(const Sizers& sizer) noexcept
+        constexpr explicit TableBuilder(const Sizer& sizer) noexcept
             : sizer(sizer)
         {
         }
 
         constexpr explicit TableBuilder(
-            const Sizers& sizer, const std::vector<std::string>& headingCells)
+            const Sizer& sizer, const std::vector<std::string>& headingCells)
             : sizer(sizer), heading(headingCells)
         {
         }
@@ -31,7 +31,7 @@ namespace priv
         [[nodiscard]] tgui::Widget::Ptr build();
 
     private:
-        const Sizers& sizer;
+        const Sizer& sizer;
         std::optional<std::vector<std::string>> heading;
         std::vector<std::vector<tgui::Widget::Ptr>> rowsOfCells;
     };
@@ -40,7 +40,7 @@ namespace priv
 class [[nodiscard]] TableBuilder final
 {
 public:
-    constexpr explicit TableBuilder(const Sizers& sizer) noexcept : sizer(sizer)
+    constexpr explicit TableBuilder(const Sizer& sizer) noexcept : sizer(sizer)
     {
     }
 
@@ -59,5 +59,5 @@ public:
     }
 
 private:
-    const Sizers& sizer;
+    const Sizer& sizer;
 };

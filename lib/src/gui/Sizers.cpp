@@ -55,14 +55,14 @@ private:
     float pixelDensity = 0.f;
 };
 
-unsigned Sizers::getBaseContainerHeight() {}
+unsigned Sizer::getBaseContainerHeight() {}
 
-unsigned Sizers::getBaseFontSize() {}
+unsigned Sizer::getBaseFontSize() {}
 #else
 #include <Windows.h>
 #endif
 
-unsigned Sizers::getBaseContainerHeight() const
+unsigned Sizer::getBaseContainerHeight() const
 {
 #ifdef ANDROID
     return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight()
@@ -77,7 +77,7 @@ unsigned Sizers::getBaseContainerHeight() const
 #endif
 }
 
-unsigned Sizers::getBaseFontSize() const
+unsigned Sizer::getBaseFontSize() const
 {
 #ifdef ANDROID
     return BaseSizeProviderSingleton::getInstance().getBaseFontSize()

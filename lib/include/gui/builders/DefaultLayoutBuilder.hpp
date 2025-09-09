@@ -155,7 +155,7 @@ namespace priv
         LayoutBuilderWithBackground(
             tgui::Panel::Ptr container,
             const BuilderProperties& props,
-            const Sizers& sizer)
+            const Sizer& sizer)
             : sizer(sizer), container(container), props(props)
         {
         }
@@ -168,7 +168,7 @@ namespace priv
         withTexturedTitle(const sf::Texture& texture);
 
     private:
-        const Sizers& sizer;
+        const Sizer& sizer;
         tgui::Panel::Ptr container;
         BuilderProperties props;
     };
@@ -177,7 +177,7 @@ namespace priv
 class [[nodiscard]] DefaultLayoutBuilder final
 {
 public:
-    constexpr explicit DefaultLayoutBuilder(const Sizers& sizer) noexcept
+    constexpr explicit DefaultLayoutBuilder(const Sizer& sizer) noexcept
         : sizer(sizer)
     {
     }
@@ -189,8 +189,8 @@ public:
     priv::LayoutBuilderWithBackground withNoBackgroundImage();
 
 private:
-    static priv::BuilderProperties buildProperties(const Sizers& sizer);
+    static priv::BuilderProperties buildProperties(const Sizer& sizer);
 
 private:
-    const Sizers& sizer;
+    const Sizer& sizer;
 };

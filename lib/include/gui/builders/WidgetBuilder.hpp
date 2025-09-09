@@ -35,34 +35,34 @@ public:
 
 public:
     static [[nodiscard]] inline tgui::Label::Ptr createTextLabel(
-        const std::string& text, const Sizers& sizer, bool justify = false)
+        const std::string& text, const Sizer& sizer, bool justify = false)
     {
         return createLabelInternal(text, 1.f, sizer, justify);
     }
 
     static [[nodiscard]] inline tgui::Label::Ptr createHeading(
         const std::string& text,
-        const Sizers& sizer,
+        const Sizer& sizer,
         HeadingLevel level = HeadingLevel::H1)
     {
         return createLabelInternal(
             text, level == HeadingLevel::H1 ? 4.f : 2.f, sizer, true);
     }
 
-    static [[nodiscard]] tgui::Container::Ptr createRow(const Sizers& sizer);
+    static [[nodiscard]] tgui::Container::Ptr createRow(const Sizer& sizer);
 
     // Create button with 100% size of the parent (but default font size)
     static [[nodiscard]] tgui::Button::Ptr createButton(
         const Label& label,
         std::function<void(void)> onClick,
-        const Sizers& sizer,
+        const Sizer& sizer,
         WidgetOptions options = WidgetOptions {});
 
     // Create a button that can fit inside an option row
     static [[nodiscard]] tgui::Button::Ptr createRowButton(
         const Label& label,
         std::function<void(void)> onClick,
-        const Sizers& sizer,
+        const Sizer& sizer,
         WidgetOptions options = WidgetOptions {});
 
     static [[nodiscard]] tgui::CheckBox::Ptr createCheckbox(
@@ -74,7 +74,7 @@ public:
         float value,
         std::function<void(float)> onChange,
         Gui& gui,
-        const Sizers& sizer,
+        const Sizer& sizer,
         const SliderProperties& properties = {},
         WidgetOptions options = {});
 
@@ -82,13 +82,13 @@ public:
         const std::vector<std::string>& items,
         const std::string& selected,
         std::function<void(std::size_t)> onSelect,
-        const Sizers& sizer,
+        const Sizer& sizer,
         WidgetOptions options = {});
 
     static [[nodiscard]] tgui::EditBox::Ptr createTextInput(
         const std::string& initialValue,
         std::function<void(tgui::String)> onChange,
-        const Sizers& sizer,
+        const Sizer& sizer,
         const std::string& regexValidator = "",
         WidgetOptions options = {});
 
@@ -116,7 +116,7 @@ public:
     static [[nodiscard]] tgui::Tabs::Ptr createTabs(
         const std::vector<Label>& tabLabels,
         std::function<void(const tgui::String&)> onTabChange,
-        const Sizers& sizer,
+        const Sizer& sizer,
         WidgetOptions options = {});
 
     static [[nodiscard]] tgui::SeparatorLine::Ptr createSeparator();
@@ -137,7 +137,7 @@ private:
     static [[nodiscard]] tgui::Label::Ptr createLabelInternal(
         const std::string& text,
         const float sizeMultiplier,
-        const Sizers& sizer,
+        const Sizer& sizer,
         const bool justify = false);
 
     static void
