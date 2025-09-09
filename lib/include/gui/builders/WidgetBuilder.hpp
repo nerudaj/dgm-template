@@ -34,13 +34,13 @@ public:
     using Label = std::string;
 
 public:
-    static [[nodiscard]] inline tgui::Label::Ptr createTextLabel(
+    [[nodiscard]] static inline tgui::Label::Ptr createTextLabel(
         const std::string& text, const Sizer& sizer, bool justify = false)
     {
         return createLabelInternal(text, 1.f, sizer, justify);
     }
 
-    static [[nodiscard]] inline tgui::Label::Ptr createHeading(
+    [[nodiscard]] static inline tgui::Label::Ptr createHeading(
         const std::string& text,
         const Sizer& sizer,
         HeadingLevel level = HeadingLevel::H1)
@@ -49,28 +49,28 @@ public:
             text, level == HeadingLevel::H1 ? 4.f : 2.f, sizer, true);
     }
 
-    static [[nodiscard]] tgui::Container::Ptr createRow(const Sizer& sizer);
+    [[nodiscard]] static tgui::Container::Ptr createRow(const Sizer& sizer);
 
     // Create button with 100% size of the parent (but default font size)
-    static [[nodiscard]] tgui::Button::Ptr createButton(
+    [[nodiscard]] static tgui::Button::Ptr createButton(
         const Label& label,
         std::function<void(void)> onClick,
         const Sizer& sizer,
         WidgetOptions options = WidgetOptions {});
 
     // Create a button that can fit inside an option row
-    static [[nodiscard]] tgui::Button::Ptr createRowButton(
+    [[nodiscard]] static tgui::Button::Ptr createRowButton(
         const Label& label,
         std::function<void(void)> onClick,
         const Sizer& sizer,
         WidgetOptions options = WidgetOptions {});
 
-    static [[nodiscard]] tgui::CheckBox::Ptr createCheckbox(
+    [[nodiscard]] static tgui::CheckBox::Ptr createCheckbox(
         bool checked,
         std::function<void(bool)> onChange,
         WidgetOptions options = {});
 
-    static [[nodiscard]] tgui::Container::Ptr createSlider(
+    [[nodiscard]] static tgui::Container::Ptr createSlider(
         float value,
         std::function<void(float)> onChange,
         Gui& gui,
@@ -78,14 +78,14 @@ public:
         const SliderProperties& properties = {},
         WidgetOptions options = {});
 
-    static [[nodiscard]] tgui::ComboBox::Ptr createDropdown(
+    [[nodiscard]] static tgui::ComboBox::Ptr createDropdown(
         const std::vector<std::string>& items,
         const std::string& selected,
         std::function<void(std::size_t)> onSelect,
         const Sizer& sizer,
         WidgetOptions options = {});
 
-    static [[nodiscard]] tgui::EditBox::Ptr createTextInput(
+    [[nodiscard]] static tgui::EditBox::Ptr createTextInput(
         const std::string& initialValue,
         std::function<void(tgui::String)> onChange,
         const Sizer& sizer,
@@ -93,7 +93,7 @@ public:
         WidgetOptions options = {});
 
     template<std::integral Number>
-    static [[nodiscard]] tgui::EditBox::Ptr createNumericInput(
+    [[nodiscard]] static tgui::EditBox::Ptr createNumericInput(
         Number value,
         std::function<void(Number)> onChange,
         const std::string& validator = getUnsignedNumericValidator(),
@@ -113,28 +113,28 @@ public:
             options);
     }
 
-    static [[nodiscard]] tgui::Tabs::Ptr createTabs(
+    [[nodiscard]] static tgui::Tabs::Ptr createTabs(
         const std::vector<Label>& tabLabels,
         std::function<void(const tgui::String&)> onTabChange,
         const Sizer& sizer,
         WidgetOptions options = {});
 
-    static [[nodiscard]] tgui::SeparatorLine::Ptr createSeparator();
+    [[nodiscard]] static tgui::SeparatorLine::Ptr createSeparator();
 
-    static [[nodiscard]] constexpr std::string
+    [[nodiscard]] static constexpr std::string
     getUnsignedNumericValidator() noexcept
     {
         return "(0|[1-9][0-9]*)";
     }
 
-    static [[nodiscard]] constexpr std::string
+    [[nodiscard]] static constexpr std::string
     getPositiveNumericValidator() noexcept
     {
         return "[1-9][0-9]*";
     }
 
 private:
-    static [[nodiscard]] tgui::Label::Ptr createLabelInternal(
+    [[nodiscard]] static tgui::Label::Ptr createLabelInternal(
         const std::string& text,
         const float sizeMultiplier,
         const Sizer& sizer,
