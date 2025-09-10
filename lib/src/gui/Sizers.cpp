@@ -54,10 +54,6 @@ private:
 private:
     float pixelDensity = 0.f;
 };
-
-unsigned Sizer::getBaseContainerHeight() {}
-
-unsigned Sizer::getBaseFontSize() {}
 #else
 #include <Windows.h>
 #endif
