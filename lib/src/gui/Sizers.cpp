@@ -48,7 +48,7 @@ public:
 private:
     static unsigned spToPx(unsigned sp, float density)
     {
-        return static_cast<unsigned>(sp * density * UI_SCALE);
+        return static_cast<unsigned>(sp * density);
     }
 
 private:
