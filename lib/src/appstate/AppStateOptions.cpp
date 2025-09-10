@@ -257,7 +257,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
     auto buttonOrNothing = [&](tgui::Button::Ptr ptr,
                                bool useNothing) -> tgui::Widget::Ptr
     {
-        if (useNothing) WidgetBuilder::createTextLabel("", dic.sizer);
+        if (useNothing) return WidgetBuilder::createTextLabel("", dic.sizer);
         return ptr;
     };
 
