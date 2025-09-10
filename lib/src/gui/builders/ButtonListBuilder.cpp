@@ -26,14 +26,17 @@ ButtonListBuilder::build(tgui::HorizontalAlignment alignment)
         layout->setPosition({ "25%", "0%" });
     else
         layout->setPosition({ "50%", "0%" });
-    layout->getRenderer()->setSpaceBetweenWidgets(Sizers::getBaseFontSize());
+    layout->getRenderer()->setSpaceBetweenWidgets(sizer.getBaseFontSize());
 
     for (auto&& [idx, props] : std::views::enumerate(buttonProps))
     {
+        auto group = tgui::Group::create(
+            { "100%", sizer.getBaseContainerHeight() * 1.5f });
         auto&& button =
-            WidgetBuilder::createMenuButton(props.label, props.onClick);
+            WidgetBuilder::createButton(props.label, props.onClick, sizer);
+        group->add(button, props.buttonId);
 
-        layout->add(button, props.buttonId);
+        layout->add(group);
     }
 
     return layout;

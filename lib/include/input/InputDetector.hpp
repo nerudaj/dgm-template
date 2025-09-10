@@ -53,7 +53,7 @@ public:
 
     void update();
 
-    NODISCARD_RESULT bool isDetectionInProgress() const noexcept
+    [[nodiscard]] bool isDetectionInProgress() const noexcept
     {
         return runMode != RunMode::Idle;
     }
@@ -80,7 +80,7 @@ private:
 
     DetectionStatus tryMouse();
 
-    NODISCARD_RESULT bool isAnyInputPressed() const;
+    [[nodiscard]] bool isAnyInputPressed() const;
 
 private:
     RunMode runMode = RunMode::Idle;

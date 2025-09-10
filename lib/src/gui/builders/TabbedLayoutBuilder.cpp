@@ -38,12 +38,13 @@ TabbedLayoutBuilder::build(const TabbedLayoutOptions& options)
                 }
             }
         },
+        sizer,
         WidgetOptions {
             .id = options.tabsWidgetId,
         });
     tabs->select(selectedTab);
 
-    return NavbarLayoutBuilder()
+    return NavbarLayoutBuilder(sizer)
         .withNavbarWidget(tabs)
         .withContent(content, options.contentWidgetId)
         .build();

@@ -65,11 +65,11 @@ void AppStateOptions::draw()
 void AppStateOptions::buildLayout()
 {
     dic.gui.rebuildWith(
-        DefaultLayoutBuilder()
+        DefaultLayoutBuilder(dic.sizer)
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::Options), HeadingLevel::H1)
-            .withContent(TabbedLayoutBuilder(dic.strings)
+            .withContent(TabbedLayoutBuilder(dic.strings, dic.sizer)
                              .addTab(
                                  StringId::VideoOptionsTab,
                                  [&](tgui::Container::Ptr content)
@@ -94,7 +94,9 @@ void AppStateOptions::buildLayout()
             .withNoTopLeftButton()
             .withNoTopRightButton()
             .withBottomLeftButton(WidgetBuilder::createButton(
-                dic.strings.getString(StringId::Back), [&] { onBack(); }))
+                dic.strings.getString(StringId::Back),
+                [&] { onBack(); },
+                dic.sizer))
             .withNoBottomRightButton()
             .build());
 }
@@ -108,7 +110,7 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings)
+        FormBuilder(dic.strings, dic.sizer)
 #ifndef ANDROID
             .addOption(
                 StringId::EnableFullscreen,
@@ -128,18 +130,16 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                     {
                         onResolutionSelected(
                             sf::VideoMode::getFullscreenModes()[idx].size);
-                    }))
+                    },
+                    dic.sizer))
 #endif
             .addOptionWithSubmit(
                 StringId::SetUiScale,
                 WidgetBuilder::createSlider(
                     settings.video.uiScale,
-                    [&](float val)
-                    {
-                        settings.video.uiScale = val;
-                        Sizers::setUiScale(val);
-                    },
+                    [&](float val) { settings.video.uiScale = val; },
                     dic.gui,
+                    dic.sizer,
                     SliderProperties {
                         .valueFormatter = [](float val)
                         { return uni::format("{:.1f}", val); },
@@ -148,7 +148,9 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                         .step = 0.1f,
                     }),
                 WidgetBuilder::createButton(
-                    dic.strings.getString(StringId::Apply), [&] { refresh(); }))
+                    dic.strings.getString(StringId::Apply),
+                    [&] { refresh(); },
+                    dic.sizer))
 #ifdef _DEBUG
             .addOption(
                 StringId::SetTheme,
@@ -161,7 +163,8 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                             dic.resmgr.getLoadedResourceIds<tgui::Theme::Ptr>()
                                 .value()[idx]));
                         refresh();
-                    }))
+                    },
+                    dic.sizer))
 #endif
             .build());
 }
@@ -170,13 +173,14 @@ void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings)
+        FormBuilder(dic.strings, dic.sizer)
             .addOption(
                 StringId::MusicVolume,
                 WidgetBuilder::createSlider(
                     settings.audio.musicVolume,
                     [&](float val) { settings.audio.musicVolume = val; },
                     dic.gui,
+                    dic.sizer,
                     SliderProperties { .valueFormatter = intValueFormatter,
                                        .low = 0.f,
                                        .high = 100.f,
@@ -187,6 +191,7 @@ void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
                     settings.audio.soundVolume,
                     [&](float val) { settings.audio.soundVolume = val; },
                     dic.gui,
+                    dic.sizer,
                     SliderProperties { .valueFormatter = intValueFormatter,
                                        .low = 0.f,
                                        .high = 100.f,
@@ -198,13 +203,14 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings)
+        FormBuilder(dic.strings, dic.sizer)
             .addOption(
                 StringId::GamepadDeadzone,
                 WidgetBuilder::createSlider(
                     settings.input.gamepadDeadzone,
                     [&](float val) { settings.input.gamepadDeadzone = val; },
                     dic.gui,
+                    dic.sizer,
                     SliderProperties { .valueFormatter = intValueFormatter,
                                        .low = 0.f,
                                        .high = 100.f,
@@ -215,6 +221,7 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
                     settings.input.cursorSpeed,
                     [&](float val) { settings.input.cursorSpeed = val; },
                     dic.gui,
+                    dic.sizer,
                     SliderProperties { .valueFormatter = intValueFormatter,
                                        .low = 100.f,
                                        .high = 1000.f,
@@ -241,16 +248,16 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
     auto&& inputKindMapper = InputKindToStringMapper(dic.strings);
     auto&& hwInputMapper = HwInputToStringMapper();
 
-    auto tableBuilder = TableBuilder().withHeading({
+    auto tableBuilder = TableBuilder(dic.sizer).withHeading({
         dic.strings.getString(StringId::BindingHeadingAction),
         dic.strings.getString(StringId::BindingHeadingKMB),
         dic.strings.getString(StringId::BindingsHeadingGamepad),
     });
 
-    auto buttonOrNothing = [](tgui::Button::Ptr ptr,
-                              bool useNothing) -> tgui::Widget::Ptr
+    auto buttonOrNothing = [&](tgui::Button::Ptr ptr,
+                               bool useNothing) -> tgui::Widget::Ptr
     {
-        if (useNothing) WidgetBuilder::createTextLabel("");
+        if (useNothing) return WidgetBuilder::createTextLabel("", dic.sizer);
         return ptr;
     };
 
@@ -268,7 +275,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                 doesVariantContain(gamepadBinding, std::monostate {});
 
             auto label = WidgetBuilder::createTextLabel(
-                inputKindMapper.inputKindToString(action));
+                inputKindMapper.inputKindToString(action), dic.sizer);
             label->getRenderer()->setPadding({ "5%", "0%", "0%", "0%" });
 
             tableBuilder.addRow({
@@ -284,6 +291,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                             app.pushState<AppStateInputDetector>(
                                 dic, settings.input, std::move(callback));
                         },
+                        dic.sizer,
                         WidgetOptions { .id =
                                             getBindButtonId<KmbBinding>(action),
                                         .enabled = !isEscapeKey }),
@@ -299,6 +307,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                             app.pushState<AppStateInputDetector>(
                                 dic, settings.input, std::move(callback));
                         },
+                        dic.sizer,
                         WidgetOptions {
                             .id = getBindButtonId<GamepadBinding>(action),
                         }),

@@ -5,7 +5,7 @@ namespace priv
 {
     tgui::Container::Ptr FinalNavbarLayoutBuilder::build()
     {
-        const auto containerHeight = Sizers::getBaseContainerHeight();
+        const auto containerHeight = sizer.getBaseContainerHeight();
         auto result = tgui::Group::create();
 
         auto navbarSection = tgui::Group::create({ "100%", containerHeight });

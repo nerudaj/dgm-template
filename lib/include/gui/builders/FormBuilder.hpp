@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/Sizers.hpp"
 #include "strings/StringProvider.hpp"
 #include <DGM/classes/Compatibility.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -12,13 +13,15 @@
 struct [[nodiscard]] OptionConfig final
 {
     bool disabled = false;
-    std::optional<std::string> tooltipText = {};
 };
 
 class [[nodiscard]] FormBuilder final
 {
 public:
-    FormBuilder(const StringProvider& strings) noexcept : strings(strings) {}
+    FormBuilder(const StringProvider& strings, const Sizer& sizer) noexcept
+        : strings(strings), sizer(sizer)
+    {
+    }
 
     FormBuilder(const FormBuilder&) = delete;
     FormBuilder(FormBuilder&&) = delete;
@@ -42,16 +45,15 @@ public:
 
     FormBuilder& addSeparator();
 
-    NODISCARD_RESULT tgui::Container::Ptr build();
+    [[nodiscard]] tgui::Container::Ptr build();
 
 private:
-    static NODISCARD_RESULT tgui::Container::Ptr createOptionRow(
+    [[nodiscard]] tgui::Container::Ptr createOptionRow(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         std::optional<std::string> widgetId);
 
-    static NODISCARD_RESULT tgui::Container::Ptr
-    createOptionRowWithSubmitButton(
+    [[nodiscard]] tgui::Container::Ptr createOptionRowWithSubmitButton(
         const std::string& labelText,
         tgui::Widget::Ptr widgetPtr,
         tgui::Button::Ptr buttonPtr);
@@ -64,9 +66,9 @@ private:
         tgui::Widget::Ptr widget;
         std::optional<std::string> widgetId = {};
         std::optional<tgui::Button::Ptr> submitBtn = {};
-        std::optional<std::string> tooltipText = {};
     };
 
     const StringProvider& strings;
+    const Sizer& sizer;
     std::vector<RowProps> rowsToBuild;
 };

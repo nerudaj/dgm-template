@@ -18,6 +18,7 @@ struct [[nodiscard]] DependencyContainer final
     TouchController touchController;
     Input input;
     VirtualCursor virtualCursor;
+    Sizer sizer;
 
     DependencyContainer(
         dgm::Window& window,
@@ -36,8 +37,8 @@ struct [[nodiscard]] DependencyContainer final
               window.getSfmlWindowContext(),
               input,
               resmgr.get<sf::Texture>("cursor.png"))
+        , sizer(settings.video)
     {
-        Sizers::setUiScale(settings.video.uiScale);
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
         // NOTE: You can create your own theme file and use it here
         gui.setTheme(resmgr.get<tgui::Theme::Ptr>("Pico8.txt"));

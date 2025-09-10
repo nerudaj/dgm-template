@@ -1,11 +1,23 @@
 #pragma once
 
-class Sizers final
+#include "settings/VideoSettings.hpp"
+
+class [[nodiscard]] Sizer final
 {
 public:
-    [[nodiscard]] static unsigned getBaseFontSize();
+    constexpr explicit Sizer(const VideoSettings& settings) noexcept
+        : settings(settings)
+    {
+    }
 
-    [[nodiscard]] static unsigned getBaseContainerHeight();
+    Sizer(Sizer&&) = default;
+    Sizer(const Sizer&) = delete;
 
-    static void setUiScale(float scale);
+public:
+    [[nodiscard]] unsigned getBaseFontSize() const;
+
+    [[nodiscard]] unsigned getBaseContainerHeight() const;
+
+private:
+    const VideoSettings& settings;
 };

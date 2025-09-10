@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
@@ -12,11 +13,14 @@ namespace priv
     class [[nodiscard]] TableBuilder final
     {
     public:
-        constexpr TableBuilder() noexcept {}
+        constexpr explicit TableBuilder(const Sizer& sizer) noexcept
+            : sizer(sizer)
+        {
+        }
 
-        explicit constexpr TableBuilder(
-            const std::vector<std::string>& headingCells)
-            : heading(headingCells)
+        constexpr explicit TableBuilder(
+            const Sizer& sizer, const std::vector<std::string>& headingCells)
+            : sizer(sizer), heading(headingCells)
         {
         }
 
@@ -24,9 +28,10 @@ namespace priv
 
         void addSeparator();
 
-        NODISCARD_RESULT tgui::Widget::Ptr build();
+        [[nodiscard]] tgui::Widget::Ptr build();
 
     private:
+        const Sizer& sizer;
         std::optional<std::vector<std::string>> heading;
         std::vector<std::vector<tgui::Widget::Ptr>> rowsOfCells;
     };
@@ -35,14 +40,24 @@ namespace priv
 class [[nodiscard]] TableBuilder final
 {
 public:
+    constexpr explicit TableBuilder(const Sizer& sizer) noexcept : sizer(sizer)
+    {
+    }
+
+    TableBuilder(TableBuilder&&) = default;
+    TableBuilder(const TableBuilder&) = delete;
+
     constexpr priv::TableBuilder withNoHeading() const noexcept
     {
-        return priv::TableBuilder();
+        return priv::TableBuilder(sizer);
     }
 
     constexpr priv::TableBuilder
     withHeading(const std::vector<std::string>& cells)
     {
-        return priv::TableBuilder(cells);
+        return priv::TableBuilder(sizer, cells);
     }
+
+private:
+    const Sizer& sizer;
 };

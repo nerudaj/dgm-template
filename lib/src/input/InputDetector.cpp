@@ -110,7 +110,7 @@ InputDetector::DetectionStatus InputDetector::tryMouse()
     return DetectionStatus::None;
 }
 
-NODISCARD_RESULT bool InputDetector::isAnyInputPressed() const
+[[nodiscard]] bool InputDetector::isAnyInputPressed() const
 {
     for (auto&& axisIdx = 0; axisIdx < sf::Joystick::AxisCount; ++axisIdx)
         if (std::abs(sf::Joystick::getAxisPosition(

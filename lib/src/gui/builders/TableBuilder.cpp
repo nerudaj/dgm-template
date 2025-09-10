@@ -18,14 +18,14 @@ void priv::TableBuilder::addSeparator()
 }
 
 template<class Range>
-NODISCARD_RESULT static auto enumerate(Range&& range)
+[[nodiscard]] static auto enumerate(Range&& range)
 {
     return std::views::zip(
         std::views::iota(size_t { 0 }, std::ranges::size(range)),
         std::forward<Range>(range));
 }
 
-NODISCARD_RESULT static tgui::Container::Ptr
+[[nodiscard]] static tgui::Container::Ptr
 createCell(const tgui::Widget::Ptr& content, size_t column, size_t totalColumns)
 {
     size_t columnWidth = 100 / totalColumns;
@@ -59,12 +59,12 @@ tgui::Widget::Ptr priv::TableBuilder::build()
 
     if (heading)
     {
-        auto&& row = WidgetBuilder::createRow();
+        auto&& row = WidgetBuilder::createRow(sizer);
 
         for (auto&& [columnIdx, cellText] : enumerate(heading.value()))
         {
             row->add(createCell(
-                WidgetBuilder::createTextLabel(cellText, "justify"_true),
+                WidgetBuilder::createTextLabel(cellText, sizer, "justify"_true),
                 columnIdx,
                 columnCount));
         }
@@ -78,7 +78,7 @@ tgui::Widget::Ptr priv::TableBuilder::build()
     {
         auto&& color = rowIdx % 2 == 1 ? tgui::Color(128, 128, 128, 64)
                                        : tgui::Color::Transparent;
-        auto&& rowWidget = WidgetBuilder::createRow();
+        auto&& rowWidget = WidgetBuilder::createRow(sizer);
         addColoredBackground(rowWidget, color);
         rowWidget->setPosition({ "0%", rowWidget->getSize().y * rowIdx++ });
 

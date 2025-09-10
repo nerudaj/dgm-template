@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include "strings/StringProvider.hpp"
 #include <TGUI/Backend/SFML-Graphics.hpp>
@@ -11,7 +12,9 @@
 class [[nodiscard]] ButtonListBuilder final
 {
 public:
-    ButtonListBuilder(const StringProvider& strings) noexcept : strings(strings)
+    ButtonListBuilder(
+        const StringProvider& strings, const Sizer& sizer) noexcept
+        : strings(strings), sizer(sizer)
     {
     }
 
@@ -25,7 +28,7 @@ public:
         std::function<void(void)> onClick,
         const std::string& buttonId = "");
 
-    NODISCARD_RESULT tgui::Container::Ptr build(
+    [[nodiscard]] tgui::Container::Ptr build(
         tgui::HorizontalAlignment alignment =
             tgui::HorizontalAlignment::Center);
 
@@ -38,5 +41,6 @@ private:
     };
 
     const StringProvider& strings;
+    const Sizer& sizer;
     std::vector<ButtonProps> buttonProps;
 };

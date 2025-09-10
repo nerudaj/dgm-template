@@ -7,9 +7,10 @@ FormBuilder& FormBuilder::addOption(
     const StringId labelId, tgui::Widget::Ptr widget, OptionConfig config)
 {
     widget->setEnabled(!config.disabled);
-    rowsToBuild.push_back({ .label = strings.getString(labelId),
-                            .widget = widget,
-                            .tooltipText = config.tooltipText });
+    rowsToBuild.push_back({
+        .label = strings.getString(labelId),
+        .widget = widget,
+    });
     return *this;
 }
 
@@ -49,7 +50,7 @@ tgui::Container::Ptr FormBuilder::build()
     for (auto&& [idx, props] : std::views::enumerate(rowsToBuild))
     {
         auto&& row =
-            props.separator ? WidgetBuilder::createRow()
+            props.separator ? WidgetBuilder::createRow(sizer)
             : props.submitBtn
                 ? createOptionRowWithSubmitButton(
                       props.label, props.widget, props.submitBtn.value())
@@ -58,11 +59,6 @@ tgui::Container::Ptr FormBuilder::build()
         if (props.separator)
         {
             row->add(WidgetBuilder::createSeparator());
-        }
-        else if (props.tooltipText.has_value())
-        {
-            row->setToolTip(
-                WidgetBuilder::createTooltip(props.tooltipText.value()));
         }
 
         verticalLayout->add(row);
@@ -76,8 +72,8 @@ tgui::Container::Ptr FormBuilder::createOptionRow(
     tgui::Widget::Ptr widgetPtr,
     std::optional<std::string> widgetId)
 {
-    auto&& row = WidgetBuilder::createRow();
-    row->add(WidgetBuilder::createTextLabel(labelText));
+    auto&& row = WidgetBuilder::createRow(sizer);
+    row->add(WidgetBuilder::createTextLabel(labelText, sizer));
 
     auto&& widgetPanel = tgui::Group::create({ "40%", "100%" });
     widgetPanel->setPosition("60%", "0%");
@@ -105,8 +101,8 @@ tgui::Container::Ptr FormBuilder::createOptionRowWithSubmitButton(
     tgui::Widget::Ptr widgetPtr,
     tgui::Button::Ptr buttonPtr)
 {
-    auto&& row = WidgetBuilder::createRow();
-    row->add(WidgetBuilder::createTextLabel(labelText));
+    auto&& row = WidgetBuilder::createRow(sizer);
+    row->add(WidgetBuilder::createTextLabel(labelText, sizer));
 
     auto&& widgetContainer = tgui::Group::create({ "25%", "100%" });
     widgetContainer->setPosition("60%", "0%");
