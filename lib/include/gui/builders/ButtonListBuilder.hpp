@@ -29,8 +29,8 @@ public:
         const std::string& buttonId = "");
 
     [[nodiscard]] tgui::Container::Ptr build(
-        tgui::HorizontalAlignment alignment =
-            tgui::HorizontalAlignment::Center);
+        tgui::HorizontalAlignment alignment = tgui::HorizontalAlignment::Center,
+        tgui::VerticalAlignment vAlignment = tgui::VerticalAlignment::Center);
 
 private:
     struct ButtonProps
