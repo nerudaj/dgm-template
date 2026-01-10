@@ -5,8 +5,12 @@ configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/include/misc/CMakeVars.hpp"
 )
 
-make_static_library ( ${LIB_TARGET_NAME}
+if ( ENABLE_LINTER )
+    set ( BUILD_OPTIONS ENABLE_LINTER )
+endif()
+
 if ( "${BUILD_ANDROID}" )
+make_static_library ( ${LIB_TARGET_NAME} ${BUILD_OPTIONS}
     DEPS
         nlohmann_json::nlohmann_json
         dgm::dgm-lib
@@ -17,7 +21,7 @@ if ( "${BUILD_ANDROID}" )
         range-v3::range-v3
 )
 else ()
-make_static_library ( ${LIB_TARGET_NAME}
+make_static_library ( ${LIB_TARGET_NAME} ${BUILD_OPTIONS}
     DEPS
         nlohmann_json::nlohmann_json
         dgm::dgm-lib

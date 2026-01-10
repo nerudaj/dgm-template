@@ -5,7 +5,11 @@ configure_file (
 	"${CMAKE_CURRENT_BINARY_DIR}/resources.rc"
 )
 
-make_executable ( ${PROJECT_NAME} DEPS cxxopts ${LIB_TARGET_NAME} )
+if ( ENABLE_LINTER )
+    set ( BUILD_OPTIONS ENABLE_LINTER )
+endif()
+
+make_executable ( ${PROJECT_NAME} ${BUILD_OPTIONS} DEPS cxxopts ${LIB_TARGET_NAME} )
 
 target_sources( ${PROJECT_NAME}
     PRIVATE

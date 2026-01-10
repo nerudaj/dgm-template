@@ -10,6 +10,7 @@ get_version_from_git (
 )
 
 set ( OPTION BUILD_ANDROID "Build for Android platform" OFF )
+set ( OPTION ENABLE_LINTER "Enable clang-tidy" OFF )
 
 project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
