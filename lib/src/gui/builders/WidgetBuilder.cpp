@@ -200,6 +200,48 @@ tgui::SeparatorLine::Ptr WidgetBuilder::createSeparator()
     return sep;
 }
 
+tgui::Container::Ptr WidgetBuilder::createCarousel(
+    const size_t pageCount,
+    std::function<void(const tgui::Container::Ptr, size_t)> onPageChange,
+    const Sizer& sizer)
+{
+    auto pageLabel = createTextLabel("x / x", sizer, "justify"_true);
+    auto content = tgui::Group::create();
+    auto pageIdx = std::make_shared<size_t>(0);
+    auto changePage =
+        [pageIdx, pageCount, pageLabel, onPageChange, content](int increment)
+    {
+        *pageIdx = (*pageIdx + pageCount + increment) % pageCount;
+        pageLabel->setText(uni::format("{} / {}", *pageIdx + 1, pageCount));
+        content->removeAllWidgets();
+        onPageChange(content, *pageIdx);
+    };
+
+    auto group = tgui::Group::create();
+
+    auto buttons = tgui::HorizontalLayout::create(
+        { "100%", sizer.getBaseContainerHeight() });
+    buttons->setAutoLayout(tgui::AutoLayout::Bottom);
+
+    auto prevButton =
+        createButton("<", [changePage] { changePage(-1); }, sizer);
+    buttons->add(prevButton);
+
+    buttons->add(pageLabel);
+
+    auto nextButton =
+        createButton(">", [changePage] { changePage(+1); }, sizer);
+    buttons->add(nextButton);
+
+    group->add(buttons);
+    content->setAutoLayout(tgui::AutoLayout::Fill);
+    group->add(content);
+
+    changePage(0);
+
+    return group;
+}
+
 void WidgetBuilder::updateDropdownItems(
     tgui::ComboBox::Ptr dropdown, const std::vector<std::string>& items)
 {

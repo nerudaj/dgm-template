@@ -105,8 +105,10 @@ public:
             {
                 auto converted = std::stoul(newVal.toStdString());
                 if (converted > std::numeric_limits<Number>::max())
-                    throw std::runtime_error(uni::format(
-                        "Number is too big to fit {} bytes", sizeof(Number)));
+                    throw std::runtime_error(
+                        uni::format(
+                            "Number is too big to fit {} bytes",
+                            sizeof(Number)));
                 onChange(static_cast<Number>(converted));
             },
             validator,
@@ -120,6 +122,11 @@ public:
         WidgetOptions options = {});
 
     [[nodiscard]] static tgui::SeparatorLine::Ptr createSeparator();
+
+    [[nodiscard]] static tgui::Container::Ptr createCarousel(
+        const size_t pageCount,
+        std::function<void(const tgui::Container::Ptr, size_t)> onPageChange,
+        const Sizer& sizer);
 
     [[nodiscard]] static constexpr std::string
     getUnsignedNumericValidator() noexcept
