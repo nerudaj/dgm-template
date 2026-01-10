@@ -25,18 +25,12 @@ jobs:
       with:
         distribution: 'oracle'
         java-version: '17'
-
     
     - name: Set up keystore
       run: |
         $bytes = "${{ secrets.APK_KEYSTORE_BASE64 }}"
         [System.IO.File]::WriteAllBytes("${{ env.KEYSTORE_PATH }}", [Convert]::FromBase64String($bytes))
       shell: powershell
-
-    - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v2
-      with:
-        cmake-version: '3.28.1'
 
     - name: Check version
       run: cmake --version
