@@ -9,13 +9,12 @@ get_version_from_git (
     FULL_VERSION_VARIABLE FULL_PROJECT_VERSION
 )
 
-set ( OPTION BUILD_ANDROID "Build for Android platform" OFF )
-set ( OPTION ENABLE_LINTER "Enable clang-tidy" OFF )
-
-project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
-
+option ( BUILD_ANDROID "Build for Android platform" OFF )
+option ( ENABLE_LINTER "Enable clang-tidy" OFF )
 option ( BUILD_TESTS "Build unit testing target" ON )
 option ( USE_NSIS "Use NSIS for packaging" OFF )
+
+project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
 set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
