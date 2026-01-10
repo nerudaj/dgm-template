@@ -5,8 +5,8 @@ configure_file (
     "${CMAKE_CURRENT_SOURCE_DIR}/include/misc/CMakeVars.hpp"
 )
 
-if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
 make_static_library ( ${LIB_TARGET_NAME}
+if ( "${BUILD_ANDROID}" )
     DEPS
         nlohmann_json::nlohmann_json
         dgm::dgm-lib

@@ -9,11 +9,7 @@ get_version_from_git (
     FULL_VERSION_VARIABLE FULL_PROJECT_VERSION
 )
 
-if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
-    set ( BUILDING_ANDROID ON )
-else ()
-    set ( BUILDING_ANDROID OFF )
-endif ()
+set ( OPTION BUILD_ANDROID "Build for Android platform" OFF )
 
 project ( ${THE_PROJECT_NAME} VERSION ${GIT_PROJECT_VERSION} )
 
@@ -22,11 +18,11 @@ option ( USE_NSIS "Use NSIS for packaging" OFF )
 
 set ( OUTPUT_FILE_NAME "${THE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}" )
 
-if ( ${BUILDING_ANDROID} AND ${USE_NSIS} )
+if ( ${BUILD_ANDROID} AND ${USE_NSIS} )
     message ( FATAL_ERROR "Cannot use NSIS for Android build! Exiting." )
 endif ()
 
-if ( ${BUILDING_ANDROID} )
+if ( ${BUILD_ANDROID} )
     message ( "Configuring for Android build" )
 
     set ( CURRENT_USER_NAME $ENV{USERNAME} )
