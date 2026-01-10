@@ -1,4 +1,4 @@
-name: CI-Windows
+name: CI-Windows-Ninja-Clang
 
 on:
   push:
@@ -34,30 +34,18 @@ jobs:
       run: |
         mkdir "${{ env.BUILD_DIR }}"
         cd "${{ env.BUILD_DIR }}"
-        cmake ..
+        cmake -G "Ninja" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..
       shell: cmd
 
     - name: Build
       working-directory: ${{env.BUILD_DIR}}
       run: |
-        cmake --build . --config Debug
+        cmake --build .
       shell: cmd
 
     - name: Test
       working-directory: ${{env.BUILD_DIR}}
       run: |
-        ctest -C Debug --output-on-failure
+        ctest --output-on-failure
       shell: cmd
 
-    - name: Pack
-      working-directory: ${{env.BUILD_DIR}}
-      run: |
-        cpack -C Debug
-      shell: cmd
-
-    - name: Store artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Windows-CI-Build
-        path: ${{env.BUILD_DIR}}/*.zip
-        retention-days: 1
