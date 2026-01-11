@@ -39,21 +39,20 @@ function ( bootstrap_cpm )
     include ( "${CMAKE_CURRENT_BINARY_DIR}/get_cpm.cmake" )
 endfunction ()
 
-# Macro: set_cpp23_x64
-# Description: Sets the CMake generator platform to x64 and configures the C++ standard to C++23, ensuring that it is required.
+# Macro: set_cpp23
+# Description: Sets the C++ standard to C++23, ensuring that it is required.
 # Arguments: None
-macro ( set_cpp23_x64 )
-    set ( CMAKE_GENERATOR_PLATFORM     x64 )
+macro ( set_cpp23 )
     set ( CMAKE_CXX_STANDARD		   23 )
     set ( CMAKE_CXX_STANDARD_REQUIRED  ON )
 endmacro () 
 
 # Macro: cpp-init
-# Description: Initializes the project by calling the bootstrap_cpm function to set up CPM.cmake and the set_cpp23_x64 macro to configure the C++ standard and platform.
+# Description: Initializes the project by calling the bootstrap_cpm function to set up CPM.cmake and the set_cpp23 macro to configure the C++ standard.
 # Arguments: None
 macro( cpp_init )
     bootstrap_cpm()
-    set_cpp23_x64()
+    set_cpp23()
 endmacro ()
 
 # Function: glob_headers_and_sources
@@ -255,7 +254,6 @@ function ( apply_compile_options TARGET )
 			DEBUG_POSTFIX "-d"
 		)
 		
-		
 	else ()
 		message ( "apply_compile_options: no options for non-msvc compiler" )
 	endif ()
@@ -272,7 +270,6 @@ function ( enable_autoformatter TARGET )
 	)
 endfunction ()
 
-# NOTE: C++23 doesn't go well with .clang-tidy v17 currently installed in MSVC
 function ( enable_linter TARGET )
 	file ( COPY_FILE
 		"${CLANG_TIDY_PATH}"
@@ -290,7 +287,7 @@ function ( enable_linter TARGET )
 			VS_GLOBAL_EnableClangTidyCodeAnalysis true
 		)
 	else ()
-		message ( "apply_compile_options: no options for non-msvc compiler" )
+		message ( "enable_linter: no options for non-msvc compiler" )
 	endif ()
 endfunction ()
 
@@ -307,8 +304,8 @@ macro ( link_private_header_folder TARGET )
 endmacro ()
 
 macro ( make_static_library TARGET )
-    set( options )
-    set( multiValueArgs DEPS )
+    set ( options ENABLE_LINTER )
+    set ( multiValueArgs DEPS )
 
     cmake_parse_arguments ( CIMSL "${options}" "" "${multiValueArgs}" ${ARGN} )
 
@@ -323,12 +320,16 @@ macro ( make_static_library TARGET )
         target_link_libraries ( ${TARGET} PUBLIC ${CIMSL_DEPS} )
     endif ()
 
+    if ( CIMSL_ENABLE_LINTER )
+        enable_linter ( ${TARGET} )
+    endif ()
+
     enable_autoformatter ( ${TARGET} )
     apply_compile_options ( ${TARGET} )
 endmacro()
 
 macro ( make_executable TARGET )
-    set( options )
+    set( options ENABLE_LINTER )
     set( multiValueArgs DEPS )
 
     cmake_parse_arguments ( CIME "${options}" "" "${multiValueArgs}" ${ARGN} )
@@ -342,6 +343,10 @@ macro ( make_executable TARGET )
 
     if ( CIME_DEPS )
         target_link_libraries ( ${TARGET} PUBLIC ${CIME_DEPS} )
+    endif ()
+
+    if ( CIME_ENABLE_LINTER )
+        enable_linter ( ${TARGET} )
     endif ()
 
     enable_autoformatter ( ${TARGET} )

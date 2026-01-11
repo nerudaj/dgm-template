@@ -58,6 +58,51 @@ private:
 #include <Windows.h>
 #endif
 
+#if !defined(ANDROID) && !defined(GetDpiForSystem)
+
+unsigned GetDpiForSystem()
+{
+    HMODULE shcore = LoadLibraryA("Shcore.dll");
+    if (!shcore) return 96; // fallback
+
+    auto getDpiForSystem = reinterpret_cast<UINT(WINAPI*)()>(
+        GetProcAddress(shcore, "GetDpiForSystem"));
+
+    if (!getDpiForSystem)
+    {
+        FreeLibrary(shcore);
+        return 96; // fallback
+    }
+
+    UINT dpi = getDpiForSystem();
+    FreeLibrary(shcore);
+    return dpi;
+}
+
+#endif
+
+#if !defined(ANDROID) && !defined(GetSystemMetricsForDpi)
+
+unsigned GetSystemMetricsForDpi(DWORD nIndex, UINT dpi)
+{
+    HMODULE shcore = LoadLibraryA("Shcore.dll");
+    if (!shcore) return 96; // Fallback to default DPI
+
+    auto getSystemMetricsForDpi = reinterpret_cast<int(WINAPI*)(DWORD, UINT)>(
+        GetProcAddress(shcore, "GetSystemMetricsForDpi"));
+    if (!getSystemMetricsForDpi)
+    {
+        FreeLibrary(shcore);
+        return 96; // Fallback to default DPI
+    }
+
+    int result = getSystemMetricsForDpi(nIndex, dpi);
+    FreeLibrary(shcore);
+    return result;
+}
+
+#endif
+
 unsigned Sizer::getBaseContainerHeight() const
 {
 #ifdef ANDROID

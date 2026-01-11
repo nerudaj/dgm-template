@@ -10,7 +10,7 @@
 #include <Windows.h>
 #include <codecvt>
 #include <shlobj.h>
-#include <shlobj_core.h>
+// #include <shlobj_core.h>
 #endif
 
 std::filesystem::path getAppdataPath()
