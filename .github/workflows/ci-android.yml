@@ -35,7 +35,7 @@ jobs:
       run: |
         mkdir "${{ env.BUILD_DIR }}"
         cd "${{ env.BUILD_DIR }}"
-        cmake -D BUILD_ANDROID=Android ..
+        cmake -D BUILD_ANDROID=ON ..
       shell: cmd
 
     - name: Build
