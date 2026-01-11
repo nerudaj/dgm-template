@@ -22,10 +22,7 @@ set_target_properties ( ${PROJECT_NAME} PROPERTIES
 )
 
 # Packaging
-install (
-	FILES       "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/${THE_PROJECT_NAME}.exe"
-	DESTINATION "bin"
-)
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin )
 
 file ( GLOB DLLS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/*.dll" )
 
