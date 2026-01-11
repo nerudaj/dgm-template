@@ -9,7 +9,7 @@ if ( ENABLE_LINTER )
     set ( BUILD_OPTIONS ENABLE_LINTER )
 endif()
 
-if ( "${BUILD_ANDROID}" )
+if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
 make_static_library ( ${LIB_TARGET_NAME} ${BUILD_OPTIONS}
     DEPS
         nlohmann_json::nlohmann_json
