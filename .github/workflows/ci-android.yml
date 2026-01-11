@@ -28,6 +28,11 @@ jobs:
         distribution: 'oracle'
         java-version: '17'
 
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.28.1'
+
     - name: Check version
       run: cmake --version
 
