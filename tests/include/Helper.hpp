@@ -20,7 +20,7 @@ public:
     static DependencyContainer createDummyDependencies(dgm::Window& window)
     {
         return DependencyContainer(
-            window, ASSETS_PATH, Language::English, AppSettings {});
+            window, ASSETS_PATH, Language::English, AppSettingsStorageModel {});
     }
 
     static std::string loadAllText(const std::filesystem::path& path)

@@ -6,7 +6,7 @@ void AppStateGame::input()
 {
     if (dic.input.isBackButtonPressed())
     {
-        app.pushState<AppStatePause>(dic, settings);
+        app.pushState<AppStatePause>(dic);
     }
 
     while (const auto event = app.window.pollEvent())
@@ -15,6 +15,10 @@ void AppStateGame::input()
         {
             app.exit();
         }
+        else if (event->is<sf::Event::FocusGained>())
+            dic.jukebox.resume();
+        else if (event->is<sf::Event::FocusLost>())
+            dic.jukebox.stop();
         else
         {
             dic.touchController.processEvent(event);

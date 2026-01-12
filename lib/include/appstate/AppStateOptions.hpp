@@ -9,10 +9,7 @@
 class [[nodiscard]] AppStateOptions final : public dgm::AppState
 {
 public:
-    AppStateOptions(
-        dgm::App& app,
-        DependencyContainer& dic,
-        AppSettings& settings) noexcept;
+    AppStateOptions(dgm::App& app, DependencyContainer& dic) noexcept;
 
 public:
     void input() override;
@@ -51,7 +48,7 @@ private:
         std::get<BindType>(target[action]) = newBinding;
         auto btn = dic.gui.get<tgui::Button>(getBindButtonId<BindType>(action));
         btn->setText(HwInputToStringMapper {}.getMapping(newBinding));
-        dic.input.updateBindings(settings.bindings);
+        dic.input.updateBindings(dic.settings.bindings);
         dic.input.forceRelease(action);
     }
 
@@ -70,5 +67,4 @@ private:
 
 private:
     DependencyContainer& dic;
-    AppSettings& settings;
 };

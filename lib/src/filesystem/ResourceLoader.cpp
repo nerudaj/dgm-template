@@ -2,6 +2,7 @@
 #include "filesystem/AppStorage.hpp"
 #include "filesystem/TiledLoader.hpp"
 #include "misc/Compatibility.hpp"
+#include <SFML/Audio/Music.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/Tgui.hpp>
 #include <expected>
@@ -45,6 +46,20 @@ loadTiledMap(const std::filesystem::path& path)
     }
 }
 
+static std::expected<sf::Music, dgm::Error>
+loadSong(const std::filesystem::path& path)
+{
+    try
+    {
+        auto music = sf::Music(path);
+        return music;
+    }
+    catch (const std::exception& ex)
+    {
+        return std::unexpected { dgm::Error(ex.what()) };
+    }
+}
+
 dgm::ResourceManager
 ResourceLoader::loadResources(const std::filesystem::path& assetDir)
 {
@@ -54,32 +69,36 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
             assetDir / "fonts", dgm::Utility::loadFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load font: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Font>(
             assetDir / "fonts", loadTguiFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load font: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Theme::Ptr>(
             assetDir / "ui-themes", loadTguiTheme, { ".txt" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load theme: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load theme: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
             assetDir / "graphics", dgm::Utility::loadTexture, { ".png" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load texture: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load texture: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::AnimationStates>(
@@ -88,31 +107,44 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
             { ".anim" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load animation states: {}",
-            result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load animation states: {}",
+                result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
             assetDir / "graphics", dgm::Utility::loadClip, { ".clip" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load clip: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load clip: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::SoundBuffer>(
             assetDir / "sounds", dgm::Utility::loadSound, { ".wav" });
         !result)
     {
-        throw std::runtime_error(uni::format(
-            "Could not load sound: {}", result.error().getMessage()));
+        throw std::runtime_error(
+            uni::format(
+                "Could not load sound: {}", result.error().getMessage()));
+    }
+
+    if (auto result = resmgr.loadResourcesFromDirectory<sf::Music>(
+            assetDir / "music", loadSong, { ".ogg", ".wav" });
+        !result)
+    {
+        throw std::runtime_error(
+            uni::format(
+                "Could not load song: {}", result.error().getMessage()));
     }
 
     return resmgr;
 }
 
-AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
+AppSettingsStorageModel
+ResourceLoader::loadSettings(const std::filesystem::path& file)
 {
     auto settingsJson = AppStorage::loadFile(file);
 
@@ -120,7 +152,8 @@ AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
     {
         try
         {
-            AppSettings settings = nlohmann::json::parse(settingsJson.value());
+            AppSettingsStorageModel settings =
+                nlohmann::json::parse(settingsJson.value());
             return settings;
         }
         catch (const std::exception& ex)
@@ -133,5 +166,5 @@ AppSettings ResourceLoader::loadSettings(const std::filesystem::path& file)
         sf::err() << settingsJson.error().getMessage() << std::endl;
     }
 
-    return AppSettings {};
+    return AppSettingsStorageModel {};
 }

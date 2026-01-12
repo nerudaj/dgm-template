@@ -16,12 +16,11 @@ public:
     AppStateInputDetector(
         dgm::App& app,
         DependencyContainer& dic,
-        const InputSettings& settings,
         std::function<void(BindType)> onInputDetected)
         : dgm::AppState(app)
         , dic(dic)
         , inputDetector([&] { onInputDetectorReady(); })
-        , CURSOR_SPEED(settings.cursorSpeed)
+        , CURSOR_SPEED(dic.settings.input.cursorSpeed)
     {
         buildLayout();
         inputDetector.startCheckingInputs(

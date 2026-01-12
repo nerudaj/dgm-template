@@ -6,7 +6,7 @@
 
 void AppStatePause::input()
 {
-    CommonHandler::handleInput(app, dic, settings.input);
+    CommonHandler::handleInput(app, dic, dic.settings.input);
 }
 
 void AppStatePause::update() {}
@@ -42,7 +42,7 @@ void AppStatePause::onResume()
 
 void AppStatePause::onOptions()
 {
-    app.pushState<AppStateOptions>(dic, settings);
+    app.pushState<AppStateOptions>(dic);
 }
 
 void AppStatePause::onBackToMenu()
