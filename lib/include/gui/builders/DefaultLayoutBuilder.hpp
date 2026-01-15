@@ -20,19 +20,19 @@ namespace priv
     {
     public:
         FinalizedLayoutBuilder(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
 
     public:
-        [[nodiscard]] inline tgui::Panel::Ptr build() const
+        [[nodiscard]] inline tgui::Container::Ptr build() const
         {
             return container;
         }
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -40,7 +40,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithContentAndThreeButtons(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
@@ -54,7 +54,7 @@ namespace priv
         FinalizedLayoutBuilder withBottomRightButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -62,7 +62,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithContentAndTwoButtons(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
@@ -77,7 +77,7 @@ namespace priv
         withBottomLeftButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -85,7 +85,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithContentAndOneButton(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
@@ -100,7 +100,7 @@ namespace priv
         withTopRightButton(tgui::Button::Ptr button);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -108,7 +108,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithContent(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
@@ -128,7 +128,7 @@ namespace priv
         }
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -136,7 +136,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithBackgroundAndTitle(
-            tgui::Panel::Ptr container, const BuilderProperties& props)
+            tgui::Container::Ptr container, const BuilderProperties& props)
             : container(container), props(props)
         {
         }
@@ -145,7 +145,7 @@ namespace priv
         LayoutBuilderWithContent withContent(tgui::Container::Ptr content);
 
     private:
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 
@@ -153,7 +153,7 @@ namespace priv
     {
     public:
         LayoutBuilderWithBackground(
-            tgui::Panel::Ptr container,
+            tgui::Container::Ptr container,
             const BuilderProperties& props,
             const Sizer& sizer)
             : sizer(sizer), container(container), props(props)
@@ -169,7 +169,7 @@ namespace priv
 
     private:
         const Sizer& sizer;
-        tgui::Panel::Ptr container;
+        tgui::Container::Ptr container;
         BuilderProperties props;
     };
 } // namespace priv
@@ -187,6 +187,8 @@ public:
     withBackgroundImage(const sf::Texture& texture);
 
     priv::LayoutBuilderWithBackground withNoBackgroundImage();
+
+    priv::LayoutBuilderWithBackground withNoBackground();
 
 private:
     static priv::BuilderProperties buildProperties(const Sizer& sizer);

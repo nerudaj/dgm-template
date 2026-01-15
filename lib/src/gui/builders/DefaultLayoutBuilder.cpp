@@ -24,21 +24,19 @@ namespace priv
                                    props.cornerButtonDimension }
                 : tgui::Layout2d { props.cornerButtonDimension * 2,
                                    props.cornerButtonDimension * 0.6f });
-        panel->setPosition(
-            {
-                (align == tgui::HorizontalAlignment::Left
-                     ? uni::format("{}", props.cornerButtonPadding)
-                     : uni::format(
-                           "parent.width - width - {}",
-                           props.cornerButtonPadding))
-                    .c_str(),
-                (valign == tgui::VerticalAlignment::Top
-                     ? uni::format("{}", props.cornerButtonPadding)
-                     : uni::format(
-                           "parent.height - height - {}",
-                           props.cornerButtonPadding))
-                    .c_str(),
-            });
+        panel->setPosition({
+            (align == tgui::HorizontalAlignment::Left
+                 ? uni::format("{}", props.cornerButtonPadding)
+                 : uni::format(
+                       "parent.width - width - {}", props.cornerButtonPadding))
+                .c_str(),
+            (valign == tgui::VerticalAlignment::Top
+                 ? uni::format("{}", props.cornerButtonPadding)
+                 : uni::format(
+                       "parent.height - height - {}",
+                       props.cornerButtonPadding))
+                .c_str(),
+        });
         panel->add(button);
         return panel;
     }
@@ -93,16 +91,15 @@ namespace priv
     LayoutBuilderWithContent LayoutBuilderWithBackgroundAndTitle::withContent(
         tgui::Container::Ptr content)
     {
-        auto&& contentPanel = tgui::Group::create(
-            {
-                "70%",
-                uni::format(
-                    "100% - {} - {} - {}",
-                    props.titleHeight,
-                    props.cornerButtonDimension,
-                    props.cornerButtonPadding)
-                    .c_str(),
-            });
+        auto&& contentPanel = tgui::Group::create({
+            "70%",
+            uni::format(
+                "100% - {} - {} - {}",
+                props.titleHeight,
+                props.cornerButtonDimension,
+                props.cornerButtonPadding)
+                .c_str(),
+        });
         contentPanel->setPosition(
             { "parent.width / 2 - width / 2", props.titleHeight });
         contentPanel->add(content, "DefaultLayoutContentPanel");
@@ -151,7 +148,7 @@ DefaultLayoutBuilder::withBackgroundImage(const sf::Texture& texture)
 priv::LayoutBuilderWithBackground DefaultLayoutBuilder::withNoBackgroundImage()
 {
     return priv::LayoutBuilderWithBackground(
-        tgui::Panel::create(), buildProperties(sizer), sizer);
+        tgui::Group::create(), buildProperties(sizer), sizer);
 }
 
 priv::BuilderProperties
