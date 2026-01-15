@@ -4,18 +4,25 @@ void Jukebox::setVolume(float newVolume)
 {
     assert(0.f <= newVolume && newVolume <= 100.f);
     volume = newVolume;
-    getCurrentTrack().setVolume(volume);
+
+    if (currentTrackName) getCurrentTrack().setVolume(volume);
 }
 
 sf::Music& Jukebox::getCurrentTrack()
 {
-    assert(!currentTrackName.empty());
-    return resmgr.getMutable<sf::Music>(currentTrackName);
+    assert(currentTrackName);
+    return resmgr.getMutable<sf::Music>(currentTrackName.value());
 }
 
 void Jukebox::play(const std::string& trackName, bool loop)
 {
-    if (currentTrackName == trackName) return;
+    if (trackName.empty())
+    {
+        currentTrackName.reset();
+        return;
+    }
+    else if (currentTrackName.value_or("") == trackName)
+        return;
 
     currentTrackName = trackName;
     auto& track = getCurrentTrack();
@@ -31,6 +38,6 @@ void Jukebox::stop()
 
 void Jukebox::resume()
 {
-    if (currentTrackName.empty()) return;
+    if (!currentTrackName) return;
     getCurrentTrack().play();
 }

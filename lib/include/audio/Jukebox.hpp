@@ -2,6 +2,7 @@
 
 #include <DGM/classes/ResourceManager.hpp>
 #include <SFML/Audio/Music.hpp>
+#include <optional>
 
 class [[nodiscard]] Jukebox final
 {
@@ -26,5 +27,5 @@ private:
 private:
     dgm::ResourceManager& resmgr;
     float volume = 0.f;
-    std::string currentTrackName;
+    std::optional<std::string> currentTrackName;
 };
