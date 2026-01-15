@@ -7,15 +7,13 @@
 class [[nodiscard]] AppStatePause final : public dgm::AppState
 {
 public:
-    AppStatePause(
-        dgm::App& app, DependencyContainer& dic, AppSettings& settings) noexcept
+    AppStatePause(dgm::App& app, DependencyContainer& dic) noexcept
         : dgm::AppState(
               app,
               dgm::AppStateConfig {
                   .shouldDrawUnderlyingState = true,
               })
         , dic(dic)
-        , settings(settings)
     {
         buildLayout();
     }
@@ -42,5 +40,4 @@ private:
 
 private:
     DependencyContainer& dic;
-    AppSettings& settings;
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audio/Jukebox.hpp"
 #include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
 #include "gui/Sizers.hpp"
@@ -19,12 +20,14 @@ struct [[nodiscard]] DependencyContainer final
     Input input;
     VirtualCursor virtualCursor;
     Sizer sizer;
+    Jukebox jukebox;
+    AppSettings settings;
 
     DependencyContainer(
         dgm::Window& window,
         const std::filesystem::path& rootDir,
         Language primaryLang,
-        const AppSettings& settings)
+        const AppSettingsStorageModel& settings)
         // Gui needs to be instantiated before Resource manager
         // since we need to have gui backend defined before
         // other tgui objects (like fonts) can be created.
@@ -38,6 +41,26 @@ struct [[nodiscard]] DependencyContainer final
               input,
               resmgr.get<sf::Texture>("cursor.png"))
         , sizer(settings.video)
+        , jukebox(resmgr)
+        , settings(
+              AppSettings {
+                  .audio =
+                      AudioSettings {
+                          .soundVolume = Observable<float>(
+                              settings.audio.soundVolume,
+                              [&](float newVolume)
+                              {
+                                  // TODO: sound effect engine
+                              }),
+                          .musicVolume = Observable<float>(
+                              settings.audio.musicVolume,
+                              [&](float newVolume)
+                              { jukebox.setVolume(newVolume); }),
+                      },
+                  .video = settings.video,
+                  .input = settings.input,
+                  .bindings = settings.bindings,
+              })
     {
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
         // NOTE: You can create your own theme file and use it here

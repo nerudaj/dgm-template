@@ -5,12 +5,14 @@
 #include "gui/Builders.hpp"
 #include "misc/CMakeVars.hpp"
 #include "strings/StringProvider.hpp"
+#include "types/SemanticTypes.hpp"
 
 AppStateMainMenu::AppStateMainMenu(
-    dgm::App& app, DependencyContainer& dic, AppSettings& settings) noexcept
-    : dgm::AppState(app), dic(dic), settings(settings)
+    dgm::App& app, DependencyContainer& dic) noexcept
+    : dgm::AppState(app), dic(dic)
 {
     buildLayout();
+    dic.jukebox.play("vampire_killer.wav", "looping"_true);
 }
 
 void AppStateMainMenu::input()
@@ -18,7 +20,7 @@ void AppStateMainMenu::input()
     CommonHandler::handleInput(
         app,
         dic,
-        settings.input,
+        dic.settings.input,
         CommonHandlerOptions {
             .disableGoBack = true,
         });
@@ -58,12 +60,12 @@ void AppStateMainMenu::buildLayout()
 
 void AppStateMainMenu::onPlay()
 {
-    app.pushState<AppStateGame>(dic, settings);
+    app.pushState<AppStateGame>(dic);
 }
 
 void AppStateMainMenu::onOptions()
 {
-    app.pushState<AppStateOptions>(dic, settings);
+    app.pushState<AppStateOptions>(dic);
 }
 
 void AppStateMainMenu::onExit()

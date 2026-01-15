@@ -13,13 +13,12 @@
 class [[nodiscard]] AppStateGame : public dgm::AppState
 {
 public:
-    AppStateGame(dgm::App& app, DependencyContainer& dic, AppSettings& settings)
+    AppStateGame(dgm::App& app, DependencyContainer& dic)
         : dgm::AppState(app)
         , dic(dic)
-        , settings(settings)
         , scene(buildScene(dic.resmgr))
         , gameRulesEngine(gameEvents, scene, dic.input)
-        , renderingEngine(dic.resmgr, scene, settings, dic.touchController)
+        , renderingEngine(dic.resmgr, scene, dic.settings, dic.touchController)
         , sound(dic.resmgr.get<sf::SoundBuffer>("land.wav"))
     {
         sound.setVolume(100.f);
@@ -39,7 +38,6 @@ private:
 
 private:
     DependencyContainer& dic;
-    AppSettings& settings;
     Scene scene;
     EventQueue<GameEvent> gameEvents;
     GameRulesEngine gameRulesEngine;

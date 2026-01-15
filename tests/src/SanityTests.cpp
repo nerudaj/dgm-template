@@ -12,7 +12,7 @@ TEST_CASE("[Sanity]")
 
     SECTION("Can default-create settings and serialize-deserialize them")
     {
-        const std::string& json = nlohmann::json(AppSettings {}).dump(4);
-        const AppSettings settings = nlohmann::json::parse(json);
+        const std::string& json = nlohmann::json(AppSettingsStorageModel {}).dump(4);
+        const AppSettingsStorageModel settings = nlohmann::json::parse(json);
     }
 }

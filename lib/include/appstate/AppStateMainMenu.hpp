@@ -5,10 +5,7 @@
 class [[nodiscard]] AppStateMainMenu final : public dgm::AppState
 {
 public:
-    AppStateMainMenu(
-        dgm::App& app,
-        DependencyContainer& dic,
-        AppSettings& settings) noexcept;
+    AppStateMainMenu(dgm::App& app, DependencyContainer& dic) noexcept;
 
 public:
     void input() override;
@@ -29,5 +26,4 @@ private:
 
 private:
     DependencyContainer& dic;
-    AppSettings& settings;
 };
