@@ -54,12 +54,11 @@ private:
 private:
     float pixelDensity = 0.f;
 };
-#elif LINUX
 #else
 #include <Windows.h>
 #endif
 
-#if !defined(ANDROID) && !defined(GetDpiForSystem) && !defined(LINUX)
+#if !defined(ANDROID) && !defined(GetDpiForSystem)
 
 unsigned GetDpiForSystem()
 {
@@ -82,7 +81,7 @@ unsigned GetDpiForSystem()
 
 #endif
 
-#if !defined(ANDROID) && !defined(GetSystemMetricsForDpi) && !defined(LINUX)
+#if !defined(ANDROID) && !defined(GetSystemMetricsForDpi)
 
 unsigned GetSystemMetricsForDpi(DWORD nIndex, UINT dpi)
 {
@@ -109,8 +108,6 @@ unsigned Sizer::getBaseContainerHeight() const
 #ifdef ANDROID
     return BaseSizeProviderSingleton::getInstance().getBaseContainerHeight()
            * settings.uiScale;
-#elif LINUX
-    return 22 * settings.uiScale;
 #else
     const unsigned dpi = GetDpiForSystem();
     return static_cast<unsigned>(
@@ -126,8 +123,6 @@ unsigned Sizer::getBaseFontSize() const
 #ifdef ANDROID
     return BaseSizeProviderSingleton::getInstance().getBaseFontSize()
            * settings.uiScale;
-#elif LINUX
-    return 18 * settings.uiScale;
 #else
     return static_cast<unsigned>(
         getBaseContainerHeight() / CONTAINER_PADDING_MULTIPLIER

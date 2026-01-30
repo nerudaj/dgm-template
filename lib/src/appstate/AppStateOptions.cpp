@@ -18,22 +18,12 @@ std::string resolutionToString(const sf::Vector2u& vec)
 
 static std::vector<std::string> getResolutionStrings()
 {
-#ifdef LINUX
-    const auto& modes = sf::VideoMode::getFullscreenModes();
-    auto stringModes = std::vector<std::string>();
-    for (auto&& mode : modes)
-    {
-        stringModes.push_back(resolutionToString(mode.size));
-    }
-    return stringModes;
-#else
     return sf::VideoMode::getFullscreenModes()
            | std::views::transform(
                [](const sf::VideoMode& mode) -> sf::Vector2u
                { return mode.size; })
            | std::views::transform(resolutionToString)
            | uniranges::to<std::vector<std::string>>();
-#endif
 }
 
 static std::string intValueFormatter(float val)
