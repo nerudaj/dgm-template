@@ -25,7 +25,7 @@ static std::vector<std::string> getResolutionStrings()
     {
         stringModes.push_back(resolutionToString(mode.size));
     }
-    return mode;
+    return stringModes;
 #else
     return sf::VideoMode::getFullscreenModes()
            | std::views::transform(
