@@ -74,7 +74,7 @@ unsigned GetDpiForSystem()
         return 96; // fallback
     }
 
-    UINT dpi = getDpiForSystem();
+    const UINT dpi = getDpiForSystem();
     FreeLibrary(shcore);
     return dpi;
 }
@@ -96,7 +96,7 @@ unsigned GetSystemMetricsForDpi(DWORD nIndex, UINT dpi)
         return 96; // Fallback to default DPI
     }
 
-    int result = getSystemMetricsForDpi(nIndex, dpi);
+    const int result = getSystemMetricsForDpi(nIndex, dpi);
     FreeLibrary(shcore);
     return result;
 }
