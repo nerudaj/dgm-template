@@ -4,7 +4,7 @@
 #include "misc/Compatibility.hpp"
 #include <SFML/Audio/Music.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
-#include <TGUI/Tgui.hpp>
+#include <TGUI/TGUI.hpp>
 #include <expected>
 
 static std::expected<tgui::Font, dgm::Error>
@@ -69,36 +69,32 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
             assetDir / "fonts", dgm::Utility::loadFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load font: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Font>(
             assetDir / "fonts", loadTguiFont, { ".ttf" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load font: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load font: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<tgui::Theme::Ptr>(
             assetDir / "ui-themes", loadTguiTheme, { ".txt" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load theme: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load theme: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
             assetDir / "graphics", dgm::Utility::loadTexture, { ".png" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load texture: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load texture: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::AnimationStates>(
@@ -107,37 +103,33 @@ ResourceLoader::loadResources(const std::filesystem::path& assetDir)
             { ".anim" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load animation states: {}",
-                result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load animation states: {}",
+            result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
             assetDir / "graphics", dgm::Utility::loadClip, { ".clip" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load clip: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load clip: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::SoundBuffer>(
             assetDir / "sounds", dgm::Utility::loadSound, { ".wav" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load sound: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load sound: {}", result.error().getMessage()));
     }
 
     if (auto result = resmgr.loadResourcesFromDirectory<sf::Music>(
             assetDir / "music", loadSong, { ".ogg", ".wav" });
         !result)
     {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load song: {}", result.error().getMessage()));
+        throw std::runtime_error(uni::format(
+            "Could not load song: {}", result.error().getMessage()));
     }
 
     return resmgr;
