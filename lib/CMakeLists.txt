@@ -31,6 +31,10 @@ make_static_library ( ${LIB_TARGET_NAME} ${BUILD_OPTIONS}
 )
 endif ()
 
+if (UNIX)
+	target_compile_definitions( ${LIB_TARGET_NAME} PRIVATE LINUX=1 )
+endif()
+
 target_precompile_headers( ${LIB_TARGET_NAME}
     PUBLIC
         <vector>
