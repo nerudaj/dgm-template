@@ -3,10 +3,9 @@
 #include "gui/builders/WidgetBuilder.hpp"
 #include <ranges>
 
-FormBuilder& FormBuilder::addOption(
-    const StringId labelId, tgui::Widget::Ptr widget, OptionConfig config)
+FormBuilder&
+FormBuilder::addOption(const StringId labelId, tgui::Widget::Ptr widget)
 {
-    widget->setEnabled(!config.disabled);
     rowsToBuild.push_back({
         .label = strings.getString(labelId),
         .widget = widget,

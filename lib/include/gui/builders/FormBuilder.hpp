@@ -9,12 +9,6 @@
 #include <tuple>
 #include <vector>
 
-// https://github.com/llvm/llvm-project/issues/36032
-struct [[nodiscard]] OptionConfig final
-{
-    bool disabled = false;
-};
-
 class [[nodiscard]] FormBuilder final
 {
 public:
@@ -28,10 +22,7 @@ public:
     ~FormBuilder() = default;
 
 public:
-    FormBuilder& addOption(
-        const StringId labelId,
-        tgui::Widget::Ptr widget,
-        OptionConfig config = {});
+    FormBuilder& addOption(const StringId labelId, tgui::Widget::Ptr widget);
 
     FormBuilder& addOptionWithWidgetId(
         const StringId labelId,

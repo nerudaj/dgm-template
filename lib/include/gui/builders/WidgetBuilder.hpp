@@ -105,10 +105,8 @@ public:
             {
                 auto converted = std::stoul(newVal.toStdString());
                 if (converted > std::numeric_limits<Number>::max())
-                    throw std::runtime_error(
-                        uni::format(
-                            "Number is too big to fit {} bytes",
-                            sizeof(Number)));
+                    throw std::runtime_error(uni::format(
+                        "Number is too big to fit {} bytes", sizeof(Number)));
                 onChange(static_cast<Number>(converted));
             },
             validator,
@@ -152,6 +150,7 @@ private:
     {
         if (options.id) widget->setWidgetName(options.id.value());
         widget->setEnabled(options.enabled);
+        widget->getRenderer()->setOpacity(options.enabled ? 1.f : 0.5f);
     }
 
     static void updateDropdownItems(
