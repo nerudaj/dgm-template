@@ -13,3 +13,10 @@ template<class... Ts>
 overloads(Ts...) -> overloads<Ts...>;
 
 #endif
+
+template<class T>
+class [[nodiscard]] NoOp final
+{
+public:
+    void operator()(const T&) {}
+};
