@@ -26,16 +26,14 @@ int main(int, char *[])
             .useFullscreen = settings.video.fullscreen,
         });
         auto &&app = dgm::App(window);
-        auto &&dependencies = DependencyContainer(window, "", Language::English, settings);
+        auto &&dependencies = DependencyContainer(window, "", Language::English, settings, SETTINGS_FILE_NAME);
 
         window.getSfmlWindowContext().setMouseCursorVisible(false);
 
         app.pushState<AppStateMainMenu>(dependencies);
         app.run();
 
-        AppStorage::saveFile(
-            SETTINGS_FILE_NAME,
-            AppSettingsStorageModel(dependencies.settings));
+        dependencies.saveSettings();
     }
     catch (const std::exception &ex)
     {

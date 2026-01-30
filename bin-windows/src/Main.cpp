@@ -12,23 +12,25 @@ int main(int, char*[])
     {
         auto&& settings = ResourceLoader::loadSettings(SETTINGS_FILE_NAME);
 
-        auto&& window = dgm::Window(
-            dgm::WindowSettings {
-                .resolution = settings.video.resolution,
-                .title = CMakeVars::TITLE,
-                .useFullscreen = settings.video.fullscreen,
-            });
+        auto&& window = dgm::Window(dgm::WindowSettings {
+            .resolution = settings.video.resolution,
+            .title = CMakeVars::TITLE,
+            .useFullscreen = settings.video.fullscreen,
+        });
         auto&& app = dgm::App(window);
         auto&& dependencies = DependencyContainer(
-            window, "../assets", Language::English, settings);
+            window,
+            "../assets",
+            Language::English,
+            settings,
+            SETTINGS_FILE_NAME);
 
         window.getSfmlWindowContext().setMouseCursorVisible(false);
 
         app.pushState<AppStateMainMenu>(dependencies);
         app.run();
 
-        AppStorage::saveFile(
-            SETTINGS_FILE_NAME, AppSettingsStorageModel(dependencies.settings));
+        dependencies.saveSettings();
     }
     catch (const std::exception& ex)
     {

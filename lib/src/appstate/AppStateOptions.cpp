@@ -1,6 +1,7 @@
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/AppStateInputDetector.hpp"
 #include "appstate/CommonHandler.hpp"
+#include "filesystem/AppStorage.hpp"
 #include "gui/Builders.hpp"
 #include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
@@ -330,6 +331,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
 
 void AppStateOptions::onBack()
 {
+    dic.saveSettings();
     app.popState();
 }
 
