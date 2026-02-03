@@ -20,10 +20,11 @@ std::string resolutionToString(const sf::Vector2u& vec)
 static std::vector<std::string> getResolutionStrings()
 {
     return sf::VideoMode::getFullscreenModes()
-           | std::views::transform([](const sf::VideoMode& mode)
-                                   { return mode.size; })
+           | std::views::transform(
+               [](const sf::VideoMode& mode) -> sf::Vector2u
+               { return mode.size; })
            | std::views::transform(resolutionToString)
-           | uniranges::to<std::vector>();
+           | uniranges::to<std::vector<std::string>>();
 }
 
 static std::string intValueFormatter(float val)
