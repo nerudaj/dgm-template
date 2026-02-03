@@ -1,6 +1,7 @@
 #pragma once
 
 #include "audio/Jukebox.hpp"
+#include "filesystem/AppStorage.hpp"
 #include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
 #include "gui/Sizers.hpp"
@@ -10,6 +11,7 @@
 #include "settings/AppSettings.hpp"
 #include "strings/StringProvider.hpp"
 #include <DGM/dgm.hpp>
+#include <functional>
 
 struct [[nodiscard]] DependencyContainer final
 {
@@ -22,44 +24,51 @@ struct [[nodiscard]] DependencyContainer final
     Sizer sizer;
     Jukebox jukebox;
     AppSettings settings;
+    std::function<void()> saveSettings;
 
     DependencyContainer(
         dgm::Window& window,
         const std::filesystem::path& rootDir,
         Language primaryLang,
-        const AppSettingsStorageModel& settings)
+        const AppSettingsStorageModel& settingsSM,
+        const std::filesystem::path& settingsFileName)
         // Gui needs to be instantiated before Resource manager
         // since we need to have gui backend defined before
         // other tgui objects (like fonts) can be created.
         : gui(window)
         , resmgr(ResourceLoader::loadResources(rootDir))
         , strings(primaryLang)
-        , touchController(settings.video.resolution)
-        , input(settings.bindings, touchController)
+        , touchController(settingsSM.video.resolution)
+        , input(settingsSM.bindings, touchController)
         , virtualCursor(
               window.getSfmlWindowContext(),
               input,
               resmgr.get<sf::Texture>("cursor.png"))
         , sizer(settings.video)
         , jukebox(resmgr)
-        , settings(
-              AppSettings {
-                  .audio =
-                      AudioSettings {
-                          .soundVolume = Observable<float>(
-                              settings.audio.soundVolume,
-                              [&](float newVolume)
-                              {
-                                  // TODO: sound effect engine
-                              }),
-                          .musicVolume = Observable<float>(
-                              settings.audio.musicVolume,
-                              [&](float newVolume)
-                              { jukebox.setVolume(newVolume); }),
-                      },
-                  .video = settings.video,
-                  .input = settings.input,
-                  .bindings = settings.bindings,
+        , settings(AppSettings {
+              .audio =
+                  AudioSettings {
+                      .soundVolume = Observable<float>(
+                          settingsSM.audio.soundVolume,
+                          [&](float newVolume)
+                          {
+                              // TODO: sound effect engine
+                          }),
+                      .musicVolume = Observable<float>(
+                          settingsSM.audio.musicVolume,
+                          [&](float newVolume)
+                          { jukebox.setVolume(newVolume); }),
+                  },
+              .video = settingsSM.video,
+              .input = settingsSM.input,
+              .bindings = settingsSM.bindings,
+          })
+        , saveSettings(
+              [settingsFileName, this]
+              {
+                  AppStorage::saveFile(
+                      settingsFileName, AppSettingsStorageModel(settings));
               })
     {
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
