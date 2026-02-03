@@ -3,7 +3,7 @@
 #include <DGM/classes/Compatibility.hpp>
 
 #ifdef ANDROID
-#include <fmt/base.h>
+#include <fmt/core.h>
 #include <range/v3/range.hpp>
 #endif
 
