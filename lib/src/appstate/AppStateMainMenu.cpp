@@ -60,15 +60,18 @@ void AppStateMainMenu::buildLayout()
 
 void AppStateMainMenu::onPlay()
 {
+    dic.soundPlayer.playPovSound(SoundId::Click);
     app.pushState<AppStateGame>(dic);
 }
 
 void AppStateMainMenu::onOptions()
 {
+    dic.soundPlayer.playPovSound(SoundId::Click);
     app.pushState<AppStateOptions>(dic);
 }
 
 void AppStateMainMenu::onExit()
 {
+    dic.soundPlayer.playPovSound(SoundId::Click);
     app.exit();
 }
