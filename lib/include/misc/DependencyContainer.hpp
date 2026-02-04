@@ -1,6 +1,7 @@
 #pragma once
 
 #include "audio/Jukebox.hpp"
+#include "audio/SoundPlayer.hpp"
 #include "filesystem/AppStorage.hpp"
 #include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
@@ -23,6 +24,7 @@ struct [[nodiscard]] DependencyContainer final
     VirtualCursor virtualCursor;
     Sizer sizer;
     Jukebox jukebox;
+    SoundPlayer soundPlayer;
     AppSettings settings;
     std::function<void()> saveSettings;
 
@@ -46,15 +48,14 @@ struct [[nodiscard]] DependencyContainer final
               resmgr.get<sf::Texture>("cursor.png"))
         , sizer(settings.video)
         , jukebox(resmgr)
+        , soundPlayer(resmgr)
         , settings(AppSettings {
               .audio =
                   AudioSettings {
                       .soundVolume = Observable<float>(
                           settingsSM.audio.soundVolume,
                           [&](float newVolume)
-                          {
-                              // TODO: sound effect engine
-                          }),
+                          { soundPlayer.setVolume(newVolume); }),
                       .musicVolume = Observable<float>(
                           settingsSM.audio.musicVolume,
                           [&](float newVolume)
