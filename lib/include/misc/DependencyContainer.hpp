@@ -76,10 +76,10 @@ struct [[nodiscard]] DependencyContainer final
         // just delete the settings.json and all will be fine again
         assert(
             BindingsSettings {}.ingameBindings.size()
-            > settingsSM.bindings.ingameBindings.size());
+            == settingsSM.bindings.ingameBindings.size());
         assert(
             BindingsSettings {}.menuBindings.size()
-            > settingsSM.bindings.menuBindings.size());
+            == settingsSM.bindings.menuBindings.size());
 
         gui.setFont(resmgr.get<tgui::Font>("ChunkFive-Regular.ttf"));
         // NOTE: You can create your own theme file and use it here
