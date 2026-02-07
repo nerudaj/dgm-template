@@ -120,3 +120,5 @@ cmake -B _build . -D CMAKE_C_COMPILER=clang-18 -D CMAKE_CXX_COMPILER=clang++-18 
 
 * TGUI seems to incorrectly compute offsets on Android. For example textured menu backgrounds are cropped at 50% height. Positions of containers in Options menu are shifted to right, which doesn't happen on Windows, etc.
 * Graphic assets bigger than 1024 px in a single dimension will make unit tests in CI fail, since there are some sanity tests that are loading resources and the build agents don't have enough VRAM.
+* On Ubuntu, font/container sizes are hardcoded values, instead of being polled from system properties like on Android or Windows. PRs implementing this are welcome.
+* On Ubuntu, current working directory is used for storing settings/save data. It should point to some temp directory. PRs implementing this are welcome.
