@@ -119,7 +119,9 @@ namespace priv
     LayoutBuilderWithBackgroundAndTitle
     LayoutBuilderWithBackground::withTexturedTitle(const sf::Texture& texture)
     {
-        const tgui::Texture ttexture(texture);
+        tgui::Texture ttexture;
+        ttexture.loadFromPixelData(
+            texture.getSize(), texture.copyToImage().getPixelsPtr());
 
         auto&& panelContainer = tgui::Group::create(
             { texture.getSize().x * props.titleHeight / texture.getSize().y,
