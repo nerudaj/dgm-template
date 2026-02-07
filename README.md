@@ -13,6 +13,10 @@
 - [Building for Android](#building-for-android)
   - [Dependencies](#dependencies-1)
   - [Setup](#setup-1)
+  - [Signing APKs](#signing-apks)
+- [Building for Ubuntu](#building-for-ubuntu)
+  - [Dependencies](#dependencies-2)
+  - [Setup](#setup-2)
 - [Known issues](#known-issues)
 
 ## Project structure
@@ -54,11 +58,8 @@ If you need to reference certain CMake variable values in native code, add them 
 Configure cmake:
 
 ```sh
-mkdir _build
-cd _build
-
 # of USE_NSIS=ON, configures cpack to use NSIS instead of zip (generates installer)
-cmake [-D USE_NSIS=ON] ..
+cmake -B _build . [-D USE_NSIS=ON]
 ```
 
 This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, then CPack would use NSIS (must be installed) instead of Zip for packaging.
@@ -73,21 +74,19 @@ cpack
 
 ## Building for Android
 
-## Dependencies
+### Dependencies
 
 * Java SDK 11
 * Android NDK
 * CMake v3.28.1+
 * Gradle is fetched automatically through gradlew
 
-## Setup
+### Setup
 
 Configure cmake:
 
 ```sh
-mkdir _build
-cd _build
-cmake -D CMAKE_SYSTEM_NAME=Android ..
+cmake -B _build . -D CMAKE_SYSTEM_NAME=Android
 ```
 
 After that you can open the `_build` folder as a project in Android Studio and continue from there. Or you can directly invoke Gradle and build from the command line:
@@ -97,9 +96,25 @@ gradlew build
 cpack
 ```
 
-## Signing APKs
+### Signing APKs
 
 The `Release-Android` pipeline is capable of automatically signing the release APKs for you, provided you have appropriate secrets defined for this repo. Read [this guide](docs/ApkSigning.md) for more details.
+
+## Building for Ubuntu
+
+Unlike on Windows, SFML doesn't automatically fetch its depenendencies on Linux. Therefore you need to install following packages first:
+
+```sh
+apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libfreetype-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev libharfbuzz-dev
+```
+
+The supported compiler is Clang 18 (and presumably anything newer will work). However, Clang uses libc++ implementation from GCC which has some troubles with std::ranges, so you also need to install Clang's implementation of libc++ and link that.
+
+First, make sure you have package `libc++-dev` installed, then select it during configuration:
+
+```sh
+cmake -B _build . -D CMAKE_C_COMPILER=clang-18 -D CMAKE_CXX_COMPILER=clang++-18 -D CMAKE_CXX_FLAGS=-stdlib=libc++
+```
 
 ## Known issues
 

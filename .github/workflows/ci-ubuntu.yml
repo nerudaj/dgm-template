@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        clang: [20, 21]
+        clang: [ 18 ]
 
     steps:
     - uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
       run: |
         mkdir "${{env.BUILD_DIR}}"
         cd "${{env.BUILD_DIR}}"
-        cmake -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} ..
+        cmake -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} -DCMAKE_CXX_FLAGS=-stdlib='libc++'..
       shell: bash
 
     - name: Build
