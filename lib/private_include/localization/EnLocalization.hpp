@@ -41,6 +41,7 @@ const std::map<StringId, StringViewType> EN_LOCALIZATION = {
     // InputKind
     { InputKind_BackButton, "Back" },
     { InputKind_ConfirmButton, "Confirm" },
+    { InputKind_PauseButton, "Pause" },
     { InputKind_CursorUp, "Cursor up" },
     { InputKind_CursorDown, "Cursor down" },
     { InputKind_CursorLeft, "Cursor left" },

@@ -34,9 +34,15 @@ bool Input::isJumpPressed() const
     return readAndRelease(InputKind::MenuCycleRight);
 }
 
+bool Input::isPauseButtonPressed() const
+{
+    return readAndRelease(InputKind::PauseButton)
+           || touchController.isBackPressed();
+}
+
 bool Input::isBackButtonPressed() const
 {
-    return readAndRelease(InputKind::BackButton) || touchController.isBackPressed();
+    return readAndRelease(InputKind::BackButton);
 }
 
 bool Input::isConfirmPressed() const

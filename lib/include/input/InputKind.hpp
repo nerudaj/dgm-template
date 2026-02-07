@@ -4,6 +4,7 @@ enum class [[nodiscard]] InputKind
 {
     BackButton,
     ConfirmButton,
+    PauseButton,
     CursorUp,
     CursorDown,
     CursorLeft,
