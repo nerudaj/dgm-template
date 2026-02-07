@@ -21,6 +21,8 @@ public:
             return strings.getString(StringId::InputKind_BackButton);
         case InputKind::ConfirmButton:
             return strings.getString(StringId::InputKind_ConfirmButton);
+        case InputKind::PauseButton:
+            return strings.getString(StringId::InputKind_PauseButton);
         case InputKind::CursorUp:
             return strings.getString(StringId::InputKind_CursorUp);
         case InputKind::CursorDown:

@@ -38,6 +38,8 @@ public:
 
     [[nodiscard]] bool isMenuCycleRightPressed() const;
 
+    [[nodiscard]] bool isPauseButtonPressed() const;
+
     [[nodiscard]] bool isBackButtonPressed() const;
 
     [[nodiscard]] bool isConfirmPressed() const;

@@ -22,9 +22,11 @@ struct [[nodiscard]] BindingsSettings final
 
     std::map<InputKind, Binding> menuBindings = {
         { InputKind::BackButton,
-          { sf::Keyboard::Key::Escape, GamepadButton { 6 } } },
+          { sf::Keyboard::Key::Escape, GamepadButton { 2 } } },
         { InputKind::ConfirmButton,
           { std::monostate {}, GamepadButton { 0 } } },
+        { InputKind::PauseButton,
+          { sf::Keyboard::Key::Escape, GamepadButton { 6 } } },
         { InputKind::CursorUp,
           { std::monostate {},
             std::pair { sf::Joystick::Axis::Y, dgm::AxisHalf::Negative } } },

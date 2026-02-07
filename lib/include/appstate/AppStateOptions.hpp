@@ -50,6 +50,8 @@ private:
         btn->setText(HwInputToStringMapper {}.getMapping(newBinding));
         dic.input.updateBindings(dic.settings.bindings);
         dic.input.forceRelease(action);
+        dic.input.forceRelease(InputKind::BackButton);
+        dic.input.forceRelease(InputKind::ConfirmButton);
     }
 
     template<class BindType>

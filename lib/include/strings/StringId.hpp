@@ -34,6 +34,7 @@ enum class [[nodiscard]] StringId
     // InputKind
     InputKind_BackButton,
     InputKind_ConfirmButton,
+    InputKind_PauseButton,
     InputKind_CursorUp,
     InputKind_CursorDown,
     InputKind_CursorLeft,
