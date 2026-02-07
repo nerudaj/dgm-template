@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  BUILD_DIR: ${{github.workspace}}/vsbuild
+  BUILD_DIR: ${{github.workspace}}/_build
 
 jobs:
   build:
@@ -43,9 +43,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        mkdir "${{env.BUILD_DIR}}"
-        cd "${{env.BUILD_DIR}}"
-        cmake -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} -DCMAKE_CXX_FLAGS=-stdlib='libc++'..
+        cmake -B "${{env.BUILD_DIR}}" . -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} -DCMAKE_CXX_FLAGS=-stdlib='libc++'
       shell: bash
 
     - name: Build
