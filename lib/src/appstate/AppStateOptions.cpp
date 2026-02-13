@@ -2,7 +2,6 @@
 #include "appstate/AppStateInputDetector.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "filesystem/AppStorage.hpp"
-#include "gui/Builders.hpp"
 #include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include "strings/InputKindToStringMapper.hpp"
@@ -98,7 +97,8 @@ void AppStateOptions::buildLayout()
             .withBottomLeftButton(WidgetBuilder::createButton(
                 dic.strings.getString(StringId::Back),
                 [&] { onBack(); },
-                dic.sizer))
+                dic.sizer,
+                dic.soundPlayer))
             .withNoBottomRightButton()
             .build());
 }
@@ -154,7 +154,8 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
                 WidgetBuilder::createButton(
                     dic.strings.getString(StringId::Apply),
                     [&] { refresh(); },
-                    dic.sizer))
+                    dic.sizer,
+                    dic.soundPlayer))
 #ifdef _DEBUG
             .addOption(
                 StringId::SetTheme,
@@ -298,6 +299,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                                 dic, std::move(callback));
                         },
                         dic.sizer,
+                        dic.soundPlayer,
                         WidgetOptions { .id =
                                             getBindButtonId<KmbBinding>(action),
                                         .enabled = !isEscapeKey }),
@@ -314,6 +316,7 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                                 dic, std::move(callback));
                         },
                         dic.sizer,
+                        dic.soundPlayer,
                         WidgetOptions {
                             .id = getBindButtonId<GamepadBinding>(action),
                         }),

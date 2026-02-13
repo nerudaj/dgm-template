@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audio/SoundPlayer.hpp"
 #include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include "strings/StringProvider.hpp"
@@ -13,8 +14,10 @@ class [[nodiscard]] ButtonListBuilder final
 {
 public:
     ButtonListBuilder(
-        const StringProvider& strings, const Sizer& sizer) noexcept
-        : strings(strings), sizer(sizer)
+        const StringProvider& strings,
+        const Sizer& sizer,
+        SoundPlayer& player) noexcept
+        : strings(strings), sizer(sizer), player(player)
     {
     }
 
@@ -42,5 +45,6 @@ private:
 
     const StringProvider& strings;
     const Sizer& sizer;
+    SoundPlayer& player;
     std::vector<ButtonProps> buttonProps;
 };

@@ -2,7 +2,6 @@
 #include "appstate/AppStateGame.hpp"
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/CommonHandler.hpp"
-#include "gui/Builders.hpp"
 #include "misc/CMakeVars.hpp"
 #include "strings/StringProvider.hpp"
 #include "types/SemanticTypes.hpp"
@@ -42,11 +41,11 @@ void AppStateMainMenu::restoreFocusImpl(const std::string&)
 void AppStateMainMenu::buildLayout()
 {
     dic.gui.rebuildWith(
-        DefaultLayoutBuilder(dic.sizer)
+        dic.guiBuilderFactory.createDefaultLayoutBuiler()
             .withBackgroundImage(
                 dic.resmgr.get<sf::Texture>("placeholder-background.png"))
             .withTitle(CMakeVars::TITLE, HeadingLevel::H1)
-            .withContent(ButtonListBuilder(dic.strings, dic.sizer)
+            .withContent(dic.guiBuilderFactory.createButtonListBuilder()
                              .addButton(StringId::PlayButton, [&] { onPlay(); })
                              .addButton(StringId::Options, [&] { onOptions(); })
                              .addButton(
@@ -60,18 +59,15 @@ void AppStateMainMenu::buildLayout()
 
 void AppStateMainMenu::onPlay()
 {
-    dic.soundPlayer.playPovSound(SoundId::Click);
     app.pushState<AppStateGame>(dic);
 }
 
 void AppStateMainMenu::onOptions()
 {
-    dic.soundPlayer.playPovSound(SoundId::Click);
     app.pushState<AppStateOptions>(dic);
 }
 
 void AppStateMainMenu::onExit()
 {
-    dic.soundPlayer.playPovSound(SoundId::Click);
     app.exit();
 }

@@ -5,6 +5,7 @@
 #include "filesystem/AppStorage.hpp"
 #include "filesystem/ResourceLoader.hpp"
 #include "gui/Gui.hpp"
+#include "gui/GuiBuilderFactory.hpp"
 #include "gui/Sizers.hpp"
 #include "input/Input.hpp"
 #include "input/TouchController.hpp"
@@ -27,6 +28,7 @@ struct [[nodiscard]] DependencyContainer final
     SoundPlayer soundPlayer;
     AppSettings settings;
     std::function<void()> saveSettings;
+    GuiBuilderFactory guiBuilderFactory;
 
     DependencyContainer(
         dgm::Window& window,
@@ -71,6 +73,7 @@ struct [[nodiscard]] DependencyContainer final
                   AppStorage::saveFile(
                       settingsFileName, AppSettingsStorageModel(settings));
               })
+        , guiBuilderFactory(sizer, strings, soundPlayer)
     {
         // These asserts will fail when you're adding new bindings
         // just delete the settings.json and all will be fine again
