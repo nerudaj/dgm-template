@@ -2,7 +2,7 @@
 
 RenderingEngine::RenderingEngine(
     dgm::ResourceManager& resmgr,
-    Scene& scene,
+    GameScene& scene,
     const AppSettings& settings,
     const TouchController& touchController) noexcept
     : scene(scene)
@@ -20,9 +20,8 @@ RenderingEngine::RenderingEngine(
         sf::Vector2f(scene.dummy.animation.getCurrentFrame().size) / 2.f);
     ground.setPosition(scene.groundPosition);
     ground.setFillColor(sf::Color(128, 192, 0));
-    ground.setSize(
-        { INTERNAL_GAME_RESOLUTION.x,
-          INTERNAL_GAME_RESOLUTION.y - scene.groundPosition.y });
+    ground.setSize({ INTERNAL_GAME_RESOLUTION.x,
+                     INTERNAL_GAME_RESOLUTION.y - scene.groundPosition.y });
 }
 
 void RenderingEngine::update(const dgm::Time& time)

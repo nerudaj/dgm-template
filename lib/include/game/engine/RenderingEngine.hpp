@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/Scene.hpp"
+#include "game/definitions/GameScene.hpp"
 #include "input/TouchController.hpp"
 #include "misc/FpsCounter.hpp"
 #include "settings/AppSettings.hpp"
@@ -11,7 +11,7 @@ class [[nodiscard]] RenderingEngine final
 public:
     RenderingEngine(
         dgm::ResourceManager& resmgr,
-        Scene& scene,
+        GameScene& scene,
         const AppSettings& settings,
         const TouchController& touchController) noexcept;
 
@@ -47,7 +47,7 @@ private:
     const static inline auto INTERNAL_GAME_RESOLUTION =
         sf::Vector2f { 1280.f, 720.f };
 
-    Scene& scene;
+    GameScene& scene;
     const AppSettings& settings;
     const TouchController& touchController;
     dgm::Camera worldCamera;

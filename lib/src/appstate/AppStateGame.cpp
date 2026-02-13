@@ -31,12 +31,11 @@ void AppStateGame::update()
     gameRulesEngine.update(app.time);
     renderingEngine.update(app.time);
 
+    // Any number of visitors can be passed down for event processing
     gameEvents.processEvents(
+        gameRulesEngine,
         [&](const DummyGameEvent& e)
-        {
-            sound.setBuffer(dic.resmgr.get<sf::SoundBuffer>(e.soundName));
-            sound.play();
-        });
+        { dic.soundPlayer.playPovSound(SoundId::Land); });
 }
 
 void AppStateGame::draw()
@@ -52,13 +51,13 @@ void AppStateGame::restoreFocusImpl(const std::string& msg)
     }
 }
 
-Scene AppStateGame::buildScene(const dgm::ResourceManager& resmgr)
+GameScene AppStateGame::buildScene(const dgm::ResourceManager& resmgr)
 {
     auto&& animation =
         dgm::Animation(resmgr.get<dgm::AnimationStates>("mrman.png.anim"), 4);
     animation.setState("idle", true);
 
-    return Scene {
+    return GameScene {
         .dummy =
             DummyEntity {
                 .body = dgm::Rect({ 100.f, 100.f }, { 32.f, 60.f }),

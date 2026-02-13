@@ -1,10 +1,10 @@
 #pragma once
 
-#include "game/Scene.hpp"
+#include "game/definitions/GameScene.hpp"
 #include "game/engine/GameRulesEngine.hpp"
 #include "game/engine/RenderingEngine.hpp"
-#include "game/events/EventQueue.hpp"
 #include "misc/DependencyContainer.hpp"
+#include "misc/EventQueue.hpp"
 #include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
 #include <SFML/Audio.hpp>
@@ -19,9 +19,7 @@ public:
         , scene(buildScene(dic.resmgr))
         , gameRulesEngine(gameEvents, scene, dic.input)
         , renderingEngine(dic.resmgr, scene, dic.settings, dic.touchController)
-        , sound(dic.resmgr.get<sf::SoundBuffer>("land.wav"))
     {
-        sound.setVolume(100.f);
     }
 
 public:
@@ -34,13 +32,12 @@ public:
 private:
     void restoreFocusImpl(const std::string& msg) override;
 
-    static Scene buildScene(const dgm::ResourceManager& resmgr);
+    static GameScene buildScene(const dgm::ResourceManager& resmgr);
 
 private:
     DependencyContainer& dic;
-    Scene scene;
+    GameScene scene;
     EventQueue<GameEvent> gameEvents;
     GameRulesEngine gameRulesEngine;
     RenderingEngine renderingEngine;
-    sf::Sound sound;
 };
