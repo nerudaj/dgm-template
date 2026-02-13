@@ -10,7 +10,7 @@ RenderingEngine::RenderingEngine(
     , atlas(atlas)
     , settings(settings)
     , touchController(touchController)
-    , shader(resmgr.getMutable<sf::Shader>("blur"))
+    , shader(resmgr.getMutable<sf::Shader>("wave"))
     , worldCamera(createFullscreenCamera(
           sf::Vector2f(settings.video.resolution), INTERNAL_GAME_RESOLUTION))
     , hudCamera(
@@ -82,12 +82,6 @@ dgm::Camera RenderingEngine::createFullscreenCamera(
 void RenderingEngine::renderWorld(dgm::Window& window)
 {
     shader.setUniform("time", timeElapsed);
-    shader.setUniform(
-        "texelSize",
-        sf::Vector2f(
-            1.f / INTERNAL_GAME_RESOLUTION.x,
-            1.f / INTERNAL_GAME_RESOLUTION.y));
-    shader.setUniform("radius", 10.f);
 
     pipeline.clear();
 
