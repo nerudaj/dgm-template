@@ -14,5 +14,5 @@ struct DummyEntity
 struct [[nodiscard]] GameScene final
 {
     DummyEntity dummy;
-    sf::Vector2f groundPosition;
+    dgm::Mesh levelMesh;
 };

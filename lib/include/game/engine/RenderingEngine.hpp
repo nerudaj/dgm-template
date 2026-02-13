@@ -1,8 +1,10 @@
 #pragma once
 
 #include "game/definitions/GameScene.hpp"
+#include "game/definitions/GameTextureAtlas.hpp"
 #include "input/TouchController.hpp"
 #include "misc/FpsCounter.hpp"
+#include "misc/ShadeableRenderingPipeline2D.hpp"
 #include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
 
@@ -12,6 +14,7 @@ public:
     RenderingEngine(
         dgm::ResourceManager& resmgr,
         GameScene& scene,
+        const GameTextureAtlas& atlas,
         const AppSettings& settings,
         const TouchController& touchController) noexcept;
 
@@ -48,6 +51,7 @@ private:
         sf::Vector2f { 1280.f, 720.f };
 
     GameScene& scene;
+    const GameTextureAtlas& atlas;
     const AppSettings& settings;
     const TouchController& touchController;
     dgm::Camera worldCamera;
@@ -56,6 +60,6 @@ private:
     FpsCounter fpsCounter;
     sf::Text text;
 
-    sf::Sprite sprite;
-    sf::RectangleShape ground;
+    ShadeableRenderingPipeline2D pipeline;
+    dgm::Clip tilesClip;
 };

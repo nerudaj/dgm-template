@@ -58,7 +58,7 @@ void GameRulesEngine::updateDummyAnimation(
 
 void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
 {
-    const float JUMP_IMPULSE = -256.f;
+    const float JUMP_IMPULSE = -292.f;
     const float GRAVITY = 256.f;
     const float MAX_FALL_SPEED = 256.f;
     const float SPEED = 128.f;
@@ -77,17 +77,14 @@ void GameRulesEngine::updateDummy(DummyEntity& dummy, const float deltaTime)
         -std::numeric_limits<float>::infinity(),
         MAX_FALL_SPEED);
 
-    dummy.body.move(dummy.forward * deltaTime);
+    auto frameForward = dummy.forward * deltaTime;
+    dgm::Collision::advanced(scene.levelMesh, dummy.body, frameForward);
+    dummy.body.move(frameForward);
     dummy.facingLeft =
         dummy.forward.x < 0.f || dummy.forward.x == 0.f && dummy.facingLeft;
 
-    auto pos = dummy.body.getPosition();
-    if (pos.y + dummy.body.getSize().y > scene.groundPosition.y)
-    {
-        dummy.forward.y = 0.f;
-        dummy.body.setPosition(
-            { pos.x, scene.groundPosition.y - dummy.body.getSize().y });
-    }
+    if (frameForward.x == 0.f) dummy.forward.x = 0.f;
+    if (frameForward.y == 0.f) dummy.forward.y = 0.f;
 }
 
 #pragma region

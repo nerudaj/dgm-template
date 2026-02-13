@@ -18,24 +18,33 @@ int main(int, char*[])
             .useFullscreen = settings.video.fullscreen,
         });
         auto&& app = dgm::App(window);
-        auto&& dependencies = DependencyContainer(
-            window,
-            "../assets",
-            Language::English,
-            settings,
-            SETTINGS_FILE_NAME);
 
-        window.getSfmlWindowContext().setMouseCursorVisible(false);
+        try
+        {
+            auto&& dependencies = DependencyContainer(
+                window,
+                "../assets",
+                Language::English,
+                settings,
+                SETTINGS_FILE_NAME);
 
-        app.pushState<AppStateMainMenu>(dependencies);
-        app.run();
+            window.getSfmlWindowContext().setMouseCursorVisible(false);
 
-        dependencies.saveSettings();
+            app.pushState<AppStateMainMenu>(dependencies);
+            app.run();
+
+            dependencies.saveSettings();
+        }
+        catch (const std::exception& ex)
+        {
+            std::cerr << ex.what() << std::endl;
+            return 1;
+        }
     }
     catch (const std::exception& ex)
     {
-        std::cerr << ex.what() << std::endl;
-        return 1;
+        // streams are too botched at this point for logging
+        throw;
     }
 
     return 0;

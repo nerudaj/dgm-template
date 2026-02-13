@@ -34,7 +34,7 @@ void AppStateGame::update()
     // Any number of visitors can be passed down for event processing
     gameEvents.processEvents(
         gameRulesEngine,
-        [&](const DummyGameEvent& e)
+        [&](const DummyGameEvent&)
         { dic.soundPlayer.playPovSound(SoundId::Land); });
 }
 
@@ -49,20 +49,4 @@ void AppStateGame::restoreFocusImpl(const std::string& msg)
     {
         std::visit([&](PopIfNotMenu&) { app.popState(msg); }, *message);
     }
-}
-
-GameScene AppStateGame::buildScene(const dgm::ResourceManager& resmgr)
-{
-    auto&& animation =
-        dgm::Animation(resmgr.get<dgm::AnimationStates>("mrman.png.anim"), 4);
-    animation.setState("idle", true);
-
-    return GameScene {
-        .dummy =
-            DummyEntity {
-                .body = dgm::Rect({ 100.f, 100.f }, { 32.f, 60.f }),
-                .animation = std::move(animation),
-            },
-        .groundPosition = { 0.f, 400.f },
-    };
 }

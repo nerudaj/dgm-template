@@ -1,6 +1,9 @@
 #pragma once
 
+#include "game/builders/GameSceneBuilder.hpp"
+#include "game/builders/GameTextureAtlasBuilder.hpp"
 #include "game/definitions/GameScene.hpp"
+#include "game/definitions/GameTextureAtlas.hpp"
 #include "game/engine/GameRulesEngine.hpp"
 #include "game/engine/RenderingEngine.hpp"
 #include "misc/DependencyContainer.hpp"
@@ -16,9 +19,12 @@ public:
     AppStateGame(dgm::App& app, DependencyContainer& dic)
         : dgm::AppState(app)
         , dic(dic)
-        , scene(buildScene(dic.resmgr))
+        , atlas(GameTextureAtlasBuilder::createTextureAtlas(
+              dic.resmgr, { 1024, 1024 }))
+        , scene(GameSceneBuilder::createScene(atlas, dic.resmgr))
         , gameRulesEngine(gameEvents, scene, dic.input)
-        , renderingEngine(dic.resmgr, scene, dic.settings, dic.touchController)
+        , renderingEngine(
+              dic.resmgr, scene, atlas, dic.settings, dic.touchController)
     {
     }
 
@@ -32,10 +38,9 @@ public:
 private:
     void restoreFocusImpl(const std::string& msg) override;
 
-    static GameScene buildScene(const dgm::ResourceManager& resmgr);
-
 private:
     DependencyContainer& dic;
+    GameTextureAtlas atlas;
     GameScene scene;
     EventQueue<GameEvent> gameEvents;
     GameRulesEngine gameRulesEngine;
