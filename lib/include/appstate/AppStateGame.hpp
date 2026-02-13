@@ -17,7 +17,11 @@ class [[nodiscard]] AppStateGame : public dgm::AppState
 {
 public:
     AppStateGame(dgm::App& app, DependencyContainer& dic)
-        : dgm::AppState(app)
+        : dgm::AppState(
+              app,
+              dgm::AppStateConfig {
+                  .clearColor = sf::Color { 0xff, 0xaa, 0x88 },
+              })
         , dic(dic)
         , atlas(GameTextureAtlasBuilder::createTextureAtlas(
               dic.resmgr, { 1024, 1024 }))

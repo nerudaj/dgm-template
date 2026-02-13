@@ -10,13 +10,14 @@ RenderingEngine::RenderingEngine(
     , atlas(atlas)
     , settings(settings)
     , touchController(touchController)
+    , shader(resmgr.getMutable<sf::Shader>("blur"))
     , worldCamera(createFullscreenCamera(
           sf::Vector2f(settings.video.resolution), INTERNAL_GAME_RESOLUTION))
     , hudCamera(
           sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } },
           sf::Vector2f(settings.video.resolution))
     , text(resmgr.get<sf::Font>("ChunkFive-Regular.ttf"))
-    , pipeline(atlas.atlas.getTexture())
+    , pipeline(atlas.atlas.getTexture(), shader)
     , tilesClip(atlas.atlas.getClip(atlas.tilesLocation))
 {
 }
@@ -24,6 +25,7 @@ RenderingEngine::RenderingEngine(
 void RenderingEngine::update(const dgm::Time& time)
 {
     fpsCounter.update(time.getDeltaTime());
+    timeElapsed += time.getDeltaTime();
 }
 
 void RenderingEngine::draw(dgm::Window& window)
@@ -79,6 +81,14 @@ dgm::Camera RenderingEngine::createFullscreenCamera(
 
 void RenderingEngine::renderWorld(dgm::Window& window)
 {
+    shader.setUniform("time", timeElapsed);
+    shader.setUniform(
+        "texelSize",
+        sf::Vector2f(
+            1.f / INTERNAL_GAME_RESOLUTION.x,
+            1.f / INTERNAL_GAME_RESOLUTION.y));
+    shader.setUniform("radius", 10.f);
+
     pipeline.clear();
 
     pipeline.addFace(

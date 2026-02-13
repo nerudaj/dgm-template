@@ -54,6 +54,7 @@ private:
     const GameTextureAtlas& atlas;
     const AppSettings& settings;
     const TouchController& touchController;
+    sf::Shader& shader;
     dgm::Camera worldCamera;
     dgm::Camera hudCamera;
 
@@ -62,4 +63,5 @@ private:
 
     ShadeableRenderingPipeline2D pipeline;
     dgm::Clip tilesClip;
+    float timeElapsed = 0.f;
 };
