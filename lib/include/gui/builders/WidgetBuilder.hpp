@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audio/SoundPlayer.hpp"
 #include "gui/Gui.hpp"
 #include "gui/HeadingLevel.hpp"
 #include "gui/Sizers.hpp"
@@ -56,6 +57,7 @@ public:
         const Label& label,
         std::function<void(void)> onClick,
         const Sizer& sizer,
+        SoundPlayer& player,
         WidgetOptions options = WidgetOptions {});
 
     // Create a button that can fit inside an option row
@@ -63,6 +65,7 @@ public:
         const Label& label,
         std::function<void(void)> onClick,
         const Sizer& sizer,
+        SoundPlayer& player,
         WidgetOptions options = WidgetOptions {});
 
     [[nodiscard]] static tgui::CheckBox::Ptr createCheckbox(
@@ -117,6 +120,7 @@ public:
         const std::vector<Label>& tabLabels,
         std::function<void(const tgui::String&)> onTabChange,
         const Sizer& sizer,
+        SoundPlayer& player,
         WidgetOptions options = {});
 
     [[nodiscard]] static tgui::SeparatorLine::Ptr createSeparator();
@@ -124,7 +128,8 @@ public:
     [[nodiscard]] static tgui::Container::Ptr createCarousel(
         const size_t pageCount,
         std::function<void(const tgui::Container::Ptr, size_t)> onPageChange,
-        const Sizer& sizer);
+        const Sizer& sizer,
+        SoundPlayer& player);
 
     [[nodiscard]] static constexpr std::string
     getUnsignedNumericValidator() noexcept

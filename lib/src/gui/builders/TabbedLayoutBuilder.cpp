@@ -39,6 +39,7 @@ TabbedLayoutBuilder::build(const TabbedLayoutOptions& options)
             }
         },
         sizer,
+        player,
         WidgetOptions {
             .id = options.tabsWidgetId,
         });
