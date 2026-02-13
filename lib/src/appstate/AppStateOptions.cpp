@@ -70,7 +70,7 @@ void AppStateOptions::buildLayout()
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::Options), HeadingLevel::H1)
-            .withContent(TabbedLayoutBuilder(dic.strings, dic.sizer)
+            .withContent(dic.guiBuilderFactory.createTabbedLayoutBuilder()
                              .addTab(
                                  StringId::VideoOptionsTab,
                                  [&](tgui::Container::Ptr content)

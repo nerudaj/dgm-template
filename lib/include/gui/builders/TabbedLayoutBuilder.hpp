@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audio/SoundPlayer.hpp"
 #include "gui/Sizers.hpp"
 #include "misc/Compatibility.hpp"
 #include "strings/StringProvider.hpp"
