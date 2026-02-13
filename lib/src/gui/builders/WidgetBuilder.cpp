@@ -43,10 +43,16 @@ tgui::Button::Ptr WidgetBuilder::createButton(
     const Label& label,
     std::function<void(void)> onClick,
     const Sizer& sizer,
+    SoundPlayer& player,
     WidgetOptions options)
 {
     auto&& button = tgui::Button::create(label);
-    button->onClick(onClick);
+    button->onClick(
+        [onClick = std::move(onClick), &player]
+        {
+            player.playPovSound(SoundId::Click);
+            onClick();
+        });
     button->setTextSize(sizer.getBaseFontSize());
     button->setSize({ "100%", "100%" });
 
@@ -59,9 +65,10 @@ tgui::Button::Ptr WidgetBuilder::createButton(
     const Label& label,
     std::function<void(void)> onClick,
     const Sizer& sizer,
+    SoundPlayer& player,
     WidgetOptions options)
 {
-    auto&& button = createButton(label, onClick, sizer, options);
+    auto&& button = createButton(label, onClick, sizer, player, options);
     button->setSize({ "90%", "90%" });
     button->setPosition({ "5%", "5%" });
     button->getRenderer()->setBackgroundColor(tgui::Color::Transparent);
@@ -175,6 +182,7 @@ tgui::Tabs::Ptr WidgetBuilder::createTabs(
     const std::vector<Label>& tabLabels,
     std::function<void(const tgui::String&)> onTabChange,
     const Sizer& sizer,
+    SoundPlayer& player,
     WidgetOptions options)
 {
     auto&& tabs = tgui::Tabs::create();
@@ -186,7 +194,13 @@ tgui::Tabs::Ptr WidgetBuilder::createTabs(
         tabs->add(label);
     }
 
-    tabs->onTabSelect(onTabChange);
+    tabs->onTabSelect(
+        [onTabChange = std::move(onTabChange),
+         &player](const tgui::String& tabname)
+        {
+            player.playPovSound(SoundId::Click);
+            onTabChange(tabname);
+        });
 
     applyOptionsToWidget(options, tabs);
 
@@ -203,7 +217,8 @@ tgui::SeparatorLine::Ptr WidgetBuilder::createSeparator()
 tgui::Container::Ptr WidgetBuilder::createCarousel(
     const size_t pageCount,
     std::function<void(const tgui::Container::Ptr, size_t)> onPageChange,
-    const Sizer& sizer)
+    const Sizer& sizer,
+    SoundPlayer& player)
 {
     auto pageLabel = createTextLabel("x / x", sizer, "justify"_true);
     auto content = tgui::Group::create();
@@ -224,13 +239,13 @@ tgui::Container::Ptr WidgetBuilder::createCarousel(
     buttons->setAutoLayout(tgui::AutoLayout::Bottom);
 
     auto prevButton =
-        createButton("<", [changePage] { changePage(-1); }, sizer);
+        createButton("<", [changePage] { changePage(-1); }, sizer, player);
     buttons->add(prevButton);
 
     buttons->add(pageLabel);
 
     auto nextButton =
-        createButton(">", [changePage] { changePage(+1); }, sizer);
+        createButton(">", [changePage] { changePage(+1); }, sizer, player);
     buttons->add(nextButton);
 
     group->add(buttons);

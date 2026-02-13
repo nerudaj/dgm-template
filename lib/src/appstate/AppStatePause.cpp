@@ -2,7 +2,6 @@
 #include "appstate/AppStateOptions.hpp"
 #include "appstate/CommonHandler.hpp"
 #include "appstate/Messaging.hpp"
-#include "gui/Builders.hpp"
 
 void AppStatePause::input()
 {
@@ -20,12 +19,12 @@ void AppStatePause::draw()
 void AppStatePause::buildLayout()
 {
     dic.gui.rebuildWith(
-        DefaultLayoutBuilder(dic.sizer)
+        dic.guiBuilderFactory.createDefaultLayoutBuiler()
             .withNoBackgroundImage()
             .withTitle(
                 dic.strings.getString(StringId::PauseTitle), HeadingLevel::H1)
             .withContent(
-                ButtonListBuilder(dic.strings, dic.sizer)
+                dic.guiBuilderFactory.createButtonListBuilder()
                     .addButton(StringId::Resume, [&] { onResume(); })
                     .addButton(StringId::Options, [&] { onOptions(); })
                     .addButton(StringId::BackToMenu, [&] { onBackToMenu(); })

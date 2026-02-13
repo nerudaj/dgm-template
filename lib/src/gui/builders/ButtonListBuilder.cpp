@@ -39,8 +39,8 @@ tgui::Container::Ptr ButtonListBuilder::build(
     {
         auto group = tgui::Group::create(
             { "100%", sizer.getBaseContainerHeight() * 1.5f });
-        auto&& button =
-            WidgetBuilder::createButton(props.label, props.onClick, sizer);
+        auto&& button = WidgetBuilder::createButton(
+            props.label, props.onClick, sizer, player);
         group->add(button, props.buttonId);
 
         layout->add(group);
