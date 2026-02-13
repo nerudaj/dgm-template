@@ -10,14 +10,22 @@ RenderingEngine::RenderingEngine(
     , atlas(atlas)
     , settings(settings)
     , touchController(touchController)
+#ifndef ANDROID
     , shader(resmgr.getMutable<sf::Shader>("wave"))
+#endif
     , worldCamera(createFullscreenCamera(
           sf::Vector2f(settings.video.resolution), INTERNAL_GAME_RESOLUTION))
     , hudCamera(
           sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } },
           sf::Vector2f(settings.video.resolution))
     , text(resmgr.get<sf::Font>("ChunkFive-Regular.ttf"))
-    , pipeline(atlas.atlas.getTexture(), shader)
+    , pipeline(
+          atlas.atlas.getTexture()
+#ifndef ANDROID
+              ,
+          shader
+#endif
+          )
     , tilesClip(atlas.atlas.getClip(atlas.tilesLocation))
 {
 }
@@ -81,7 +89,9 @@ dgm::Camera RenderingEngine::createFullscreenCamera(
 
 void RenderingEngine::renderWorld(dgm::Window& window)
 {
+#ifndef ANDROID
     shader.setUniform("time", timeElapsed);
+#endif
 
     pipeline.clear();
 

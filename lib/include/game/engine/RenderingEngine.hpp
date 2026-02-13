@@ -54,7 +54,9 @@ private:
     const GameTextureAtlas& atlas;
     const AppSettings& settings;
     const TouchController& touchController;
+#ifndef ANDROID
     sf::Shader& shader;
+#endif
     dgm::Camera worldCamera;
     dgm::Camera hudCamera;
 
