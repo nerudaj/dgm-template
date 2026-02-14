@@ -2,32 +2,38 @@
 
 RenderingEngine::RenderingEngine(
     dgm::ResourceManager& resmgr,
-    Scene& scene,
+    GameScene& scene,
+    const GameTextureAtlas& atlas,
     const AppSettings& settings,
     const TouchController& touchController) noexcept
     : scene(scene)
+    , atlas(atlas)
     , settings(settings)
     , touchController(touchController)
+#ifndef ANDROID
+    , shader(resmgr.getMutable<sf::Shader>("wave"))
+#endif
     , worldCamera(createFullscreenCamera(
           sf::Vector2f(settings.video.resolution), INTERNAL_GAME_RESOLUTION))
     , hudCamera(
           sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } },
           sf::Vector2f(settings.video.resolution))
     , text(resmgr.get<sf::Font>("ChunkFive-Regular.ttf"))
-    , sprite(resmgr.get<sf::Texture>("mrman.png"))
+    , pipeline(
+          atlas.atlas.getTexture()
+#ifndef ANDROID
+              ,
+          shader
+#endif
+          )
+    , tilesClip(atlas.atlas.getClip(atlas.tilesLocation))
 {
-    sprite.setOrigin(
-        sf::Vector2f(scene.dummy.animation.getCurrentFrame().size) / 2.f);
-    ground.setPosition(scene.groundPosition);
-    ground.setFillColor(sf::Color(128, 192, 0));
-    ground.setSize(
-        { INTERNAL_GAME_RESOLUTION.x,
-          INTERNAL_GAME_RESOLUTION.y - scene.groundPosition.y });
 }
 
 void RenderingEngine::update(const dgm::Time& time)
 {
     fpsCounter.update(time.getDeltaTime());
+    timeElapsed += time.getDeltaTime();
 }
 
 void RenderingEngine::draw(dgm::Window& window)
@@ -83,17 +89,39 @@ dgm::Camera RenderingEngine::createFullscreenCamera(
 
 void RenderingEngine::renderWorld(dgm::Window& window)
 {
-    sprite.setTextureRect(scene.dummy.animation.getCurrentFrame());
-    sprite.setPosition(scene.dummy.body.getCenter());
-    sprite.setScale({ scene.dummy.facingLeft ? -1.f : 1.f, 1.f });
+#ifndef ANDROID
+    shader.setUniform("time", timeElapsed);
+#endif
 
-    scene.dummy.body.debugRender(window); // rendering hitbox
-    window.draw(ground);
-    window.draw(sprite);
+    pipeline.clear();
+
+    pipeline.addFace(
+        scene.dummy.body.getCenter(),
+        sf::FloatRect(scene.dummy.animation.getCurrentFrame()),
+        sf::degrees(0),
+        { scene.dummy.facingLeft ? -1.f : 1.f, 1.f });
+
+    for (auto y = 0, idx = 0; y < scene.levelMesh.getDataSize().y; ++y)
+    {
+        for (auto x = 0; x < scene.levelMesh.getDataSize().x; ++x, ++idx)
+        {
+            if (scene.levelMesh[idx] == -1) continue;
+
+            pipeline.addFace(
+                sf::Vector2f(scene.levelMesh.getVoxelSize()) / 2.f
+                    + sf::Vector2f(x, y).componentWiseMul(
+                        sf::Vector2f(scene.levelMesh.getVoxelSize())),
+                sf::FloatRect(tilesClip.getFrame(scene.levelMesh[idx])));
+        }
+    }
+
+    pipeline.renderTo(window);
+    // scene.dummy.body.debugRender(window); // rendering hitbox
 }
 
 void RenderingEngine::renderHud(dgm::Window& window)
 {
+    text.setPosition({ 10.f, 10.f });
     text.setString(fpsCounter.getText());
     window.draw(text);
 }

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "game/Scene.hpp"
-#include "game/events/EventQueue.hpp"
-#include "game/events/GameEvents.hpp"
+#include "game/definitions/GameEvents.hpp"
+#include "game/definitions/GameScene.hpp"
 #include "input/Input.hpp"
+#include "misc/EventQueue.hpp"
 
 class [[nodiscard]] GameRulesEngine final
 {
 public:
     GameRulesEngine(
         EventQueue<GameEvent>& gameEventQueue,
-        Scene& scene,
+        GameScene& scene,
         Input& input) noexcept
         : gameEventQueue(gameEventQueue), scene(scene), input(input)
     {
@@ -18,6 +18,9 @@ public:
 
     GameRulesEngine(GameRulesEngine&&) = delete;
     GameRulesEngine(const GameRulesEngine&) = delete;
+
+public:
+    void operator()(const DummyGameEvent&) {}
 
 public:
     void update(const dgm::Time& time);
@@ -32,6 +35,6 @@ private:
 
 private:
     EventQueue<GameEvent>& gameEventQueue;
-    Scene& scene;
+    GameScene& scene;
     Input& input;
 };

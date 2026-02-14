@@ -11,8 +11,8 @@ struct DummyEntity
     sf::Vector2f forward = { 0.f, 0.f };
 };
 
-struct [[nodiscard]] Scene final
+struct [[nodiscard]] GameScene final
 {
     DummyEntity dummy;
-    sf::Vector2f groundPosition;
+    dgm::Mesh levelMesh;
 };

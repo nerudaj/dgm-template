@@ -1,8 +1,10 @@
 #pragma once
 
-#include "game/Scene.hpp"
+#include "game/definitions/GameScene.hpp"
+#include "game/definitions/GameTextureAtlas.hpp"
 #include "input/TouchController.hpp"
 #include "misc/FpsCounter.hpp"
+#include "misc/ShadeableRenderingPipeline2D.hpp"
 #include "settings/AppSettings.hpp"
 #include <DGM/dgm.hpp>
 
@@ -11,7 +13,8 @@ class [[nodiscard]] RenderingEngine final
 public:
     RenderingEngine(
         dgm::ResourceManager& resmgr,
-        Scene& scene,
+        GameScene& scene,
+        const GameTextureAtlas& atlas,
         const AppSettings& settings,
         const TouchController& touchController) noexcept;
 
@@ -47,15 +50,20 @@ private:
     const static inline auto INTERNAL_GAME_RESOLUTION =
         sf::Vector2f { 1280.f, 720.f };
 
-    Scene& scene;
+    GameScene& scene;
+    const GameTextureAtlas& atlas;
     const AppSettings& settings;
     const TouchController& touchController;
+#ifndef ANDROID
+    sf::Shader& shader;
+#endif
     dgm::Camera worldCamera;
     dgm::Camera hudCamera;
 
     FpsCounter fpsCounter;
     sf::Text text;
 
-    sf::Sprite sprite;
-    sf::RectangleShape ground;
+    ShadeableRenderingPipeline2D pipeline;
+    dgm::Clip tilesClip;
+    float timeElapsed = 0.f;
 };

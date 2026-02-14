@@ -13,12 +13,12 @@ public:
             EventType { std::forward<Args>(args)... });
     }
 
-    template<class Visitor>
-    void processEvents(Visitor&& visitor)
+    template<class... Visitor>
+    void processEvents(Visitor&&... visitors)
     {
         for (size_t idx = 0; idx < events.size(); ++idx)
         {
-            std::visit(visitor, events[idx]);
+            (std::visit(visitors, events[idx]), ...);
         }
 
         events.clear();
