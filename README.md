@@ -5,8 +5,9 @@
 ## Table of Contents
 
 - [Project structure](#project-structure)
-- [Customizing template](#customizing-template)
-- [Propagating CMake variables into native code](#propagating-cmake-variables-into-native-code)
+- [Documentation](#documentation)
+  - [Customizing template](#customizing-template)
+  - [Propagating CMake variables into native code](#propagating-cmake-variables-into-native-code)
 - [Building for Windows](#building-for-windows)
   - [Dependencies](#dependencies)
   - [Setup](#setup)
@@ -15,23 +16,21 @@
   - [Setup](#setup-1)
   - [Signing APKs](#signing-apks)
 - [Building for Ubuntu](#building-for-ubuntu)
-  - [Dependencies](#dependencies-2)
-  - [Setup](#setup-2)
 - [Known issues](#known-issues)
 
 ## Project structure
 
  * `assets` - All runtime assets that will be packaged and distributed with the game go here. If you respect the structure of subfolders, your assets will be autoloaded into `dgm::ResourceManager` on start of the app.
  * `assets-private` - Assets that should be under version control, but not directly installed with the game, such as application icon or project files for Gimp or similar programs.
- * `bin-android` - Contains entire project structure for Android Studio to work with. The only thing you should meddle with in there is `Main.cpp` in `cppcore` folder. Nothing else doesn't need touching.
+ * `bin-android` - Contains the Android entry point (`Main.cpp`) and CMake configuration for Android builds. Nothing else in this folder needs touching.
  * `bin-windows` - Contains `Main.cpp` for Windows app.
  * `cmake` - Contains utility CMake files.
  * `lib` - Contains the entire code of the application.
  * `tests` - Contains unit testing source codes.
 
-## Documentaiton
+## Documentation
 
-Follow [this link](docs/Readme.md)
+For additional guides (application icons, APK signing, UI), see the [documentation index](docs/Readme.md).
 
 ### Customizing template
 
@@ -43,7 +42,7 @@ If you plan to deploy on Android, change the value of `ANDROID_ORG` as well.
 
 ### Propagating CMake variables into native code
 
-If you need to reference certain CMake variable values in native code, add them to `lib/misc/CMakeVars.hpp.in`. During configure, this file is configured into `lib/misc/CMakeVars.hpp` and you can include it easily in code through `#include <misc/CMakeVars.hpp>`.
+If you need to reference certain CMake variable values in native code, add them to `lib/include/misc/CMakeVars.hpp.in`. During configuration, this file is generated as `lib/include/misc/CMakeVars.hpp` and you can include it in code via `#include <misc/CMakeVars.hpp>`.
 
 ## Building for Windows
 
@@ -58,18 +57,18 @@ If you need to reference certain CMake variable values in native code, add them 
 Configure cmake:
 
 ```sh
-# of USE_NSIS=ON, configures cpack to use NSIS instead of zip (generates installer)
+# If USE_NSIS=ON, configures CPack to use NSIS instead of ZIP (generates installer)
 cmake -B _build . [-D USE_NSIS=ON]
 ```
 
-This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, then CPack would use NSIS (must be installed) instead of Zip for packaging.
+This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, CPack will use NSIS (must be installed) instead of ZIP for packaging.
 
 Or you can build the whole thing from the command line:
 
 ```sh
-cmake --build . --config Release
-ctest -C Release
-cpack
+cmake --build _build --config Release
+ctest --test-dir _build -C Release
+cpack --config _build/CPackConfig.cmake
 ```
 
 ## Building for Android
@@ -86,7 +85,7 @@ cpack
 Configure cmake:
 
 ```sh
-cmake -B _build . -D CMAKE_SYSTEM_NAME=Android
+cmake -B _build . -D BUILD_ANDROI=ON
 ```
 
 After that you can open the `_build` folder as a project in Android Studio and continue from there. Or you can directly invoke Gradle and build from the command line:
@@ -102,7 +101,7 @@ The `Release-Android` pipeline is capable of automatically signing the release A
 
 ## Building for Ubuntu
 
-Unlike on Windows, SFML doesn't automatically fetch its depenendencies on Linux. Therefore you need to install following packages first:
+Unlike on Windows, SFML doesn't automatically fetch its dependencies on Linux. You need to install the following packages first:
 
 ```sh
 apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libfreetype-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev libharfbuzz-dev
