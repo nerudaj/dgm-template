@@ -5,6 +5,7 @@ set ( TEST_TARGET_NAME "unit-tests" )
 string ( TOLOWER "${THE_PROJECT_NAME}" PROJECT_NAME_LOWERCASE )
 
 # C++ vars
+set ( SFML_BUILD_SHARED_LIBS ON )
 set ( USE_SFML_TGUI_STATIC_LINKAGE OFF )
 
 # Installer
