@@ -14,7 +14,7 @@ CPMAddPackage("gh:jarro2783/cxxopts#v${CXXOPTS_VERSION}")
 CPMAddPackage("gh:nlohmann/json#v${NLOHMANN_VERSION}")
 
 if ( "${CMAKE_SYSTEM_NAME}" STREQUAL "Android" )
-	set ( BUILD_SHARED_LIBS ${SFML_BUILD_SHARED_LIBS} )
+	set ( BUILD_SHARED_LIBS ON )
 endif()
 
 set ( SFML_STATIC_LIBRARIES ${USE_SFML_TGUI_STATIC_LINKAGE} )
