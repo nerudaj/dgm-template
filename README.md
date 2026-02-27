@@ -104,7 +104,7 @@ The `Release-Android` pipeline is capable of automatically signing the release A
 Unlike on Windows, SFML doesn't automatically fetch its dependencies on Linux. You need to install the following packages first:
 
 ```sh
-apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libfreetype-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev libharfbuzz-dev
+apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libfreetype-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev libharfbuzz-dev libc++-dev libmedtls-dev
 ```
 
 The supported compiler is Clang 18 (and presumably anything newer will work). However, Clang uses libc++ implementation from GCC which has some troubles with std::ranges, so you also need to install Clang's implementation of libc++ and link that.
