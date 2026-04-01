@@ -28,7 +28,7 @@ jobs:
     - name: Setup essential packages
       run: |
         sudo apt update
-        sudo apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev libegl1-mesa-dev libc++-dev libmbedtls-dev
+        sudo apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev libegl1-mesa-dev libc++-dev libmbedtls-dev libssh2-dev
       shell: bash
     
     - name: Install Clang ${{ matrix.clang }}
