@@ -25,7 +25,7 @@ jobs:
       with:
         cmake-version: '4.0.3'
 
-    - name: Setup SFML development libraries
+    - name: Setup LibC++
       run: |
         sudo apt update
         sudo apt install libc++-dev
