@@ -24,6 +24,12 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '4.0.3'
+
+    - name: Setup SFML development libraries
+      run: |
+        sudo apt update
+        sudo apt install libc++-dev
+      shell: bash
     
     - name: Install Clang ${{ matrix.clang }}
       run: |
