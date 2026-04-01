@@ -2,7 +2,7 @@ include ( "${CMAKE_CURRENT_LIST_DIR}/add-catch.cmake" )
 
 set ( CXXOPTS_VERSION "3.3.1" )
 set ( NLOHMANN_VERSION "3.12.0" )
-set ( SFML_VERSION "#feature-android-joystick-support" )
+set ( SFML_VERSION "feature-android-joystick-support" )
 set ( DGM_LIB_VERSION "main" )
 set ( FSM_LIB_VERSION "2.1.1" )
 set ( TGUI_VERSION "1.x" )
