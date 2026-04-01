@@ -25,10 +25,10 @@ jobs:
       with:
         cmake-version: '4.0.3'
 
-    - name: Setup LibC++
+    - name: Setup essential packages
       run: |
         sudo apt update
-        sudo apt install libc++-dev
+        sudo apt install libc++-dev libxrandr-dev libxcursor-dev libxi-dev
       shell: bash
     
     - name: Install Clang ${{ matrix.clang }}

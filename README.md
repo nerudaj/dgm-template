@@ -103,9 +103,10 @@ The `Release-Android` pipeline is capable of automatically signing the release A
 
 The supported compiler is Clang 18 (and presumably anything newer will work). However, Clang uses libc++ implementation from GCC which has some troubles with std::ranges, so you also need to install Clang's implementation of libc++ and link that.
 
-First, make sure you have package `libc++-dev` installed, then select it during configuration:
+First, make sure you have package `libc++-dev` installed (and also X window development libraries), then select it during configuration:
 
 ```sh
+sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
 cmake -B _build . -D CMAKE_C_COMPILER=clang-18 -D CMAKE_CXX_COMPILER=clang++-18 -D CMAKE_CXX_FLAGS=-stdlib=libc++
 ```
 
