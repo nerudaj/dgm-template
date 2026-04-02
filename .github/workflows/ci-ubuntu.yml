@@ -25,10 +25,10 @@ jobs:
       with:
         cmake-version: '4.0.3'
 
-    - name: Setup SFML development libraries
+    - name: Setup essential packages
       run: |
         sudo apt update
-        sudo apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libfreetype-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libfreetype-dev libharfbuzz-dev libc++-dev libmbedtls-dev
+        sudo apt install libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev libegl1-mesa-dev libc++-dev libmbedtls-dev libssh2-1-dev
       shell: bash
     
     - name: Install Clang ${{ matrix.clang }}
@@ -43,7 +43,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cmake -B "${{env.BUILD_DIR}}" . -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} -DCMAKE_CXX_FLAGS=-stdlib='libc++'
+        cmake -B "${{env.BUILD_DIR}}" . -G Ninja -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} -DCMAKE_CXX_FLAGS=-stdlib='libc++' --trace
       shell: bash
 
     - name: Build
