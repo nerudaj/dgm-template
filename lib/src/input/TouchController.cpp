@@ -14,19 +14,27 @@ void TouchInput::reset()
         touchPosition = touchArea.getPosition();
 }
 
-TouchModel::TouchModel(const sf::Vector2u& windowSize)
-    : objects(std::array {
-          TouchInput(
-              TouchObjectKind::Joystick,
-              { 150.f, windowSize.y - 150.f },
-              150.f),
-          TouchInput(
-              TouchObjectKind::Button,
-              { windowSize.x - 150.f, windowSize.y - 150.f },
-              150.f),
-          TouchInput(TouchObjectKind::Button, { 100.f, 100.f }, 100.f),
-      })
+std::array<TouchInput, 3u>
+TouchModel::computeLayout(const sf::Vector2u& windowSize)
 {
+    const float windowWidth10perc = windowSize.x * 0.1f;
+    const float windowWidth5perc = windowSize.x * 0.05f;
+
+    return std::array {
+        TouchInput(
+            TouchObjectKind::Joystick,
+            { windowWidth10perc, windowSize.y - windowWidth10perc },
+            windowWidth10perc),
+        TouchInput(
+            TouchObjectKind::Button,
+            { windowSize.x - windowWidth10perc,
+              windowSize.y - windowWidth10perc },
+            windowWidth10perc),
+        TouchInput(
+            TouchObjectKind::Button,
+            { windowWidth5perc, windowWidth5perc },
+            windowWidth5perc),
+    };
 }
 
 void TouchController::processEvent(const std::optional<sf::Event>& e)
