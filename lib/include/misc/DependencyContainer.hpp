@@ -63,7 +63,18 @@ struct [[nodiscard]] DependencyContainer final
                           [&](float newVolume)
                           { jukebox.setVolume(newVolume); }),
                   },
-              .video = settingsSM.video,
+              .video =
+                  VideoSettings {
+                      .resolution = UnsafeObservable<sf::Vector2u>(
+                          settingsSM.video.resolution,
+                          [&](const sf::Vector2u& newResolution)
+                          {
+                              touchController.recomputeLayoutAfterWindowResize(
+                                  newResolution);
+                          }),
+                      .fullscreen = settingsSM.video.fullscreen,
+                      .uiScale = settingsSM.video.uiScale,
+                  },
               .input = settingsSM.input,
               .bindings = settingsSM.bindings,
           })

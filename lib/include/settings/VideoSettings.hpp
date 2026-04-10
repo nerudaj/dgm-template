@@ -3,8 +3,9 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <nlohmann/json.hpp>
+#include <types/Observable.hpp>
 
-struct [[nodiscard]] VideoSettings final
+struct [[nodiscard]] VideoSettingsStorageModel final
 {
     sf::Vector2u resolution =
 #ifdef ANDROID
@@ -29,4 +30,11 @@ namespace sf
 }
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    VideoSettings, resolution, fullscreen, uiScale);
+    VideoSettingsStorageModel, resolution, fullscreen, uiScale);
+
+struct [[nodiscard]] VideoSettings final
+{
+    UnsafeObservable<sf::Vector2u> resolution;
+    bool fullscreen;
+    float uiScale;
+};

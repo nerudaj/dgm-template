@@ -15,11 +15,16 @@ public:
         dgm::ResourceManager& resmgr,
         GameScene& scene,
         const GameTextureAtlas& atlas,
-        const AppSettings& settings,
+        AppSettings& settings,
         const TouchController& touchController) noexcept;
 
     RenderingEngine(RenderingEngine&&) = delete;
     RenderingEngine(const RenderingEngine&) = delete;
+
+    ~RenderingEngine()
+    {
+        settings.video.resolution.unregisterObserver(*this);
+    }
 
 public:
     void update(const dgm::Time& time);
@@ -52,7 +57,7 @@ private:
 
     GameScene& scene;
     const GameTextureAtlas& atlas;
-    const AppSettings& settings;
+    AppSettings& settings;
     const TouchController& touchController;
 #ifndef ANDROID
     sf::Shader& shader;

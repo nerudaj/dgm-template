@@ -17,17 +17,18 @@ struct [[nodiscard]] AppSettings final
 struct [[nodiscard]] AppSettingsStorageModel final
 {
     AudioSettingsStorageModel audio;
-    VideoSettings video;
+    VideoSettingsStorageModel video;
     InputSettings input;
     BindingsSettings bindings;
 
     AppSettingsStorageModel() = default;
 
     explicit AppSettingsStorageModel(const AppSettings& settings) noexcept
-        : audio(
-              { .soundVolume = settings.audio.soundVolume,
-                .musicVolume = settings.audio.musicVolume })
-        , video(settings.video)
+        : audio({ .soundVolume = settings.audio.soundVolume,
+                  .musicVolume = settings.audio.musicVolume })
+        , video({ .resolution = settings.video.resolution,
+                  .fullscreen = settings.video.fullscreen,
+                  .uiScale = settings.video.uiScale })
         , input(settings.input)
         , bindings(settings.bindings)
     {

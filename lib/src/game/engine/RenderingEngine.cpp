@@ -4,7 +4,7 @@ RenderingEngine::RenderingEngine(
     dgm::ResourceManager& resmgr,
     GameScene& scene,
     const GameTextureAtlas& atlas,
-    const AppSettings& settings,
+    AppSettings& settings,
     const TouchController& touchController) noexcept
     : scene(scene)
     , atlas(atlas)
@@ -14,10 +14,11 @@ RenderingEngine::RenderingEngine(
     , shader(resmgr.getMutable<sf::Shader>("wave"))
 #endif
     , worldCamera(createFullscreenCamera(
-          sf::Vector2f(settings.video.resolution), INTERNAL_GAME_RESOLUTION))
+          sf::Vector2f(settings.video.resolution.operator sf::Vector2u()),
+          INTERNAL_GAME_RESOLUTION))
     , hudCamera(
           sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } },
-          sf::Vector2f(settings.video.resolution))
+          sf::Vector2f(settings.video.resolution.operator sf::Vector2u()))
     , text(resmgr.get<sf::Font>("ChunkFive-Regular.ttf"))
     , pipeline(
           atlas.atlas.getTexture()
@@ -28,6 +29,14 @@ RenderingEngine::RenderingEngine(
           )
     , tilesClip(atlas.atlas.getClip(atlas.tilesLocation))
 {
+    settings.video.resolution.registerObserver(
+        *this,
+        [&](const sf::Vector2u& newResolution)
+        {
+            hudCamera = dgm::Camera(
+                sf::FloatRect { { 0.f, 0.f }, { 1.f, 1.f } },
+                sf::Vector2f(newResolution));
+        });
 }
 
 void RenderingEngine::update(const dgm::Time& time)
