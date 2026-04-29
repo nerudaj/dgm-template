@@ -1,6 +1,6 @@
-#include "misc/CMakeVars.hpp"
 #include "misc/DependencyContainer.hpp"
 #include "localization/EnLocalization.hpp"
+#include "misc/CMakeVars.hpp"
 
 DependencyContainer::DependencyContainer(
     dgm::Window& window,
@@ -13,9 +13,11 @@ DependencyContainer::DependencyContainer(
     // other tgui objects (like fonts) can be created.
     : gui(window)
     , resmgr(ResourceLoader::loadResources(rootDir))
-    , strings(primaryLang, std::map<Language, Localization>{
-        {Language::English, EN_LOCALIZATION},
-    })
+    , strings(
+          primaryLang,
+          std::map<Language, Localization> {
+              { Language::English, EN_LOCALIZATION },
+          })
     , touchController(settingsSM.video.resolution)
     , input(settingsSM.bindings, touchController)
     , virtualCursor(
@@ -48,7 +50,9 @@ DependencyContainer::DependencyContainer(
                                   newResolution);
                           }),
                       .fullscreen = settingsSM.video.fullscreen,
-                      .uiScale = settingsSM.video.uiScale,
+                      .uiScale = Observable<float>(
+                          settingsSM.video.uiScale,
+                          [&](float newScale) { sizer.setScale(newScale); }),
                   },
               .input = settingsSM.input,
               .bindings = settingsSM.bindings,
@@ -56,8 +60,10 @@ DependencyContainer::DependencyContainer(
     , saveSettings(
           [settingsFileName, this]
           {
-              AppStorage::saveFile(CMakeVars::TITLE,
-                  settingsFileName, AppSettingsStorageModel(settings));
+              AppStorage::saveFile(
+                  CMakeVars::TITLE,
+                  settingsFileName,
+                  AppSettingsStorageModel(settings));
           })
     , guiBuilderFactory(sizer, strings, soundPlayer)
 {
