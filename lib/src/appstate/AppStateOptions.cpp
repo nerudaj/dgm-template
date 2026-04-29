@@ -88,17 +88,15 @@ void AppStateOptions::buildLayout()
                                  [&](tgui::Container::Ptr content)
                                  { onBindingsTabSelected(content); })
                              .setTabSelected(StringId::VideoOptionsTab)
-                             .build(TabbedLayoutOptions {
-                                 .tabsWidgetId = TABS_ID,
-                                 .contentIsScrollable = true,
-                             }))
+                             .build(
+                                 TabbedLayoutOptions {
+                                     .tabsWidgetId = TABS_ID,
+                                     .contentIsScrollable = true,
+                                 }))
             .withNoTopLeftButton()
             .withNoTopRightButton()
-            .withBottomLeftButton(WidgetBuilder::createButton(
-                dic.strings.getString(StringId::Back),
-                [&] { onBack(); },
-                dic.sizer,
-                dic.soundPlayer))
+            .withBottomLeftButton(dic.guiBuilderFactory.createTextButton(
+                StringId::Back, [&] { onBack(); }))
             .withNoBottomRightButton()
             .build());
 }
@@ -112,7 +110,8 @@ void AppStateOptions::onVideoTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings, dic.sizer)
+        dic.guiBuilderFactory
+            .createFormBuilder()
 #ifndef ANDROID
             .addOption(
                 StringId::EnableFullscreen,
@@ -178,7 +177,7 @@ void AppStateOptions::onAudioTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings, dic.sizer)
+        dic.guiBuilderFactory.createFormBuilder()
             .addOption(
                 StringId::MusicVolume,
                 WidgetBuilder::createSlider(
@@ -208,7 +207,7 @@ void AppStateOptions::onInputTabSelected(tgui::Container::Ptr content)
 {
     content->removeAllWidgets();
     content->add(
-        FormBuilder(dic.strings, dic.sizer)
+        dic.guiBuilderFactory.createFormBuilder()
             .addOption(
                 StringId::GamepadDeadzone,
                 WidgetBuilder::createSlider(
@@ -255,11 +254,12 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
     auto&& inputKindMapper = InputKindToStringMapper(dic.strings);
     auto&& hwInputMapper = HwInputToStringMapper();
 
-    auto tableBuilder = TableBuilder(dic.sizer).withHeading({
-        dic.strings.getString(StringId::BindingHeadingAction),
-        dic.strings.getString(StringId::BindingHeadingKMB),
-        dic.strings.getString(StringId::BindingsHeadingGamepad),
-    });
+    auto tableBuilder = dic.guiBuilderFactory.createTableBuilder().withHeading(
+        {
+            dic.strings.getString(StringId::BindingHeadingAction),
+            dic.strings.getString(StringId::BindingHeadingKMB),
+            dic.strings.getString(StringId::BindingsHeadingGamepad),
+        });
 
     auto buttonOrNothing = [&](tgui::Button::Ptr ptr,
                                bool useNothing) -> tgui::Widget::Ptr
@@ -285,43 +285,44 @@ void AppStateOptions::onBindingsTabSelected(tgui::Container::Ptr content)
                 inputKindMapper.inputKindToString(action), dic.sizer);
             label->getRenderer()->setPadding({ "5%", "0%", "0%", "0%" });
 
-            tableBuilder.addRow({
-                label,
-                buttonOrNothing(
-                    WidgetBuilder::createRowButton(
-                        std::visit(hwInputMapper, kmbBinding),
-                        [&]
-                        {
-                            std::function<void(KmbBinding)> callback =
-                                [&](KmbBinding b)
-                            { onInputDetected(action, b, bindings); };
-                            app.pushState<AppStateInputDetector>(
-                                dic, std::move(callback));
-                        },
-                        dic.sizer,
-                        dic.soundPlayer,
-                        WidgetOptions { .id =
-                                            getBindButtonId<KmbBinding>(action),
-                                        .enabled = !isEscapeKey }),
-                    noKmb),
-                buttonOrNothing(
-                    WidgetBuilder::createRowButton(
-                        std::visit(hwInputMapper, gamepadBinding),
-                        [&]
-                        {
-                            std::function<void(GamepadBinding)> callback =
-                                [&](GamepadBinding b)
-                            { onInputDetected(action, b, bindings); };
-                            app.pushState<AppStateInputDetector>(
-                                dic, std::move(callback));
-                        },
-                        dic.sizer,
-                        dic.soundPlayer,
-                        WidgetOptions {
-                            .id = getBindButtonId<GamepadBinding>(action),
-                        }),
-                    noGmp),
-            });
+            tableBuilder.addRow(
+                {
+                    label,
+                    buttonOrNothing(
+                        WidgetBuilder::createRowButton(
+                            std::visit(hwInputMapper, kmbBinding),
+                            [&]
+                            {
+                                std::function<void(KmbBinding)> callback =
+                                    [&](KmbBinding b)
+                                { onInputDetected(action, b, bindings); };
+                                app.pushState<AppStateInputDetector>(
+                                    dic, std::move(callback));
+                            },
+                            dic.sizer,
+                            dic.soundPlayer,
+                            WidgetOptions {
+                                .id = getBindButtonId<KmbBinding>(action),
+                                .enabled = !isEscapeKey }),
+                        noKmb),
+                    buttonOrNothing(
+                        WidgetBuilder::createRowButton(
+                            std::visit(hwInputMapper, gamepadBinding),
+                            [&]
+                            {
+                                std::function<void(GamepadBinding)> callback =
+                                    [&](GamepadBinding b)
+                                { onInputDetected(action, b, bindings); };
+                                app.pushState<AppStateInputDetector>(
+                                    dic, std::move(callback));
+                            },
+                            dic.sizer,
+                            dic.soundPlayer,
+                            WidgetOptions {
+                                .id = getBindButtonId<GamepadBinding>(action),
+                            }),
+                        noGmp),
+                });
         }
     };
 
