@@ -6,8 +6,9 @@
 #include <SFML/Audio.hpp>
 #include <map>
 #include <vector>
+#include <audio/GuiAudioInterface.hpp>
 
-class [[nodiscard]] SoundPlayer final
+class [[nodiscard]] SoundPlayer final : public GuiAudioInterface
 {
 public:
     explicit SoundPlayer(const dgm::ResourceManager& resmgr);
@@ -46,6 +47,12 @@ public:
     void stopAllChannels();
 
     void setVolume(const float volume);
+
+public: // GuiAudioInterface
+    void playClick()
+    {
+        std::ignore = playPovSound(SoundId::Click);
+    }
 
 private:
     sf::Time playSound(
