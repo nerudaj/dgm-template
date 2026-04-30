@@ -18,6 +18,7 @@ jobs:
       with:
         fetch-depth: 0
         tags: true
+        submodules: true
 
     - name: Check version
       run: cmake --version
