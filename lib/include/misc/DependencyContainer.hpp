@@ -3,18 +3,18 @@
 #include "audio/Jukebox.hpp"
 #include "audio/SoundPlayer.hpp"
 #include "filesystem/ResourceLoader.hpp"
-#include "gui/Gui.hpp"
-#include "gui/GuiBuilderFactory.hpp"
-#include "gui/Sizers.hpp"
 #include "input/Input.hpp"
 #include "input/TouchController.hpp"
 #include "input/VirtualCursor.hpp"
-#include "settings/AppSettings.hpp"
 #include "strings/Language.hpp"
 #include "strings/StringId.hpp"
 #include <DGM/dgm.hpp>
 #include <filesystem/AppStorage.hpp>
 #include <functional>
+#include <gui/Gui.hpp>
+#include <gui/GuiBuilderFactory.hpp>
+#include <gui/Sizers.hpp>
+#include <settings/AppSettings.hpp>
 #include <strings/StringProvider.hpp>
 
 struct [[nodiscard]] DependencyContainer final
