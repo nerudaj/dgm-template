@@ -4,6 +4,7 @@
 #include "audio/SoundId.hpp"
 #include <DGM/classes/ResourceManager.hpp>
 #include <SFML/Audio.hpp>
+#include <audio/GuiAudioInterface.hpp>
 #include <map>
 #include <vector>
 #include <audio/GuiAudioInterface.hpp>
@@ -49,7 +50,7 @@ public:
     void setVolume(const float volume);
 
 public: // GuiAudioInterface
-    void playClick()
+    void playClick() override
     {
         std::ignore = playPovSound(SoundId::Click);
     }
