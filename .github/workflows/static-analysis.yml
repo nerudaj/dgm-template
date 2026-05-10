@@ -35,3 +35,16 @@ jobs:
       run: |
         cmake --build . --config Debug
       shell: cmd
+
+    - name: Cppcheck
+      working-directory: ${{github.workspace}}
+      run: |
+        cppcheck ./lib/src/ \
+        -I ./lib/include/ \
+        -I _build/_deps/dgm-engine-core-lib-src/lib/include/ \
+        -I ./lib/private_include/ \
+        --enable=all \
+        --suppress=unusedFunction \
+        --suppress=missingIncludeSystem \
+        --suppress=incorrectStringBooleanError
+      shell: cmd
