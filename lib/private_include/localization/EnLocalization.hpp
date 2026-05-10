@@ -5,7 +5,10 @@
 
 using enum StringId;
 
-const std::map<StringId, StringViewType> EN_LOCALIZATION = {
+const std::map<StringId, StringViewType> EN_LOCALIZATION =
+{
+    { Title, "Template Title" },
+
     { PlayButton, "Play" },
     { Options, "Options" },
     { PauseTitle, "Game paused" },

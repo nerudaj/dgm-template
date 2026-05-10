@@ -7,6 +7,7 @@
 #include <audio/GuiAudioInterface.hpp>
 #include <map>
 #include <vector>
+#include <audio/GuiAudioInterface.hpp>
 
 class [[nodiscard]] SoundPlayer final : public GuiAudioInterface
 {
