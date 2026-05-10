@@ -36,5 +36,5 @@ struct [[nodiscard]] VideoSettings final
 {
     UnsafeObservable<sf::Vector2u> resolution;
     bool fullscreen;
-    float uiScale;
+    Observable<float> uiScale;
 };
