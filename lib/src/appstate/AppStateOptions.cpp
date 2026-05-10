@@ -19,11 +19,11 @@ std::string resolutionToString(const sf::Vector2u& vec)
 static std::vector<std::string> getResolutionStrings()
 {
     return sf::VideoMode::getFullscreenModes()
-           | std::views::transform(
+           | uni::views::transform(
                [](const sf::VideoMode& mode) -> sf::Vector2u
                { return mode.size; })
-           | std::views::transform(resolutionToString)
-           | uniranges::to<std::vector<std::string>>();
+           | uni::views::transform(resolutionToString)
+           | uni::ranges::to<std::vector<std::string>>();
 }
 
 static std::string intValueFormatter(float val)
@@ -66,10 +66,9 @@ void AppStateOptions::draw()
 void AppStateOptions::buildLayout()
 {
     dic.gui.rebuildWith(
-        DefaultLayoutBuilder(dic.sizer)
+        dic.guiBuilderFactory.createDefaultLayoutBuilder()
             .withNoBackgroundImage()
-            .withTitle(
-                dic.strings.getString(StringId::Options), HeadingLevel::H1)
+            .withTitle(StringId::Options, HeadingLevel::H1)
             .withContent(dic.guiBuilderFactory.createTabbedLayoutBuilder()
                              .addTab(
                                  StringId::VideoOptionsTab,

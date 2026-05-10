@@ -15,7 +15,7 @@ DependencyContainer::DependencyContainer(
     , resmgr(ResourceLoader::loadResources(rootDir))
     , strings(
           primaryLang,
-          std::map<Language, Localization> {
+          std::map<Language, Localization<StringId>> {
               { Language::English, EN_LOCALIZATION },
           })
     , touchController(settingsSM.video.resolution)

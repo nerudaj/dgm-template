@@ -4,6 +4,8 @@
 
 enum class [[nodiscard]] StringId
 {
+    Title,
+
     PlayButton,
     Options,
     PauseTitle,

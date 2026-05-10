@@ -41,10 +41,10 @@ void AppStateMainMenu::restoreFocusImpl(const std::string&)
 void AppStateMainMenu::buildLayout()
 {
     dic.gui.rebuildWith(
-        dic.guiBuilderFactory.createDefaultLayoutBuiler()
+        dic.guiBuilderFactory.createDefaultLayoutBuilder()
             .withBackgroundImage(
                 dic.resmgr.get<sf::Texture>("placeholder-background.png"))
-            .withTitle(CMakeVars::TITLE, HeadingLevel::H1)
+            .withTitle(StringId::Title, HeadingLevel::H1)
             .withContent(dic.guiBuilderFactory.createButtonListBuilder()
                              .addButton(StringId::PlayButton, [&] { onPlay(); })
                              .addButton(StringId::Options, [&] { onOptions(); })
