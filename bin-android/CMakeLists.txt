@@ -17,7 +17,6 @@ set(CMAKE_SHARED_LINKER_FLAGS
         "${CMAKE_SHARED_LINKER_FLAGS} -u \
     Java_com_google_androidgamesdk_GameActivity_initializeNativeCode")
     
-add_subdirectory ( ../dgm-engine-core-lib "${CMAKE_CURRENT_BINARY_DIR}/core-lib" )
 add_subdirectory ( ../lib "${CMAKE_CURRENT_BINARY_DIR}/lib" )
     
 add_library(${PROJECT_NAME} SHARED
