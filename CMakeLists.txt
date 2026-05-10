@@ -86,7 +86,6 @@ else ()
 
     include ( "cmake/dependencies.cmake" )
 
-    add_subdirectory ( "dgm-engine-core-lib" )
     add_subdirectory ( "lib" )
     add_subdirectory ( "bin-windows" )
 
