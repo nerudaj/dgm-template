@@ -13,7 +13,7 @@ void AppStateInputDetector::input()
 {
     while (const auto event = app.window.pollEvent())
     {
-        if (event) dic.gui.handleEvent(event.value());
+        dic.gui.handleEvent(event.value());
     }
 }
 

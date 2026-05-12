@@ -1,0 +1,32 @@
+name: Cppcheck Analysis
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cppcheck:
+    name: Run Cppcheck
+    runs-on: ubuntu-latest  # You can also use windows-latest or macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+
+      - name: Run static analysis
+        run: |
+          cppcheck ./lib/src/ \
+          -I ./lib/include/ \
+          -I _build/_deps/dgm-engine-core-lib-src/lib/include/ \
+          -I ./lib/private_include/ \
+          --enable=all \
+          --suppress=unusedFunction \
+          --suppress=missingIncludeSystem \
+          --suppress=incorrectStringBooleanError
