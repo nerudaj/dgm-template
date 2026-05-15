@@ -1,6 +1,6 @@
 include ( "${CMAKE_CURRENT_LIST_DIR}/add-catch.cmake" )
 
-set ( DGM_ENGINE_CORE_LIB_VERSION "main" )
+set ( DGM_ENGINE_CORE_LIB_VERSION "gui-builder-refactors" )
 set ( CXXOPTS_VERSION "v3.3.1" )
 set ( FSM_LIB_VERSION "main" )
 set ( CATCH2_VERSION "v3.8.0" )
