@@ -1,38 +1,14 @@
 #include "filesystem/ResourceLoader.hpp"
 #include "filesystem/TiledLoader.hpp"
 #include "misc/CMakeVars.hpp"
-#include <SFML/Audio/Music.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <expected>
 #include <filesystem/AppStorage.hpp>
+#include <filesystem/DgmLoader.hpp>
+#include <filesystem/SfmlLoader.hpp>
+#include <filesystem/TguiLoader.hpp>
 #include <misc/Compatibility.hpp>
-
-static std::expected<tgui::Font, dgm::Error>
-loadTguiFont(const std::filesystem::path& path)
-{
-    try
-    {
-        return tgui::Font(path.string());
-    }
-    catch (const std::exception& ex)
-    {
-        return std::unexpected(dgm::Error(ex.what()));
-    }
-}
-
-static std::expected<tgui::Theme::Ptr, dgm::Error>
-loadTguiTheme(const std::filesystem::path& path)
-{
-    try
-    {
-        return tgui::Theme::create(path.string());
-    }
-    catch (const std::exception& ex)
-    {
-        return std::unexpected(dgm::Error(ex.what()));
-    }
-}
 
 static std::expected<tiled::FiniteMapModel, dgm::Error>
 loadTiledMap(const std::filesystem::path& path)
@@ -47,130 +23,65 @@ loadTiledMap(const std::filesystem::path& path)
     }
 }
 
-static std::expected<sf::Music, dgm::Error>
-loadSong(const std::filesystem::path& path)
+class Loader
 {
-    try
-    {
-        auto music = sf::Music(path);
-        return music;
-    }
-    catch (const std::exception& ex)
-    {
-        return std::unexpected { dgm::Error(ex.what()) };
-    }
-}
+public:
+    Loader(dgm::ResourceManager& resmgr, const std::filesystem::path& assetDir)
+    : resmgr(resmgr)
+    , assetDir(assetDir)
+    {}
 
-static inline std::expected<sf::Shader, dgm::Error>
-loadShader(const std::filesystem::path& path)
-{
-    try
-    {
-        auto&& path1 = path.string() + ".vert";
-        auto&& path2 = path.string() + ".frag";
+    Loader(Loader&&) = delete;
+    Loader(const Loader&) = delete;
 
-        auto shader = sf::Shader(std::filesystem::path(path1), path2);
-        return shader;
-    }
-    catch (const std::exception& ex)
+public:
+    template<class T>
+    void loadOrThrow(
+        const std::string& folder,
+        const std::vector<std::string>& extensions,
+        auto&& loadCallback)
     {
-        return std::unexpected(dgm::Error(ex.what()));
+        if (auto result = resmgr.loadResourcesFromDirectory<T>(
+            assetDir / folder,
+            std::forward<decltype(loadCallback)>(loadCallback),
+            extensions); !result)
+        {
+            throw dgm::Exception(
+                uni::format(
+                    "Could not load resource: {}",
+                    result.error().getMessage()));
+        }
     }
-}
+
+private:
+    dgm::ResourceManager& resmgr;
+    std::filesystem::path assetDir;
+};
 
 dgm::ResourceManager
 ResourceLoader::loadResources(const std::filesystem::path& assetDir)
 {
     dgm::ResourceManager resmgr;
+    auto&& loader = Loader(resmgr, assetDir);
 
-    if (auto result = resmgr.loadResourcesFromDirectory<sf::Font>(
-            assetDir / "fonts", dgm::Utility::loadFont, { ".ttf" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load font: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<tgui::Font>(
-            assetDir / "fonts", loadTguiFont, { ".ttf" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load font: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<tgui::Theme::Ptr>(
-            assetDir / "ui-themes", loadTguiTheme, { ".txt" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load theme: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<sf::Texture>(
-            assetDir / "graphics", dgm::Utility::loadTexture, { ".png" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load texture: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<dgm::AnimationStates>(
-            assetDir / "graphics",
-            dgm::Utility::loadAnimationStates,
-            { ".anim" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load animation states: {}",
-                result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<dgm::Clip>(
-            assetDir / "graphics", dgm::Utility::loadClip, { ".clip" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load clip: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<sf::SoundBuffer>(
-            assetDir / "sounds", dgm::Utility::loadSound, { ".wav" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load sound: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<sf::Music>(
-            assetDir / "music", loadSong, { ".ogg", ".wav" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load song: {}", result.error().getMessage()));
-    }
-
-    if (auto result = resmgr.loadResourcesFromDirectory<tiled::FiniteMapModel>(
-            assetDir / "levels", loadTiledMap, { ".json" });
-        !result)
-    {
-        throw std::runtime_error(
-            uni::format(
-                "Could not load level: {}", result.error().getMessage()));
-    }
+    loader.loadOrThrow<sf::Font>("fonts", { ".ttf" }, dgm::Utility::loadFont);
+    loader.loadOrThrow<tgui::Font>("fonts", { ".ttf" }, TguiLoader::loadFont);
+    loader.loadOrThrow<tgui::Theme::Ptr>(
+        "ui-themes", { ".txt" }, TguiLoader::loadTheme);
+    loader.loadOrThrow<tgui::Texture>(
+        "tgui-graphics", { ".png" }, TguiLoader::loadTexture);
+    loader.loadOrThrow<sf::Texture>("graphics", { ".png" }, SfmlLoader::loadTexture);
+    loader.loadOrThrow<dgm::AnimationStates>(
+        "graphics", { ".anim" }, DgmLoader::loadAnimationStates);
+    loader.loadOrThrow<dgm::Clip>("graphics", { ".clip" }, DgmLoader::loadClip);
+    loader.loadOrThrow<sf::SoundBuffer>("sounds", { ".wav" }, SfmlLoader::loadSound);
+    loader.loadOrThrow<sf::Music>("music", { ".ogg", ".wav" }, SfmlLoader::loadSong);
+    loader.loadOrThrow<tiled::FiniteMapModel>("levels", { ".json" }, loadTiledMap);
 
 #ifndef ANDROID
     // Shaders are not supported on Android with SFML
     if (auto result = resmgr.loadResource<sf::Shader>(
-            assetDir / "shaders" / "wave", loadShader);
+            assetDir / "shaders" / "wave", SfmlLoader::loadShader);
         !result)
     {
         throw std::runtime_error(

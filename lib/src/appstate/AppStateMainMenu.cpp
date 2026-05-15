@@ -43,7 +43,7 @@ void AppStateMainMenu::buildLayout()
     dic.gui.rebuildWith(
         dic.guiBuilderFactory.createDefaultLayoutBuilder()
             .withBackgroundImage(
-                dic.resmgr.get<sf::Texture>("placeholder-background.png"))
+                dic.resmgr.get<tgui::Texture>("placeholder-background.png"))
             .withTitle(StringId::Title, HeadingLevel::H1)
             .withContent(dic.guiBuilderFactory.createButtonListBuilder()
                              .addButton(StringId::PlayButton, [&] { onPlay(); })

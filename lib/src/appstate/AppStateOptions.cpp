@@ -67,7 +67,7 @@ void AppStateOptions::buildLayout()
 {
     dic.gui.rebuildWith(
         dic.guiBuilderFactory.createDefaultLayoutBuilder()
-            .withNoBackgroundImage()
+            .withNoBackground()
             .withTitle(StringId::Options, HeadingLevel::H1)
             .withContent(dic.guiBuilderFactory.createTabbedLayoutBuilder()
                              .addTab(
@@ -94,8 +94,7 @@ void AppStateOptions::buildLayout()
                                  }))
             .withNoTopLeftButton()
             .withNoTopRightButton()
-            .withBottomLeftButton(dic.guiBuilderFactory.createTextButton(
-                StringId::Back, [&] { onBack(); }))
+            .withBottomLeftButton(StringId::Back, [&] { onBack(); })
             .withNoBottomRightButton()
             .build());
 }
