@@ -20,7 +20,7 @@ void AppStatePause::buildLayout()
 {
     dic.gui.rebuildWith(
         dic.guiBuilderFactory.createDefaultLayoutBuilder()
-            .withNoBackgroundImage()
+            .withNoBackground()
             .withTitle(StringId::PauseTitle, HeadingLevel::H1)
             .withContent(
                 dic.guiBuilderFactory.createButtonListBuilder()
