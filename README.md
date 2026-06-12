@@ -59,6 +59,11 @@ Configure cmake:
 ```sh
 # If USE_NSIS=ON, configures CPack to use NSIS instead of ZIP (generates installer)
 cmake -B _build . [-D USE_NSIS=ON]
+  -D CMAKE_C_COMPILER=clang ^
+  -D CMAKE_CXX_COMPILER=clang++ ^
+  -D CMAKE_CXX_STANDARD=23 ^
+  -D CMAKE_CXX_STANDARD_REQUIRED=ON ^
+  -D CMAKE_GENERATOR_PLATFORM=x64
 ```
 
 This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, CPack will use NSIS (must be installed) instead of ZIP for packaging.
@@ -85,7 +90,7 @@ cpack --config _build/CPackConfig.cmake
 Configure cmake:
 
 ```sh
-cmake -B _build . -D BUILD_ANDROI=ON
+cmake -B _build . -D BUILD_ANDROID=ON
 ```
 
 After that you can open the `_build` folder as a project in Android Studio and continue from there. Or you can directly invoke Gradle and build from the command line:
@@ -107,7 +112,13 @@ First, make sure you have package `libc++-dev` installed (and also X window deve
 
 ```sh
 sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
-cmake -B _build . -D CMAKE_C_COMPILER=clang-18 -D CMAKE_CXX_COMPILER=clang++-18 -D CMAKE_CXX_FLAGS=-stdlib=libc++
+cmake -B _build . \
+  -G Ninja \
+  -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} \
+  -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} \
+  -D CMAKE_CXX_FLAGS=-stdlib='libc++' \
+  -D CMAKE_CXX_STANDARD=23 \
+  -D CMAKE_CXX_STANDARD_REQUIRED=ON
 ```
 
 ## Known issues
