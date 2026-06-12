@@ -112,12 +112,12 @@ First, make sure you have package `libc++-dev` installed (and also X window deve
 
 ```sh
 sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
-cmake -B _build . ^
-  -G Ninja ^
-  -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} ^
-  -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} ^
-  -D CMAKE_CXX_FLAGS=-stdlib='libc++' ^
-  -D CMAKE_CXX_STANDARD=23 ^
+cmake -B _build . \
+  -G Ninja \
+  -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} \
+  -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} \
+  -D CMAKE_CXX_FLAGS=-stdlib='libc++' \
+  -D CMAKE_CXX_STANDARD=23 \
   -D CMAKE_CXX_STANDARD_REQUIRED=ON
 ```
 
