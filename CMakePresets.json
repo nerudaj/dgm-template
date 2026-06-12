@@ -46,7 +46,7 @@
 			"displayName": "MSVC - Visual Studio generator (MSBuild)",
 			"description": "Configure using Visual Studio generator (selects MSBuild).",
 			"generator": "Visual Studio 17 2022",
-			"binaryDir": "${sourceDir}/_build-${presetName}",
+			"binaryDir": "${sourceDir}/_build",
 			"cacheVariables": {
 				"CMAKE_GENERATOR_PLATFORM": "x64"
 			}
