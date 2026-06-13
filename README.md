@@ -49,6 +49,7 @@ If you need to reference certain CMake variable values in native code, add them 
 ### Dependencies
 
 * Visual Studio 2022 (v17.12+) with platform toolset v143
+  * If you want to use newer Visual Studio, you can edit `CMakePresets.json` and change the name of the generator for `msvc` preset.
 * CMake v3.28.1+
 * Optional: NSIS v3+ (for packaging)
 
@@ -58,15 +59,12 @@ Configure cmake:
 
 ```sh
 # If USE_NSIS=ON, configures CPack to use NSIS instead of ZIP (generates installer)
-cmake -B _build . [-D USE_NSIS=ON]
-  -D CMAKE_C_COMPILER=clang ^
-  -D CMAKE_CXX_COMPILER=clang++ ^
-  -D CMAKE_CXX_STANDARD=23 ^
-  -D CMAKE_CXX_STANDARD_REQUIRED=ON ^
-  -D CMAKE_GENERATOR_PLATFORM=x64
+cmake --preset msvc [-D USE_NSIS=ON]
 ```
 
 This will generate a `<project-name>.sln` file inside `_build`. You can open it in Visual Studio and work from there. When you use `-D USE_NSIS=ON`, CPack will use NSIS (must be installed) instead of ZIP for packaging.
+
+> NOTE: If you have CMake tools installed with MSVC, you don't have to even invoke CMake manually. Just open the repo in MSVC, it will prompt you for the configure preset and configure for you. Same goes for Visual Studio Code.
 
 Or you can build the whole thing from the command line:
 
@@ -112,13 +110,8 @@ First, make sure you have package `libc++-dev` installed (and also X window deve
 
 ```sh
 sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
-cmake -B _build . \
-  -G Ninja \
-  -D CMAKE_C_COMPILER=clang-${{ matrix.clang }} \
-  -D CMAKE_CXX_COMPILER=clang++-${{ matrix.clang }} \
-  -D CMAKE_CXX_FLAGS=-stdlib='libc++' \
-  -D CMAKE_CXX_STANDARD=23 \
-  -D CMAKE_CXX_STANDARD_REQUIRED=ON
+cmake --preset clang-debug
+cmake --build --preset build-clang-debug
 ```
 
 ## Known issues
