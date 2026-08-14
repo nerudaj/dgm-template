@@ -2,6 +2,10 @@
 
 # dgm project template
 
+## AI Contribution Policy
+
+AI-generated contributions are prohibited, because other OSS projects could lose their collective minds if they ever wanted to depend on this project.
+
 ## Table of Contents
 
 - [Project structure](#project-structure)
@@ -16,6 +20,7 @@
   - [Setup](#setup-1)
   - [Signing APKs](#signing-apks)
 - [Building for Ubuntu](#building-for-ubuntu)
+- [Who's using this?](#whos-using-dgm-template)
 - [Known issues](#known-issues)
 
 ## Project structure
@@ -113,6 +118,12 @@ sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
 cmake --preset clang-debug
 cmake --build --preset build-clang-debug
 ```
+
+## Who's using dgm-template?
+
+ * [Rend](https://nerudaj.itch.io/Rend) - Retro arena FPS
+ * [MagRider](https://nerudaj.itch.io/MagRider) - Magnetic platformer
+ * [Mansion Malevolence](https://nerudaj.itch.io/MansionMalevolence) - Resident Evil demaked into a solitaire card game
 
 ## Known issues
 
