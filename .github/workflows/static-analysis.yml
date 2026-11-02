@@ -30,6 +30,6 @@ jobs:
 
     - name: Build
       run: |
-        cmake --build --preset build-msvc-debug
+        cmake --build --preset msvc-debug-build
       shell: cmd
 
