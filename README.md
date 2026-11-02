@@ -116,7 +116,7 @@ First, make sure you have package `libc++-dev` installed (and also X window deve
 ```sh
 sudo apt install libxrandr-dev libxcursor-dev libxi-dev libc++-dev
 cmake --preset clang-debug
-cmake --build --preset build-clang-debug
+cmake --build --preset clang-debug-build
 ```
 
 ## Who's using dgm-template?

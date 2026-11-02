@@ -48,7 +48,7 @@ jobs:
 
     - name: Build
       run: |
-        cmake --build --preset build-clang-debug
+        cmake --build --preset clang-debug-build
       shell: bash
 
     # NOTE: No tests because X server is returning errors
